@@ -1196,7 +1196,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(type)(=!?)(ArmorStand|Arrow|Bat|Blaze|Boat|CaveSpider|Chicken|Cow|Creeper|EnderCrystal|EnderDragon|Enderman|Endermite|EntityHorse|EyeOfEnderSignal|FallingSand|Fireball|FireworksRocketEntity|Ghast|Giant|Guardian|ItemFrame|Item|LavaSlime|LeashKnot|MinecartChest|MinecartCommandBlock|MinecartFurnace|MinecartHopper|MinecartRideable|MinecartSpawner|MinecartTNT|Mob|Monster|MushroomCow|Ozelot|Painting|PigZombie|Pig|PrimedTnt|Rabbit|Rabbit|Sheep|Shulker|Silverfish|Skeleton|Slime|SmallFireball|Snowball|SnowMan|Spider|Squid|ThrownEgg|ThrownEnderpearl|ThrownExpBottle|ThrownPotion|Villager|VillagerGolem|Witch|WitherBoss|WitherSkull|Wolf|XPOrb|Zombie),?</string>
+					<string>(type)(=!?)(AreaEffectCloud|ArmorStand|Arrow|Bat|Blaze|Boat|CaveSpider|Chicken|Cow|Creeper|EnderCrystal|EnderDragon|Enderman|Endermite|EntityHorse|EyeOfEnderSignal|FallingSand|Fireball|FireworksRocketEntity|Ghast|Giant|Guardian|ItemFrame|Item|LavaSlime|LeashKnot|MinecartChest|MinecartCommandBlock|MinecartFurnace|MinecartHopper|MinecartRideable|MinecartSpawner|MinecartTNT|Mob|Monster|MushroomCow|Ozelot|Painting|PigZombie|Pig|PrimedTnt|Rabbit|Rabbit|Sheep|Shulker|Silverfish|Skeleton|Slime|SmallFireball|Snowball|SnowMan|Spider|Squid|ThrownEgg|ThrownEnderpearl|ThrownExpBottle|ThrownPotion|Villager|VillagerGolem|Witch|WitherBoss|WitherSkull|Wolf|XPOrb|Zombie),?</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -1676,7 +1676,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(((?:\\+)?\")type\2)\s*:\s*(\2?)(ArmorStand|Arrow|Bat|Blaze|Boat|CaveSpider|Chicken|Cow|Creeper|EnderCrystal|EnderDragon|Enderman|Endermite|EntityHorse|EyeOfEnderSignal|FallingSand|Fireball|FireworksRocketEntity|Ghast|Giant|Guardian|ItemFrame|Item|LavaSlime|LeashKnot|MinecartChest|MinecartCommandBlock|MinecartFurnace|MinecartHopper|MinecartRideable|MinecartSpawner|MinecartTNT|Mob|Monster|MushroomCow|Ozelot|Painting|PigZombie|Pig|PrimedTnt|Rabbit|Rabbit|Sheep|Shulker|Silverfish|Skeleton|Slime|SmallFireball|Snowball|SnowMan|Spider|Squid|ThrownEgg|ThrownEnderpearl|ThrownExpBottle|ThrownPotion|Villager|VillagerGolem|Witch|WitherBoss|WitherSkull|Wolf|XPOrb|Zombie)(\3),?</string>
+					<string>(((?:\\+)?\")type\2)\s*:\s*(\2?)(AreaEffectCloud|ArmorStand|Arrow|Bat|Blaze|Boat|CaveSpider|Chicken|Cow|Creeper|EnderCrystal|EnderDragon|Enderman|Endermite|EntityHorse|EyeOfEnderSignal|FallingSand|Fireball|FireworksRocketEntity|Ghast|Giant|Guardian|ItemFrame|Item|LavaSlime|LeashKnot|MinecartChest|MinecartCommandBlock|MinecartFurnace|MinecartHopper|MinecartRideable|MinecartSpawner|MinecartTNT|Mob|Monster|MushroomCow|Ozelot|Painting|PigZombie|Pig|PrimedTnt|Rabbit|Rabbit|Sheep|Shulker|Silverfish|Skeleton|Slime|SmallFireball|Snowball|SnowMan|Spider|Squid|ThrownEgg|ThrownEnderpearl|ThrownExpBottle|ThrownPotion|Villager|VillagerGolem|Witch|WitherBoss|WitherSkull|Wolf|XPOrb|Zombie)(\3),?</string>
 				</dict>
 			</array>
 		</dict>
