@@ -626,7 +626,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(Rotation|RightArm|LeftArm|Body|Head|LeftLeg|RightLeg)\s*:\s*(\[)(?:(?:(\d+):)?(-?\d+(?:\.\d+)?[f|F]?),\s*)(?:(?:(\d+):)?(-?\d+(?:\.\d+)?[f|F]?),\s*)(?:(\d+):)?(-?\d+(?:\.\d+)?[f|F]?\s*)(\]),?</string>
+					<string>(Rotation|RightArm|LeftArm|Body|Head|LeftLeg|RightLeg)\s*:\s*(\[)(?:(?:(\d+):)?(-?\d+(?:\.\d+)?[f|F]?),\s*)(?:(?:(?:(\d+):)?(-?\d+(?:\.\d+)?[f|F]?),\s*))?(?:(?:(\d+):)?(-?\d+(?:\.\d+)?[f|F]?\s*))?(\]),?</string>
 				</dict>
 				<dict>
 					<key>captures</key>
