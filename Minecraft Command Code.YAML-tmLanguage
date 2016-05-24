@@ -340,7 +340,7 @@ repository:
       captures:
         '1': {name: string.unquoted.mcc}
         '2': {name: constant.numeric.mcc}
-    - match: '(CustomName|(?:Affected(?:Blocks|Entities|Items)|QueryResult|SuccessCount)(?:Objective|Name)|OwnerName|OwnerUUID|HurtBy|inTile|Potion|Owner|Thrower|Type|DisplayTile|LootTable|EntityId|LastOutput|Block|Particle|Motive|id?|Pattern|Lock|Item|ExtraType|Signature|Value|AttributeName|Name|Slot|SkullOwner|profileId|profileName|url|Command)\s*:\s*([^,}]+),?' #String
+    - match: '(CustomName|(?:Affected(?:Blocks|Entities|Items)|QueryResult|SuccessCount)(?:Objective|Name)|OwnerName|OwnerUUID|HurtBy|inTile|Potion|Owner|Thrower|Type|DisplayTile|LootTable|EntityId|LastOutput|Block|Particle|Motive|id?|Pattern|Lock|Item|ExtraType|Signature|Value|AttributeName|Name|Slot|SkullOwner|profileId|profileName|url)\s*:\s*([^,}]+),?' #String
       captures:
         '1': {name: string.unquoted.mcc}
         '2': {name: string.quoted.mcc}
@@ -501,7 +501,7 @@ repository:
         '1': {name: string.unquoted.mcc}
         '2': {name: keyword.operator.assignment.mcc}
         '3': {name: support.type.mcc}
-    - match: '(team|tag)(=!?)([\w-]{1,16}),?'
+    - match: '(team|tag)(=!?)([\w-]+),?'
       captures:
         '1': {name: string.unquoted.mcc}
         '2': {name: keyword.operator.assignment.mcc}

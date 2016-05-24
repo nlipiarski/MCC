@@ -1157,7 +1157,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(team|tag)(=!?)([\w-]{1,16}),?</string>
+					<string>(team|tag)(=!?)([\w-]+),?</string>
 				</dict>
 				<dict>
 					<key>captures</key>
