@@ -698,7 +698,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(Command)\s*:\s*(\2)</string>
+					<string>(Command)\s*:\s*((?:\\+)?\")</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -706,9 +706,14 @@
 							<key>name</key>
 							<string>string.unquoted.mcc</string>
 						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>string.quoted.mcc</string>
+						</dict>
 					</dict>
 					<key>end</key>
-					<string>((?:\\+)?\"?),?</string>
+					<string>((?:\\+)?\"),?</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>

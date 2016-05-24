@@ -345,9 +345,10 @@ repository:
         '1': {name: string.unquoted.mcc}
         '2': {name: string.quoted.mcc}
     - name: json.attribute.command.mcc
-      begin: '(Command)\s*:\s*(\2)'
+      begin: '(Command)\s*:\s*((?:\\+)?\")'
       beginCaptures:
         '1': {name: string.unquoted.mcc}
+        '2': {name: string.quoted.mcc }
       patterns:
       - name: json.attribute.command.json.mcc
         begin: '([\{\[])\s*'
@@ -373,7 +374,7 @@ repository:
       - include: '#entity-selector'
       - include: '#string'
       - include: '#number'
-      end: '((?:\\+)?\"?),?'
+      end: '((?:\\+)?\"),?'
       endCaptures:
         '1': {name: string.quoted.mcc}
     - name: json.string.texts.mcc
