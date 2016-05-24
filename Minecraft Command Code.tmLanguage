@@ -643,7 +643,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(OnGround|Invulnerable|CustomNameVisible|Silent|Glowing|BatFlags|IsChickenJockey|Powered|ignited|PlayerSpawned|Bred|ChestedHorse|EatingHaystack|HasReproduced|Tame|Saddle|SkeletonTrap|Elder|wasOnGround|IsVillager|IsBaby|CanBreakDoors|Sheared|Willing|rewardExp|PlayerCreated|Angry|player|inGround|Ambient|ShowParticles|CustomDisplayTile|Enabled|TrackOutput|DropItem|HurtEntities|Marker|Invisible|NoBasePlate|Gravity|ShowArms|Small|ShowBottom|Flicker|Trail|powered|auto|ExactTeleport|extending|Unbreakable|resolved|isPublic|map_is_scaling|NoGravity|Count)\s*:\s*((?:0|1)b?),?</string>
+					<string>(OnGround|Invulnerable|CustomNameVisible|Silent|Glowing|BatFlags|IsChickenJockey|Powered|ignited|PlayerSpawned|Bred|ChestedHorse|EatingHaystack|HasReproduced|Tame|Saddle|SkeletonTrap|Elder|wasOnGround|IsVillager|IsBaby|CanBreakDoors|Sheared|Willing|rewardExp|PlayerCreated|Angry|player|inGround|Ambient|ShowParticles|CustomDisplayTile|Enabled|TrackOutput|DropItem|HurtEntities|Marker|Invisible|NoBasePlate|Gravity|ShowArms|Small|ShowBottom|Flicker|Trail|powered|auto|ExactTeleport|extending|Unbreakable|resolved|isPublic|map_is_scaling|NoGravity|Count|PersistenceRequired|NoAI)\s*:\s*((?:0|1)b?),?</string>
 				</dict>
 				<dict>
 					<key>captures</key>
