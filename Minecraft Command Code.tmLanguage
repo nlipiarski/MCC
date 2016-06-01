@@ -1782,7 +1782,7 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>(~?-?\d*(?:\.\d+)?)</string>
+					<string>\b(~?-?\d*(?:\.\d+)?)\b</string>
 					<key>name</key>
 					<string>constant.numeric.mcc</string>
 				</dict>
