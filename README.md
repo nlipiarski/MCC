@@ -29,16 +29,15 @@ Minecraft Command Code is plays nice with [Smelt](http://smelt.gnasp.com) Code C
 
 Sublime is an extremely powerful, but kind of complicated, text editor. Learning how to use it effectively will be key to keeping your code maintainable.
 
-### Requirements
-* [Sublime](https://www.sublimetext.com/)
-* [Package Control Plugin](https://packagecontrol.io/installation) (double-check your Sublime version)
+### Instructions
 
 *Installing Package Control can be scary, but just follow the instructions carefuly. You'll be OK.*
 
-### Instructions
-* With Sublime opened, press Ctrl+Shift+P to open the Command Palette
-* Type "install package" into the Command Palette and select "Package Control: Install Package"
-* Type "MinecraftCommandCode" to filter the packages and select "Minecraft Command Code Syntax Highlighter"
+1. Install [Sublime](https://www.sublimetext.com/)
+2. Install [Package Control Plugin](https://packagecontrol.io/installation) (double-check your Sublime version)
+3. With Sublime opened, press Ctrl+Shift+P to open the Command Palette
+4. Type "install package" into the Command Palette and select "Package Control: Install Package"
+5. Type "MinecraftCommandCode" to filter the packages and select "Minecraft Command Code Syntax Highlighter"
 
 Now any file with a .mcc extension will use the Minecraft Command Code syntax highlighting.
 
