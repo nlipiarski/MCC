@@ -41,4 +41,4 @@ Sublime is an extremely powerful, but kind of complicated, text editor. Learning
 
 Now any file with an .mcc extension will use the Minecraft Command Code syntax highlighting.
 
-If you run into any issues, feel free to send an email to [Moesh](mailto:moesh@moesh.ca) with the details.
+If you run into any issues, feel free to send an email to [Moesh](mailto:moesh@moesh.ca) with the details or open an issue on the [github issue page](https://github.com/42iscool42/MCC/issues).
