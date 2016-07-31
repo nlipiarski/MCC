@@ -6,9 +6,9 @@
 
 Minecraft Map Making is more complex than ever.
 
-Besides learning how commands, scoreboards, and entities interfact with each other, we also have to keep a mental network of what command is in each block. MCC aims to aid mechanics (formerly known as command blockers) in writing maintainable code through adding support for syntax highlighting.
+Besides learning how commands, scoreboards, and entities interact with each other, we also have to keep a mental network of what command is in each block. MCC aims to aid mechanics (formerly known as command blockers) in writing maintainable code through adding support for syntax highlighting.
 
-Minecraft Commands are constantly envolving. By writing your commands into a text document rather than Command Blocks, you're able have a good overview of what needs to be changed. We've made it even more enticing by adding syntax highlighting to all Minecraft's commands *which can be put into a Command Block*.
+Minecraft Commands are constantly envolving. By writing your commands into a text document rather than Command Blocks, you're able to have a good overview of what needs to be changed. We've made it even more enticing by adding syntax highlighting to all Minecraft commands *which can be put into Command Blocks*.
 
 
 
@@ -23,7 +23,7 @@ Minecraft Commands are constantly envolving. By writing your commands into a tex
 ***MCC Syntax Highlighting with Bliss Theme.***
 ![An Example of MCC](http://i.imgur.com/c0026hJ.png)
 
-Minecraft Command Code is plays nice with [Smelt](http://smelt.gnasp.com) Code Compiler by Gnasp, which means you can make and deploy changes quickly.
+Minecraft Command Code also plays nicely with [Smelt](http://smelt.gnasp.com) Code Compiler by Gnasp, which means you can make and deploy changes quickly.
 
 ## Installation
 
@@ -39,6 +39,6 @@ Sublime is an extremely powerful, but kind of complicated, text editor. Learning
 4. Type "install package" into the Command Palette and select "Package Control: Install Package"
 5. Type "MinecraftCommandCode" to filter the packages and select "Minecraft Command Code Syntax Highlighter"
 
-Now any file with a .mcc extension will use the Minecraft Command Code syntax highlighting.
+Now any file with an .mcc extension will use the Minecraft Command Code syntax highlighting.
 
 If you run into any issues, feel free to send an email to [Moesh](mailto:moesh@moesh.ca) with the details.
