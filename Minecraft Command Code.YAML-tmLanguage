@@ -20,7 +20,7 @@ patterns:
 repository:
   comment:
     patterns:
-    - match: '(//|#)(.*)$'
+    - match: '(//)(.*)$'
       captures:
        '1': {name: comment.line.numbersign.mcc}
        '2': {name: comment.line.mcc}
@@ -433,7 +433,7 @@ repository:
   commands:
     patterns:
     - name: keyword.control.mcc
-      match: '!\w+'
+      match: '(!\w+|# \w+)'
     - name: keyword.control.mcc
       match: '/\b(achievement|blockdata|clear|clone|debug|defaultgamemode|difficulty|effect|enchant|entitydata|execute|fill|gamemode|gamerule|give|kill|me|particle|playsound|replaceitem|say|scoreboard|seed|setblock|setworldspawn|spawnpoint|spreadplayers|stats|summon|tellraw|tell|testforblocks|testforblock|testfor|time|title|toggledownfall|tp|weather|worldborder|xp|stopsound|teleport|trigger)\b'
     - name: support.type.mcc
