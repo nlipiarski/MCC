@@ -16,15 +16,11 @@
 		</dict>
 		<dict>
 			<key>include</key>
+			<string>#smelt</string>
+		</dict>
+		<dict>
+			<key>include</key>
 			<string>#nbt-json-array</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>#entity-selector-parameterless</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>#entity-selector-argumented</string>
 		</dict>
 		<dict>
 			<key>include</key>
@@ -41,6 +37,10 @@
 		<dict>
 			<key>include</key>
 			<string>#number</string>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>#string</string>
 		</dict>
 	</array>
 	<key>repository</key>
@@ -301,14 +301,6 @@
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#entity-selector-parameterless</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#entity-selector-argumented</string>
-						</dict>
-						<dict>
-							<key>include</key>
 							<string>#entity-selector</string>
 						</dict>
 						<dict>
@@ -354,12 +346,6 @@
 		<dict>
 			<key>patterns</key>
 			<array>
-				<dict>
-					<key>match</key>
-					<string>(!\w+|# \w+)</string>
-					<key>name</key>
-					<string>keyword.control.mcc</string>
-				</dict>
 				<dict>
 					<key>match</key>
 					<string>/\b(achievement|blockdata|clear|clone|debug|defaultgamemode|difficulty|effect|enchant|entitydata|execute|fill|gamemode|gamerule|give|kill|me|particle|playsound|replaceitem|say|scoreboard|seed|setblock|setworldspawn|spawnpoint|spreadplayers|stats|summon|tellraw|tell|testforblocks|testforblock|testfor|time|title|toggledownfall|tp|weather|worldborder|xp|stopsound|teleport|trigger)\b</string>
@@ -517,16 +503,11 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>comment.line.numbersign.mcc</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
 							<string>comment.line.mcc</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(//)(.*)$</string>
+					<string>(//.*)$</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -805,14 +786,6 @@
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#entity-selector-parameterless</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#entity-selector-argumented</string>
-						</dict>
-						<dict>
-							<key>include</key>
 							<string>#entity-selector</string>
 						</dict>
 						<dict>
@@ -1005,253 +978,251 @@
 							<key>name</key>
 							<string>entity.name.function.mcc</string>
 						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.function.mcc</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>support.type.mcc</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>support.type.mcc</string>
+						</dict>
+						<key>5</key>
+						<dict>
+							<key>name</key>
+							<string>support.type.mcc</string>
+						</dict>
+						<key>6</key>
+						<dict>
+							<key>name</key>
+							<string>support.type.mcc</string>
+						</dict>
+						<key>7</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.function.mcc</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(@[aper])(\[)(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?(-?\d+\s*)(])</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(\@[aepr])(\[)(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.function.mcc</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.function.mcc</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>support.type.mcc</string>
+						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>support.type.mcc</string>
+						</dict>
+						<key>5</key>
+						<dict>
+							<key>name</key>
+							<string>support.type.mcc</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(\])</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.function.mcc</string>
+						</dict>
+					</dict>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>string.unquoted.mcc</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>keyword.operator.assignment.mcc</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>support.type.mcc</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>(d?[xyz]|[rl]m?|c|score_[0-z]{1,16}(?:_min)?)(=)(-?\d+),?</string>
+						</dict>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>string.unquoted.mcc</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>keyword.operator.assignment.mcc</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>support.type.mcc</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>(m)(=)([0-3]|-1),?</string>
+						</dict>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>string.unquoted.mcc</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>keyword.operator.assignment.mcc</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>support.type.mcc</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>(r[xy]m?)(=)(-?\d+(?:\.\d+)?),?</string>
+						</dict>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>string.unquoted.mcc</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>keyword.operator.assignment.mcc</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>support.type.mcc</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>(name)(=!?)([\w-]+),?</string>
+						</dict>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>string.unquoted.mcc</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>keyword.operator.assignment.mcc</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>support.type.mcc</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>(team|tag)(=!?)([\w-]+),?</string>
+						</dict>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>string.unquoted.mcc</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>keyword.operator.assignment.mcc</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>(team)(=),?</string>
+						</dict>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>string.unquoted.mcc</string>
+								</dict>
+								<key>2</key>
+								<dict>
+									<key>name</key>
+									<string>keyword.operator.assignment.mcc</string>
+								</dict>
+								<key>3</key>
+								<dict>
+									<key>name</key>
+									<string>support.type.mcc</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>(type)(=!?)(AreaEffectCloud|ArmorStand|Arrow|SpectralArrow|TippedArrow|Bat|Blaze|Boat|CaveSpider|Chicken|Cow|Creeper|EnderCrystal|EnderDragon|Enderman|Endermite|EntityHorse|EyeOfEnderSignal|FallingSand|Fireball|FireworksRocketEntity|Ghast|Giant|Guardian|ItemFrame|Item|LavaSlime|LeashKnot|MinecartChest|MinecartCommandBlock|MinecartFurnace|MinecartHopper|MinecartRideable|MinecartSpawner|MinecartTNT|Mob|Monster|MushroomCow|Ozelot|Painting|PigZombie|Pig|PrimedTnt|Rabbit|Rabbit|Sheep|Shulker|Silverfish|Skeleton|Slime|SmallFireball|Snowball|SnowMan|Spider|Squid|ThrownEgg|ThrownEnderpearl|ThrownExpBottle|ThrownPotion|Villager|VillagerGolem|Witch|WitherBoss|WitherSkull|Wolf|XPOrb|ShulkerBullet|DragonFireball|AreaEffectCloud|Zombie),?</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#err-chars</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.function.mcc</string>
+						</dict>
 					</dict>
 					<key>match</key>
 					<string>(@[aepr]|\*)</string>
 				</dict>
 			</array>
-		</dict>
-		<key>entity-selector-argumented</key>
-		<dict>
-			<key>begin</key>
-			<string>(\@[aepr])(\[)(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.function.mcc</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.function.mcc</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>support.type.mcc</string>
-				</dict>
-				<key>4</key>
-				<dict>
-					<key>name</key>
-					<string>support.type.mcc</string>
-				</dict>
-				<key>5</key>
-				<dict>
-					<key>name</key>
-					<string>support.type.mcc</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>(\])</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.function.mcc</string>
-				</dict>
-			</dict>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>string.unquoted.mcc</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.operator.assignment.mcc</string>
-						</dict>
-						<key>3</key>
-						<dict>
-							<key>name</key>
-							<string>support.type.mcc</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>(d?[xyz]|[rl]m?|c|score_[0-z]{1,16}(?:_min)?)(=)(-?\d+),?</string>
-				</dict>
-				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>string.unquoted.mcc</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.operator.assignment.mcc</string>
-						</dict>
-						<key>3</key>
-						<dict>
-							<key>name</key>
-							<string>support.type.mcc</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>(m)(=)([0-3]|-1),?</string>
-				</dict>
-				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>string.unquoted.mcc</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.operator.assignment.mcc</string>
-						</dict>
-						<key>3</key>
-						<dict>
-							<key>name</key>
-							<string>support.type.mcc</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>(r[xy]m?)(=)(-?\d+(?:\.\d+)?),?</string>
-				</dict>
-				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>string.unquoted.mcc</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.operator.assignment.mcc</string>
-						</dict>
-						<key>3</key>
-						<dict>
-							<key>name</key>
-							<string>support.type.mcc</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>(name)(=!?)([\w-]+),?</string>
-				</dict>
-				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>string.unquoted.mcc</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.operator.assignment.mcc</string>
-						</dict>
-						<key>3</key>
-						<dict>
-							<key>name</key>
-							<string>support.type.mcc</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>(team|tag)(=!?)([\w-]+),?</string>
-				</dict>
-				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>string.unquoted.mcc</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.operator.assignment.mcc</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>(team)(=),?</string>
-				</dict>
-				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>string.unquoted.mcc</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>keyword.operator.assignment.mcc</string>
-						</dict>
-						<key>3</key>
-						<dict>
-							<key>name</key>
-							<string>support.type.mcc</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>(type)(=!?)(AreaEffectCloud|ArmorStand|Arrow|SpectralArrow|TippedArrow|Bat|Blaze|Boat|CaveSpider|Chicken|Cow|Creeper|EnderCrystal|EnderDragon|Enderman|Endermite|EntityHorse|EyeOfEnderSignal|FallingSand|Fireball|FireworksRocketEntity|Ghast|Giant|Guardian|ItemFrame|Item|LavaSlime|LeashKnot|MinecartChest|MinecartCommandBlock|MinecartFurnace|MinecartHopper|MinecartRideable|MinecartSpawner|MinecartTNT|Mob|Monster|MushroomCow|Ozelot|Painting|PigZombie|Pig|PrimedTnt|Rabbit|Rabbit|Sheep|Shulker|Silverfish|Skeleton|Slime|SmallFireball|Snowball|SnowMan|Spider|Squid|ThrownEgg|ThrownEnderpearl|ThrownExpBottle|ThrownPotion|Villager|VillagerGolem|Witch|WitherBoss|WitherSkull|Wolf|XPOrb|ShulkerBullet|DragonFireball|AreaEffectCloud|Zombie),?</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#err-chars</string>
-				</dict>
-			</array>
-		</dict>
-		<key>entity-selector-parameterless</key>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.function.mcc</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.function.mcc</string>
-				</dict>
-				<key>3</key>
-				<dict>
-					<key>name</key>
-					<string>support.type.mcc</string>
-				</dict>
-				<key>4</key>
-				<dict>
-					<key>name</key>
-					<string>support.type.mcc</string>
-				</dict>
-				<key>5</key>
-				<dict>
-					<key>name</key>
-					<string>support.type.mcc</string>
-				</dict>
-				<key>6</key>
-				<dict>
-					<key>name</key>
-					<string>support.type.mcc</string>
-				</dict>
-				<key>7</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.function.mcc</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>(@[aper])(\[)(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?(-?\d+\s*)(])</string>
 		</dict>
 		<key>err-chars</key>
 		<dict>
@@ -1465,7 +1436,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(((?:\\+)?\")(?:selector|executeAs|markerTag)\2)\s*:\s*(\2)</string>
+					<string>(((?:\\+)?\")(?:selector|markerTag)\2)\s*:\s*(\2)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -1481,7 +1452,7 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -1491,21 +1462,13 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 					</dict>
 					<key>name</key>
 					<string>json.string.selector</string>
 					<key>patterns</key>
 					<array>
-						<dict>
-							<key>include</key>
-							<string>#entity-selector-parameterless</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#entity-selector-argumented</string>
-						</dict>
 						<dict>
 							<key>include</key>
 							<string>#entity-selector</string>
@@ -1532,53 +1495,11 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string</string>
-						</dict>
-						<key>4</key>
-						<dict>
-							<key>name</key>
 							<string>constant.language.mcc</string>
-						</dict>
-						<key>5</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.string</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(((?:\\+)?\")color\2)\s*:\s*(\2)(none|black|dark_blue|dark_green|dark_aqua|dark_red|dark_purple|gold|gray|dark_gray|blue|green|aqua|red|light_purple|yellow|white)(\3),?</string>
-				</dict>
-				<dict>
-					<key>captures</key>
-					<dict>
-						<key>1</key>
-						<dict>
-							<key>name</key>
-							<string>string.quoted.mcc</string>
-						</dict>
-						<key>2</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.string</string>
-						</dict>
-						<key>3</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.string</string>
-						</dict>
-						<key>4</key>
-						<dict>
-							<key>name</key>
-							<string>constant.language.mcc</string>
-						</dict>
-						<key>5</key>
-						<dict>
-							<key>name</key>
-							<string>punctuation.definition.string</string>
-						</dict>
-					</dict>
-					<key>match</key>
-					<string>(((?:\\+)?\")type\2)\s*:\s*(\2)(impulse|repeating|chain)(\3),?</string>
+					<string>(((?:\\+)?\")color\2)\s*:\s*(\2(?:none|black|dark_blue|dark_green|dark_aqua|dark_red|dark_purple|gold|gray|dark_gray|blue|green|aqua|red|light_purple|yellow|white)\2),?</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -1832,13 +1753,7 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>[-+/*%^]=</string>
-					<key>name</key>
-					<string>keyword.operator.assignment.mcc</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>[!?=/]</string>
+					<string>[-+/*%^]?=</string>
 					<key>name</key>
 					<string>keyword.operator.assignment.mcc</string>
 				</dict>
@@ -2061,14 +1976,6 @@
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#entity-selector-parameterless</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#entity-selector-argumented</string>
-						</dict>
-						<dict>
-							<key>include</key>
 							<string>#entity-selector</string>
 						</dict>
 						<dict>
@@ -2105,6 +2012,151 @@
 				</dict>
 			</array>
 		</dict>
+		<key>smelt</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>(!\w+|# .+$)</string>
+					<key>name</key>
+					<string>keyword.control.mcc</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#smelt-json-array</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>(\$\{\w+\}|\$\w+)</string>
+					<key>name</key>
+					<string>entity.name.mcc</string>
+				</dict>
+			</array>
+		</dict>
+		<key>smelt-json-array</key>
+		<dict>
+			<key>begin</key>
+			<string>(\&gt;\{)</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctionation.definition.mcc</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>(\})</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.mcc</string>
+				</dict>
+			</dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>(\"executeAs\")\s*:\s*(\")</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>string.quoted.mcc</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>string.quoted.mcc</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(\"),?</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>string.quoted.mcc</string>
+						</dict>
+					</dict>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#entity-selector</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#err-chars</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>string.quoted.mcc</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>constant.language.mcc</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(\"type\")\s*:\s*(\"(?:(?:impulse|repeating)(?:-chain)?|chain)\"),?</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>string.quoted.mcc</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>constant.language.mcc</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(\"(?:auto|conditional)\")\s*:\s*(true|false),?</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>string.quoted.mcc</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>string.quoted.mcc</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(\"markerTag\")\s*:\s*(\"(?:[^\\\"]|(\\.))*\")</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>err-chars</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>json-err</string>
+				</dict>
+			</array>
+		</dict>
 		<key>string</key>
 		<dict>
 			<key>patterns</key>
@@ -2124,7 +2176,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>\b("(?:[^\\\"]|(\\.))*")\b</string>
+					<string>("(?:[^\\\"]|(\\.))*")</string>
 				</dict>
 			</array>
 		</dict>

@@ -7,32 +7,70 @@ uuid: 0da65be4-5aac-4b6f-8071-1aadb970b8d9
 
 patterns:
 - include: '#comment'
+- include: "#smelt"
 - include: '#nbt-json-array'
-- include: '#entity-selector-parameterless'
-- include: '#entity-selector-argumented'
 - include: '#entity-selector'
 - include: '#commands'
 - include: '#operators'
 - include: '#number'
-
-#- include: '#string'
+- include: '#string'
 
 repository:
   comment:
     patterns:
-    - match: '(//)(.*)$'
+    - match: '(//.*)$'
       captures:
-       '1': {name: comment.line.numbersign.mcc}
-       '2': {name: comment.line.mcc}
+       '1': {name: comment.line.mcc}
     - name: comment.block.mcc
       begin: '(/\*)'
       end: '(\*/)'
     - name: comment.line.mcc
       begin: '(!!)'
       end: '(!!)'
-        
+  
 
-  nbt-json-array: #The json matching goes first because it includes stuff that is mentioned in other syntax definitions
+  smelt:
+    patterns: 
+    - name: keyword.control.mcc
+      match: '(!\w+|# .+$)'
+    - include: '#smelt-json-array'
+    - name: entity.name.mcc
+      match: '(\$\{\w+\}|\$\w+)'
+
+  smelt-json-array: 
+    begin: '(\>\{)'
+    beginCaptures:
+      '1': {name: punctionation.definition.mcc}
+    patterns:
+    - begin: '(\"executeAs\")\s*:\s*(\")'
+      beginCaptures:
+        '1': {name: string.quoted.mcc} 
+        '2': {name: string.quoted.mcc}
+      patterns:
+      - include: '#entity-selector'
+      - include: '#err-chars'
+      end: '(\"),?'
+      endCaptures:
+        '1': {name: string.quoted.mcc}
+    - match: '(\"type\")\s*:\s*(\"(?:(?:impulse|repeating)(?:-chain)?|chain)\"),?'
+      captures:
+        '1': {name: string.quoted.mcc} 
+        '2': {name: constant.language.mcc}
+    - match: '(\"(?:auto|conditional)\")\s*:\s*(true|false),?'
+      captures:
+        '1': {name: string.quoted.mcc} 
+        '2': {name: constant.language.mcc}
+    - match: '(\"markerTag\")\s*:\s*(\"(?:[^\\\"]|(\\.))*\")'
+      captures:
+        '1': {name: string.quoted.mcc}
+        '2': {name: string.quoted.mcc}
+    - include: "err-chars"
+    - include: "json-err"
+    end: '(\})'
+    endCaptures:
+      '1': {name: punctuation.definition.mcc }
+
+  nbt-json-array: #Json Matching is second because it can include selectors, commands, and other syntax matched by other areas of the code
     begin: '([\{\[])'
     beginCaptures:
       '1': {name: punctuation.definition.mcc}
@@ -60,33 +98,22 @@ repository:
         '3': {name: string.quoted.mcc}
                    #Matching for the selector: directive
     - name: json.string.selector
-      begin: '(((?:\\+)?\")(?:selector|executeAs|markerTag)\2)\s*:\s*(\2)'
+      begin: '(((?:\\+)?\")(?:selector|markerTag)\2)\s*:\s*(\2)'
       beginCaptures:
         '1': {name: string.quoted.mcc} #The quotes
         '2': {name: punctuation.definition.string} #'Selector'
-        '3': {name: punctuation.definition.string}
+        '3': {name: string.quoted.mcc}
       patterns:
-      - include: '#entity-selector-parameterless'
-      - include: '#entity-selector-argumented'
       - include: '#entity-selector'
       - include: '#err-chars'
       end: '(\\?"),?'
       endCaptures:
-        '1': {name: punctuation.definition.string}
-    - match: '(((?:\\+)?\")color\2)\s*:\s*(\2)(none|black|dark_blue|dark_green|dark_aqua|dark_red|dark_purple|gold|gray|dark_gray|blue|green|aqua|red|light_purple|yellow|white)(\3),?'
+        '1': {name: string.quoted.mcc}
+    - match: '(((?:\\+)?\")color\2)\s*:\s*(\2(?:none|black|dark_blue|dark_green|dark_aqua|dark_red|dark_purple|gold|gray|dark_gray|blue|green|aqua|red|light_purple|yellow|white)\2),?'
       captures:
         '1': {name: string.quoted.mcc} 
         '2': {name: punctuation.definition.string}
-        '3': {name: punctuation.definition.string}
-        '4': {name: constant.language.mcc} 
-        '5': {name: punctuation.definition.string}
-    - match: '(((?:\\+)?\")type\2)\s*:\s*(\2)(impulse|repeating|chain)(\3),?'
-      captures:
-        '1': {name: string.quoted.mcc} 
-        '2': {name: punctuation.definition.string}
-        '3': {name: punctuation.definition.string}
-        '4': {name: constant.language.mcc} 
-        '5': {name: punctuation.definition.string}
+        '3': {name: constant.language.mcc}
     - match: '(((?:\\+)?\")(?:bold|italic|underline|strikethrough|obfuscated|conditional|auto)\2)\s*:\s*(\2?)(true|false)\3,?' #Booleans
       captures:
         '1': {name: string.quoted.mcc} #Quotes
@@ -122,7 +149,7 @@ repository:
         '5': {name: punctuation.definition.string.mcc}
 
 
-  hover-event-json: #TODO: add command detection for value
+  hover-event-json:
     begin: '(((?:\\+)?\")hoverEvent\2)\s*:\s*([\[\{])\s*'
     beginCaptures:
       '1': {name: string.quoted.mcc}
@@ -227,8 +254,6 @@ repository:
         endCaptures:
           '1': {name: punctuation.definition.mcc}
       - include: '#commands'
-      - include: '#entity-selector-parameterless'
-      - include: '#entity-selector-argumented'
       - include: '#entity-selector'
       - include: '#string'
       - include: '#number'
@@ -262,8 +287,6 @@ repository:
       - match: '([\w-]+|\*)'
         captures:
           '1': {name: string.quoted.mcc}
-      - include: '#entity-selector-parameterless'
-      - include: '#entity-selector-argumented'
       - include: '#entity-selector'
       - include: '#err-chars'
       end: '((?:\\+)?\"),?'
@@ -376,8 +399,6 @@ repository:
         endCaptures:
           '1': {name: punctuation.definition.mcc}
       - include: '#commands'
-      - include: '#entity-selector-parameterless'
-      - include: '#entity-selector-argumented'
       - include: '#entity-selector'
       - include: '#string'
       - include: '#number'
@@ -433,8 +454,6 @@ repository:
   commands:
     patterns:
     - name: keyword.control.mcc
-      match: '(!\w+|# \w+)'
-    - name: keyword.control.mcc
       match: '/\b(achievement|blockdata|clear|clone|debug|defaultgamemode|difficulty|effect|enchant|entitydata|execute|fill|gamemode|gamerule|give|kill|me|particle|playsound|replaceitem|say|scoreboard|seed|setblock|setworldspawn|spawnpoint|spreadplayers|stats|summon|tellraw|tell|testforblocks|testforblock|testfor|time|title|toggledownfall|tp|weather|worldborder|xp|stopsound|teleport|trigger)\b'
     - name: support.type.mcc
       match: '\b(food|add|clear|block|entity|destroy|set|on|off|reload|remove|replace|true|false|start|stop|day|night|clear|rain|thunder|peaceful|easy|normal|hard|hollow|keep|outline|survival|creative|adventure|spectator|dummy|trigger|deathCount|playerKillCount|totalKillCount|health|list|sidebar|belowName|objectives|players|teams|list|setdisplay|list|reset|enable|test|operation|empty|join|leave|option|color|commandBlockOutput|doDaylightCycle|doEntityDrops|doFireTick|doMobLoot|doMobSpawning|doTileDrops|keepInventory|logAdminCommands|mobGriefing|naturalRegeneration|randomTickSpeed|reducedDebugINfo|sendCommandFeedback|spawnRadius|reducedDebugInfo|disableElytraMovementCheck|showDeathMessages|spectatorsGenerateChunks|tag|AffectedBlocks|AffectedEntities|AffectedItems|QueryResult|SuccessCount)\b'
@@ -470,67 +489,66 @@ repository:
         '1': {name: string.unquoted.mcc}
         '2': {name: constant.language.mcc}
 
-  entity-selector-parameterless:
-    match: '(@[aper])(\[)(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?(-?\d+\s*)(])'
-    captures:
-      '1': {name: entity.name.function.mcc}
-      '2': {name: entity.name.function.mcc}
-      '3': {name: support.type.mcc}
-      '4': {name: support.type.mcc}
-      '5': {name: support.type.mcc}
-      '6': {name: support.type.mcc}
-      '7': {name: entity.name.function.mcc}
-
-  entity-selector-argumented:
-    begin: '(\@[aepr])(\[)(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?'
-    beginCaptures:
-      '1': {name: entity.name.function.mcc}
-      '2': {name: entity.name.function.mcc}
-      '3': {name: support.type.mcc}
-      '4': {name: support.type.mcc}
-      '5': {name: support.type.mcc}
-    patterns:
-    - match: '(d?[xyz]|[rl]m?|c|score_[0-z]{1,16}(?:_min)?)(=)(-?\d+),?'
-      captures:
-        '1': {name: string.unquoted.mcc}
-        '2': {name: keyword.operator.assignment.mcc}
-        '3': {name: support.type.mcc}
-    - match: '(m)(=)([0-3]|-1),?'
-      captures:
-        '1': {name: string.unquoted.mcc}
-        '2': {name: keyword.operator.assignment.mcc}
-        '3': {name: support.type.mcc}
-    - match: '(r[xy]m?)(=)(-?\d+(?:\.\d+)?),?'
-      captures:
-        '1': {name: string.unquoted.mcc}
-        '2': {name: keyword.operator.assignment.mcc}
-        '3': {name: support.type.mcc}
-    - match: '(name)(=!?)([\w-]+),?'
-      captures:
-        '1': {name: string.unquoted.mcc}
-        '2': {name: keyword.operator.assignment.mcc}
-        '3': {name: support.type.mcc}
-    - match: '(team|tag)(=!?)([\w-]+),?'
-      captures:
-        '1': {name: string.unquoted.mcc}
-        '2': {name: keyword.operator.assignment.mcc}
-        '3': {name: support.type.mcc}
-    - match: '(team)(=),?' #This is here because team= is valid
-      captures:
-        '1': {name: string.unquoted.mcc}
-        '2': {name: keyword.operator.assignment.mcc}
-    - match: '(type)(=!?)(AreaEffectCloud|ArmorStand|Arrow|SpectralArrow|TippedArrow|Bat|Blaze|Boat|CaveSpider|Chicken|Cow|Creeper|EnderCrystal|EnderDragon|Enderman|Endermite|EntityHorse|EyeOfEnderSignal|FallingSand|Fireball|FireworksRocketEntity|Ghast|Giant|Guardian|ItemFrame|Item|LavaSlime|LeashKnot|MinecartChest|MinecartCommandBlock|MinecartFurnace|MinecartHopper|MinecartRideable|MinecartSpawner|MinecartTNT|Mob|Monster|MushroomCow|Ozelot|Painting|PigZombie|Pig|PrimedTnt|Rabbit|Rabbit|Sheep|Shulker|Silverfish|Skeleton|Slime|SmallFireball|Snowball|SnowMan|Spider|Squid|ThrownEgg|ThrownEnderpearl|ThrownExpBottle|ThrownPotion|Villager|VillagerGolem|Witch|WitherBoss|WitherSkull|Wolf|XPOrb|ShulkerBullet|DragonFireball|AreaEffectCloud|Zombie),?'
-      captures:
-        '1': {name: string.unquoted.mcc}
-        '2': {name: keyword.operator.assignment.mcc}
-        '3': {name: support.type.mcc}
-    - include: '#err-chars'
-    end: '(\])'
-    endCaptures:
-      '1': {name: entity.name.function.mcc}
-  
   entity-selector:
     patterns:
+    #This is the selecter where there are no keys used
+    - match: '(@[aper])(\[)(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?(-?\d+\s*)(])'
+      captures:
+        '1': {name: entity.name.function.mcc}
+        '2': {name: entity.name.function.mcc}
+        '3': {name: support.type.mcc}
+        '4': {name: support.type.mcc}
+        '5': {name: support.type.mcc}
+        '6': {name: support.type.mcc}
+        '7': {name: entity.name.function.mcc}
+    #This section highlights the entity selector when there are keys involved
+    - begin: '(\@[aepr])(\[)(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?'
+      beginCaptures:
+        '1': {name: entity.name.function.mcc}
+        '2': {name: entity.name.function.mcc}
+        '3': {name: support.type.mcc}
+        '4': {name: support.type.mcc}
+        '5': {name: support.type.mcc}
+      patterns:
+      - match: '(d?[xyz]|[rl]m?|c|score_[0-z]{1,16}(?:_min)?)(=)(-?\d+),?'
+        captures:
+          '1': {name: string.unquoted.mcc}
+          '2': {name: keyword.operator.assignment.mcc}
+          '3': {name: support.type.mcc}
+      - match: '(m)(=)([0-3]|-1),?'
+        captures:
+          '1': {name: string.unquoted.mcc}
+          '2': {name: keyword.operator.assignment.mcc}
+          '3': {name: support.type.mcc}
+      - match: '(r[xy]m?)(=)(-?\d+(?:\.\d+)?),?'
+        captures:
+          '1': {name: string.unquoted.mcc}
+          '2': {name: keyword.operator.assignment.mcc}
+          '3': {name: support.type.mcc}
+      - match: '(name)(=!?)([\w-]+),?'
+        captures:
+          '1': {name: string.unquoted.mcc}
+          '2': {name: keyword.operator.assignment.mcc}
+          '3': {name: support.type.mcc}
+      - match: '(team|tag)(=!?)([\w-]+),?'
+        captures:
+          '1': {name: string.unquoted.mcc}
+          '2': {name: keyword.operator.assignment.mcc}
+          '3': {name: support.type.mcc}
+      - match: '(team)(=),?' #This is here because team= is valid
+        captures:
+          '1': {name: string.unquoted.mcc}
+          '2': {name: keyword.operator.assignment.mcc}
+      - match: '(type)(=!?)(AreaEffectCloud|ArmorStand|Arrow|SpectralArrow|TippedArrow|Bat|Blaze|Boat|CaveSpider|Chicken|Cow|Creeper|EnderCrystal|EnderDragon|Enderman|Endermite|EntityHorse|EyeOfEnderSignal|FallingSand|Fireball|FireworksRocketEntity|Ghast|Giant|Guardian|ItemFrame|Item|LavaSlime|LeashKnot|MinecartChest|MinecartCommandBlock|MinecartFurnace|MinecartHopper|MinecartRideable|MinecartSpawner|MinecartTNT|Mob|Monster|MushroomCow|Ozelot|Painting|PigZombie|Pig|PrimedTnt|Rabbit|Rabbit|Sheep|Shulker|Silverfish|Skeleton|Slime|SmallFireball|Snowball|SnowMan|Spider|Squid|ThrownEgg|ThrownEnderpearl|ThrownExpBottle|ThrownPotion|Villager|VillagerGolem|Witch|WitherBoss|WitherSkull|Wolf|XPOrb|ShulkerBullet|DragonFireball|AreaEffectCloud|Zombie),?'
+        captures:
+          '1': {name: string.unquoted.mcc}
+          '2': {name: keyword.operator.assignment.mcc}
+          '3': {name: support.type.mcc}
+      - include: '#err-chars'
+      end: '(\])'
+      endCaptures:
+        '1': {name: entity.name.function.mcc}
+    #Highlights your basic entity selector
     - match: '(@[aepr]|\*)'
       captures:
         '1': {name: entity.name.function.mcc}
@@ -544,9 +562,7 @@ repository:
   operators:
     patterns:
     - name: keyword.operator.assignment.mcc
-      match: '[-+/*%^]='
-    - name: keyword.operator.assignment.mcc
-      match: '[!?=/]'
+      match: '[-+/*%^]?='
 
   number:
     patterns:
@@ -560,7 +576,7 @@ repository:
 
   string:
     patterns:
-    - match: '\b("(?:[^\\\"]|(\\.))*")\b'
+    - match: '("(?:[^\\\"]|(\\.))*")'
       captures:
         '1': {name: string.quoted.mcc}
         '2': {name: constant.character.escape}
