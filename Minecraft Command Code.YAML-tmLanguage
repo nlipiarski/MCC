@@ -9,11 +9,11 @@ patterns:
 - include: '#comment'
 - include: "#smelt"
 - include: '#nbt-json-array'
+- include: '#string'
 - include: '#entity-selector'
 - include: '#commands'
 - include: '#operators'
 - include: '#number'
-- include: '#string'
 
 repository:
   comment:
@@ -82,10 +82,10 @@ repository:
     - include: '#pages-json'
     - include: '#entity-data'
     - include: '$self'
-    - include: '#json-err'
     - include: '#json-string'
-    - include: '#err-chars' #Should be last
-    end: '([\}\]]),?' #Make sure you match square and curly brackets
+    - include: '#json-err'
+    - include: '#err-chars'
+    end: '([\}\]]),?'
     endCaptures:
       '1': {name: punctuation.definition.mcc}
   
@@ -134,8 +134,8 @@ repository:
       - include: '#pages-json'
       - include: '#entity-data'
       - include: '#nbt-json-array'
-      - include: '#json-err'
       - include: '#json-string'
+      - include: '#json-err'
       - include: '#err-chars'
       end: '([\]\}]),?'
       captures:
@@ -177,8 +177,8 @@ repository:
       - include: '#pages-json'
       - include: '#entity-data'
       - include: '#nbt-json-array'
-      - include: '#json-err'
       - include: '#json-string'
+      - include: '#json-err'
       - include: '#err-chars'
       end: '([\]\}])((?:\\+)?\")?,?'
       endCaptures:
@@ -221,8 +221,8 @@ repository:
       - include: '#pages-json'
       - include: '#entity-data'
       - include: '#nbt-json-array'
-      - include: '#json-err'
       - include: '#json-string'
+      - include: '#json-err'
       - include: '#err-chars'
       end: '([\]\}])((?:\\+)?\")?,?'
       endCaptures:
@@ -247,15 +247,14 @@ repository:
         - include: '#pages-json'
         - include: '#entity-data'
         - include: '$self'
-        - include: '#json-err'
         - include: '#json-string'
+        - include: '#json-err'
         - include: '#err-chars' #Should be last
         end: '([\}\]]),?' #Make sure to match square and curly brackets
         endCaptures:
           '1': {name: punctuation.definition.mcc}
       - include: '#commands'
       - include: '#entity-selector'
-      - include: '#string'
       - include: '#number'
       end: '((?:\\+)?\"),?'
       endCaptures:
@@ -323,8 +322,8 @@ repository:
       - include: '#pages-json'
       - include: '#entity-data'
       - include: '#nbt-json-array'
-      - include: '#json-err'
       - include: '#json-string'
+      - include: '#json-err'
       - include: '#err-chars'
       end: '([\]\}])(\"),?'
       endCaptures:
@@ -392,15 +391,14 @@ repository:
         - include: '#pages-json'
         - include: '#entity-data'
         - include: '$self'
-        - include: '#json-err'
         - include: '#json-string'
+        - include: '#json-err'
         - include: '#err-chars' #Should be last
         end: '([\}\]]),?' #Make sure to match square and curly brackets
         endCaptures:
           '1': {name: punctuation.definition.mcc}
       - include: '#commands'
       - include: '#entity-selector'
-      - include: '#string'
       - include: '#number'
       end: '((?:\\+)?\"),?'
       endCaptures:
@@ -422,8 +420,8 @@ repository:
         - include: '#pages-json'
         - include: '#entity-data'
         - include: '$self'
-        - include: '#json-err'
         - include: '#json-string'
+        - include: '#json-err'
         - include: '#err-chars' #Should be last
         end: '([\}\]]),?' #Make sure to match square and curly brackets
         endCaptures:
@@ -444,8 +442,8 @@ repository:
       - include: '#pages-json'
       - include: '#entity-data'
       - include: '#nbt-json-array'
-      - include: '#json-err'
       - include: '#json-string'
+      - include: '#json-err'
       - include: '#err-chars' #Should be last
       end: '([\}\]]),?'
       endCaptures:

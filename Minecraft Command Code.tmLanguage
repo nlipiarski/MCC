@@ -24,6 +24,10 @@
 		</dict>
 		<dict>
 			<key>include</key>
+			<string>#string</string>
+		</dict>
+		<dict>
+			<key>include</key>
 			<string>#entity-selector</string>
 		</dict>
 		<dict>
@@ -37,10 +41,6 @@
 		<dict>
 			<key>include</key>
 			<string>#number</string>
-		</dict>
-		<dict>
-			<key>include</key>
-			<string>#string</string>
 		</dict>
 	</array>
 	<key>repository</key>
@@ -176,11 +176,11 @@
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#json-err</string>
+							<string>#json-string</string>
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#json-string</string>
+							<string>#json-err</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -283,11 +283,11 @@
 								</dict>
 								<dict>
 									<key>include</key>
-									<string>#json-err</string>
+									<string>#json-string</string>
 								</dict>
 								<dict>
 									<key>include</key>
-									<string>#json-string</string>
+									<string>#json-err</string>
 								</dict>
 								<dict>
 									<key>include</key>
@@ -302,10 +302,6 @@
 						<dict>
 							<key>include</key>
 							<string>#entity-selector</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#string</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -768,11 +764,11 @@
 								</dict>
 								<dict>
 									<key>include</key>
-									<string>#json-err</string>
+									<string>#json-string</string>
 								</dict>
 								<dict>
 									<key>include</key>
-									<string>#json-string</string>
+									<string>#json-err</string>
 								</dict>
 								<dict>
 									<key>include</key>
@@ -787,10 +783,6 @@
 						<dict>
 							<key>include</key>
 							<string>#entity-selector</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#string</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -878,11 +870,11 @@
 								</dict>
 								<dict>
 									<key>include</key>
-									<string>#json-err</string>
+									<string>#json-string</string>
 								</dict>
 								<dict>
 									<key>include</key>
-									<string>#json-string</string>
+									<string>#json-err</string>
 								</dict>
 								<dict>
 									<key>include</key>
@@ -952,11 +944,11 @@
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#json-err</string>
+							<string>#json-string</string>
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#json-string</string>
+							<string>#json-err</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -1367,11 +1359,11 @@
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#json-err</string>
+							<string>#json-string</string>
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#json-string</string>
+							<string>#json-err</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -1593,11 +1585,11 @@
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#json-err</string>
+							<string>#json-string</string>
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#json-string</string>
+							<string>#json-err</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -1723,11 +1715,11 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#json-err</string>
+					<string>#json-string</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#json-string</string>
+					<string>#json-err</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -1862,11 +1854,11 @@
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#json-err</string>
+							<string>#json-string</string>
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#json-string</string>
+							<string>#json-err</string>
 						</dict>
 						<dict>
 							<key>include</key>
