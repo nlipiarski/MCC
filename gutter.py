@@ -85,7 +85,7 @@ class UpdateGutterCommand(sublime_plugin.TextCommand):
 class UpdateGutter(sublime_plugin.EventListener):
 	def on_load(self, view):
 		if (view.file_name().endswith(".mcc")):
-			self.view.run_command("update_gutter")
+			view.run_command("update_gutter")
 
 	def on_modified(self, view):
 		if (view.file_name().endswith(".mcc")):
