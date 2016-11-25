@@ -1212,7 +1212,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(@[aepr]|\*)</string>
+					<string>\b(@[aepr]|\*)\b</string>
 				</dict>
 			</array>
 		</dict>
