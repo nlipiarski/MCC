@@ -12,13 +12,18 @@ class UpdateGutterCommand(sublime_plugin.TextCommand):
 		for blockType in ["impulse", "repeating", "chain", "impulse-chain", "repeating-chain"]:
 			self.view.add_regions(blockType, [], "source")
 			codeLines[blockType] = []
+			self.view.add_regions(blockType + "-off", [], "source")
+			codeLines[blockType + "-off"] = []
 			self.view.add_regions(blockType + "-conditional", [], "source")
 			codeLines[blockType + "-conditional"] = []
+			self.view.add_regions(blockType + "-conditional-off", [], "source")
+			codeLines[blockType + "-conditional-off"] = []
 
 		smeltJsonRegions = self.view.find_all(">\{.*\}")
 		self.view.add_regions("smeltJson",smeltJsonRegions)
 		lastType = "impulse"
 		lastConditional = ""
+		lastAuto = ""
 		for i in range(len(smeltJsonRegions)):
 			if (i<(len(smeltJsonRegions)-1)):
 				codeRegion = sublime.Region(smeltJsonRegions[i].end()+1, smeltJsonRegions[i+1].begin()-1)
@@ -47,23 +52,33 @@ class UpdateGutterCommand(sublime_plugin.TextCommand):
 			except KeyError:
 				newType = lastType
 
+			try:
+				if (not smeltJson["auto"]):
+					newAuto = "-off"
+				else:
+					newAuto = ""
+			except KeyError:
+				newAuto = lastAuto
+
 			firstLine = True
 			for line in self.view.lines(codeRegion):
-				if(re.search(r"^\s*\/",self.view.substr(line))):
+				if(re.search(r"^\s*\/",self.view.substr(line)) and not re.search(r"^\s*\/\/", self.view.substr(line))):
 					if (firstLine and (newType == "impulse-chain" or  newType == "repeating-chain")):
 						firstLine = False
 						newType = newType[0:-6]
-						self.add_code_region(newType+newConditional, line)
+						self.add_code_region(newType+newConditional + newAuto, line)
 						newType = "chain"
 					else:
-						self.add_code_region(newType+newConditional, line)
+						self.add_code_region(newType+newConditional + newAuto, line)
 
 
 				elif (re.search(r"^\s*\#",self.view.substr(line))):
 					newType = "impulse"
 					newConditional = ""
+					newAuto = ""
 					lastType = "impulse"
 					lastConditional = ""
+					lastAuto = ""
 
 			lastType = newType
 			lastConditional = newConditional
