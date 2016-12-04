@@ -62,6 +62,8 @@ class UpdateGutterCommand(sublime_plugin.TextCommand):
 
 			firstLine = True
 			for line in self.view.lines(codeRegion):
+				if ("comment" in self.view.scope_name(line.begin())):
+					continue
 				if(re.search(r"^\s*\/",self.view.substr(line)) and not re.search(r"^\s*\/\/", self.view.substr(line))):
 					if (firstLine and (newType == "impulse-chain" or  newType == "repeating-chain")):
 						firstLine = False
