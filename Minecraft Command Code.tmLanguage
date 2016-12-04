@@ -42,6 +42,10 @@
 			<key>include</key>
 			<string>#number</string>
 		</dict>
+		<dict>
+			<key>include</key>
+			<string>#err-chars</string>
+		</dict>
 	</array>
 	<key>repository</key>
 	<dict>
@@ -1212,7 +1216,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>\b(@[aepr]|\*)\b</string>
+					<string>(@[aepr]|\*)[^\[]</string>
 				</dict>
 			</array>
 		</dict>
@@ -1397,6 +1401,14 @@
 					</dict>
 					<key>match</key>
 					<string>(((?:\\+)?\")value\2)\s*:\s*((?:\"(?:[^\\\"]|\\.)*\")|(?:\\\"(?:[^\\\"]|\\(?:\\\\)+\"|\\[^\"])*\\\")),?</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#json-err</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#err-chars</string>
 				</dict>
 			</array>
 		</dict>
