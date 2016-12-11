@@ -231,34 +231,20 @@ repository:
       endCaptures:
         '1': {name: punctuation.definition.mcc}
     - name: json.attribute.command.mcc
-      begin: '(((?:\\+)?\")value\2)\s*:\s*(\2)(/)'
+      begin: '(((?:\\+)?\")value\2)\s*:\s*(\2)'
       beginCaptures:
         '1': {name: string.quoted.mcc}
         '2': {name: punctuation.definition.string.mcc}
         '3': {name: string.quoted.mcc}
         '4': {name: keyword.control.mcc}
       patterns:
-      - name: json.attribute.command.json.mcc
-        begin: '([\{\[])\s*'
-        beginCaptures:
-          '1': {name: punctuation.definition.mcc}
-        patterns:
-        - include: '#json-attributes'
-        - include: '#hover-event-json'
-        - include: '#click-event-json'
-        - include: '#score-json'
-        - include: '#pages-json'
-        - include: '#entity-data'
-        - include: '$self'
-        - include: '#json-string'
-        - include: '#json-err'
-        - include: '#err-chars' #Should be last
-        end: '([\}\]]),?' #Make sure to match square and curly brackets
-        endCaptures:
-          '1': {name: punctuation.definition.mcc}
-      - include: '#commands'
+      - include: '#nbt-json-array'
+      - include: '#string'
       - include: '#entity-selector'
+      - include: '#commands'
+      - include: '#operators'
       - include: '#number'
+      - include: '#err-chars'
       end: '((?:\\+)?\"),?'
       endCaptures:
         '1': {name: string.quoted.mcc}

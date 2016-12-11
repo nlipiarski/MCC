@@ -194,7 +194,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(((?:\\+)?\")value\2)\s*:\s*(\2)(/)</string>
+					<string>(((?:\\+)?\")value\2)\s*:\s*(\2)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -233,75 +233,12 @@
 					<key>patterns</key>
 					<array>
 						<dict>
-							<key>begin</key>
-							<string>([\{\[])\s*</string>
-							<key>beginCaptures</key>
-							<dict>
-								<key>1</key>
-								<dict>
-									<key>name</key>
-									<string>punctuation.definition.mcc</string>
-								</dict>
-							</dict>
-							<key>end</key>
-							<string>([\}\]]),?</string>
-							<key>endCaptures</key>
-							<dict>
-								<key>1</key>
-								<dict>
-									<key>name</key>
-									<string>punctuation.definition.mcc</string>
-								</dict>
-							</dict>
-							<key>name</key>
-							<string>json.attribute.command.json.mcc</string>
-							<key>patterns</key>
-							<array>
-								<dict>
-									<key>include</key>
-									<string>#json-attributes</string>
-								</dict>
-								<dict>
-									<key>include</key>
-									<string>#hover-event-json</string>
-								</dict>
-								<dict>
-									<key>include</key>
-									<string>#click-event-json</string>
-								</dict>
-								<dict>
-									<key>include</key>
-									<string>#score-json</string>
-								</dict>
-								<dict>
-									<key>include</key>
-									<string>#pages-json</string>
-								</dict>
-								<dict>
-									<key>include</key>
-									<string>#entity-data</string>
-								</dict>
-								<dict>
-									<key>include</key>
-									<string>$self</string>
-								</dict>
-								<dict>
-									<key>include</key>
-									<string>#json-string</string>
-								</dict>
-								<dict>
-									<key>include</key>
-									<string>#json-err</string>
-								</dict>
-								<dict>
-									<key>include</key>
-									<string>#err-chars</string>
-								</dict>
-							</array>
+							<key>include</key>
+							<string>#nbt-json-array</string>
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#commands</string>
+							<string>#string</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -309,7 +246,19 @@
 						</dict>
 						<dict>
 							<key>include</key>
+							<string>#commands</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#operators</string>
+						</dict>
+						<dict>
+							<key>include</key>
 							<string>#number</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#err-chars</string>
 						</dict>
 					</array>
 				</dict>
