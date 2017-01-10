@@ -72,18 +72,19 @@ repository:
       '1': {name: punctuation.definition.mcc }
 
   nbt-json-array: #Json Matching is second because it can include selectors, commands, and other syntax matched by other areas of the code
+    name: mcc.nbt-json-array
     begin: '([\{\[])'
     beginCaptures:
       '1': {name: punctuation.definition.mcc}
     patterns:
-    - include: '#json-attributes'
+    - include: '#entity-data'
     - include: '#hover-event-json'
     - include: '#click-event-json'
     - include: '#score-json'
     - include: '#pages-json'
-    - include: '#entity-data'
-    - include: '$self'
+    - include: '#json-attributes'
     - include: '#json-string'
+    - include: '$self'
     - include: '#json-err'
     - include: '#err-chars'
     end: '([\}\]]),?'
@@ -91,6 +92,7 @@ repository:
       '1': {name: punctuation.definition.mcc}
   
   json-attributes:
+    name: mcc.json-attributes
     patterns:
     - match: '(((?:\\+)?\")(?:text|insertion|title|author|translate)\2)\s*:\s*((?:\"(?:[^\\\"]|\\.)*\")|(?:\\\"(?:[^\\\"]|\\[^\"])*\\\")),?' 
       captures:
@@ -128,14 +130,14 @@ repository:
         '2': {name: punctuation.definition.string.mcc}
         '3': {name: punctuation.definition.mcc}
       patterns:
-      - include: '#json-attributes'
       - include: '#hover-event-json'
       - include: '#click-event-json'
       - include: '#score-json'
       - include: '#pages-json'
       - include: '#entity-data'
-      - include: '#nbt-json-array'
+      - include: '#json-attributes'
       - include: '#json-string'
+      - include: '#nbt-json-array'
       - include: '#json-err'
       - include: '#err-chars'
       end: '([\]\}]),?'
@@ -151,6 +153,7 @@ repository:
 
 
   hover-event-json:
+    name: mcc.hover-event
     begin: '(((?:\\+)?\")hoverEvent\2)\s*:\s*([\[\{])\s*'
     beginCaptures:
       '1': {name: string.quoted.mcc}
@@ -171,14 +174,14 @@ repository:
         '2': {name: punctuation.definition.string.mcc}
         '3': {name: punctuation.definition.mcc}
       patterns:
-      - include: '#json-attributes'
       - include: '#hover-event-json'
       - include: '#click-event-json'
       - include: '#score-json'
       - include: '#pages-json'
       - include: '#entity-data'
-      - include: '#nbt-json-array'
+      - include: '#json-attributes'
       - include: '#json-string'
+      - include: '#nbt-json-array'
       - include: '#json-err'
       - include: '#err-chars'
       end: '([\]\}])((?:\\+)?\")?,?'
@@ -197,6 +200,7 @@ repository:
       '1': {name: punctuation.definition.mcc}
 
   click-event-json:
+    name: mcc.click-event
     begin: '(((?:\\+)?\")clickEvent\2)\s*:\s*([\[\{])'
     beginCaptures:
       '1': {name: string.quoted.mcc}
@@ -217,14 +221,14 @@ repository:
         '2': {name: punctuation.definition.string.mcc}
         '3': {name: punctuation.definition.mcc}
       patterns:
-      - include: '#json-attributes'
       - include: '#hover-event-json'
       - include: '#click-event-json'
       - include: '#score-json'
       - include: '#pages-json'
       - include: '#entity-data'
-      - include: '#nbt-json-array'
+      - include: '#json-attributes'
       - include: '#json-string'
+      - include: '#nbt-json-array'
       - include: '#json-err'
       - include: '#err-chars'
       end: '([\]\}])((?:\\+)?\")?,?'
@@ -259,6 +263,7 @@ repository:
       '1': {name: punctuation.definition.mcc} 
 
   score-json:
+    name: mcc.score-json
     begin: '(((?:\\+)?\")score\2)\s*:\s*([\[\{])'
     beginCaptures:
       '1': {name: string.quoted.mcc}
@@ -291,6 +296,7 @@ repository:
       '1': {name: punctuation.definition.mcc}
 
   pages-json:
+    name: mcc.pages-json
     begin: '(((?:\\+)?\")pages\2)\s*:\s*([\[\{])'
     beginCaptures:
       '1': {name: string.quoted.mcc}
@@ -303,13 +309,12 @@ repository:
         '1': {name: punctuation.definition.string.mcc}
         '2': {name: punctuation.definition.mapping.mcc}
       patterns:
-      - include: '#nbt-json-array'
-      - include: '#json-attributes'
       - include: '#hover-event-json'
       - include: '#click-event-json'
       - include: '#score-json'
       - include: '#pages-json'
       - include: '#entity-data'
+      - include: '#json-attributes'
       - include: '#nbt-json-array'
       - include: '#json-string'
       - include: '#json-err'
@@ -327,6 +332,7 @@ repository:
       '1': {name: punctuation.definition.mcc}
 
   entity-data: #Any data tag that can be used to describe an entity or items is here
+    name: mcc.entity-data
     patterns:
     - match: '(?:Pos|Motion|direction|power|Body|(?:Left|Right)(?:Arm|Leg)|Head)\s*:\s*(\[)(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?\s*)(\]),?'
       captures:
@@ -354,11 +360,11 @@ repository:
       captures:
         '1': {name: string.unquoted.mcc }
         '2': {name: constant.numeric.mcc}
-    - match: '(Fire|Air|Dimension|PortalCooldown|UUIDMost|UUIDLeast|EggLayTime|InLove|Age|ForcedAge|ExplosionRadius|Fuse|DragonPhase|carried(?:Data)?|Life[tT]ime|Temper|Type|Variant|SkeletonTrapTime|ExplosionPower|Size|CatType|ConversionTime|(?:Villager)?Profession|Anger|RabbitType|MoreCarrotTicks|Color|Peek|AttachFace|AP[XYZ]|SkeletonType|Riches|Career(?:Level)?|(?:max)?Uses|Invul|CollarColor|[xyz]Tile|in|shake|inData|pickup|life|[Ii]d|Amplifier|Duration|life|Age|Health|PickupDelay|Count|Damage|Value|Display(?:Data|Offset)|LootTableSeed|Fuel|Weight|Spawn(?:Count|Range)|Delay|(?:Min|Max)SpawnDelay|MaxNearbyEntities|RequiredPlayerRange|TNTFuse|TransferCooldown|TileID|Data|Time|FallHurtMax|ReapplicationDelay|WaitTime|DisabledSlots|(?:Tile)?[X-Z]|Type|Flight|Facing|ItemRotation|[Litp]|Steps|Base|Levels|Primary|Secondary|BrewTime|Fuel|OutputSignal|(?:Burn|Cook)Time|CookTimeTotal|note|block(?:Id|Data)|facing|Record|SkullType|Rot|Slot|lvl|RepairCost|Operation|color|HideFlags|generation|timestamp|type|SuccessCount|ZombieType|ParticleParam[1|2])\s*:\s*(-?\d+s?),?' #Whole numbers
+    - match: '(CustomPotionColor|Amount|Fire|Air|Dimension|PortalCooldown|UUIDMost|UUIDLeast|EggLayTime|InLove|Age|ForcedAge|ExplosionRadius|Fuse|DragonPhase|carried(?:Data)?|Life[tT]ime|Temper|Type|Variant|SkeletonTrapTime|ExplosionPower|Size|CatType|ConversionTime|(?:Villager)?Profession|Anger|RabbitType|MoreCarrotTicks|Color|Peek|AttachFace|AP[XYZ]|SkeletonType|Riches|Career(?:Level)?|(?:max)?Uses|Invul|CollarColor|[xyz]Tile|in|shake|inData|pickup|life|[Ii]d|Amplifier|Duration|life|Age|Health|PickupDelay|Count|Damage|Value|Display(?:Data|Offset)|LootTableSeed|Fuel|Weight|Spawn(?:Count|Range)|Delay|(?:Min|Max)SpawnDelay|MaxNearbyEntities|RequiredPlayerRange|TNTFuse|TransferCooldown|TileID|Data|Time|FallHurtMax|ReapplicationDelay|WaitTime|DisabledSlots|(?:Tile)?[X-Z]|Type|Flight|Facing|ItemRotation|[Litp]|Steps|Base|Levels|Primary|Secondary|BrewTime|Fuel|OutputSignal|(?:Burn|Cook)Time|CookTimeTotal|note|block(?:Id|Data)|facing|Record|SkullType|Rot|Slot|lvl|RepairCost|Operation|color|HideFlags|generation|timestamp|type|SuccessCount|ZombieType|ParticleParam[1|2])\s*:\s*(-?\d+s?),?' #Whole numbers
       captures:
         '1': {name: string.unquoted.mcc}
         '2': {name: constant.numeric.mcc}
-    - match: '(CustomName|(?:Affected(?:Blocks|Entities|Items)|QueryResult|SuccessCount)(?:Objective|Name)|OwnerName|OwnerUUID|HurtBy|inTile|Potion|Owner|Thrower|Type|DisplayTile|LootTable|EntityId|LastOutput|Block|Particle|Motive|id?|Pattern|Lock|Item|ExtraType|Signature|Value|AttributeName|Name|Slot|SkullOwner|profileId|profileName|url)\s*:\s*([^,}]+),?' #String
+    - match: '(Team|Attributes|CustomName|(?:Affected(?:Blocks|Entities|Items)|QueryResult|SuccessCount)(?:Objective|Name)|OwnerName|OwnerUUID|HurtBy|inTile|Potion|Owner|Thrower|Type|DisplayTile|LootTable|EntityId|LastOutput|Block|Particle|Motive|id?|Pattern|Lock|Item|ExtraType|Signature|Value|AttributeName|Name|Slot|SkullOwner|profileId|profileName|url)\s*:\s*([^,}]+),?' #String
       captures:
         '1': {name: string.unquoted.mcc}
         '2': {name: string.quoted.mcc}
@@ -373,14 +379,14 @@ repository:
         beginCaptures:
           '1': {name: punctuation.definition.mcc}
         patterns:
-        - include: '#json-attributes'
         - include: '#hover-event-json'
         - include: '#click-event-json'
         - include: '#score-json'
         - include: '#pages-json'
         - include: '#entity-data'
-        - include: '$self'
+        - include: '#json-attributes'
         - include: '#json-string'
+        - include: '$self'
         - include: '#json-err'
         - include: '#err-chars' #Should be last
         end: '([\}\]]),?' #Make sure to match square and curly brackets
@@ -402,14 +408,14 @@ repository:
         beginCaptures:
           '1': {name: punctuation.definition.mcc}
         patterns:
-        - include: '#json-attributes'
         - include: '#hover-event-json'
         - include: '#click-event-json'
         - include: '#score-json'
         - include: '#pages-json'
         - include: '#entity-data'
-        - include: '$self'
+        - include: '#json-attributes'
         - include: '#json-string'
+        - include: '$self'
         - include: '#json-err'
         - include: '#err-chars' #Should be last
         end: '([\}\]]),?' #Make sure to match square and curly brackets
@@ -424,16 +430,16 @@ repository:
         '1': {name: string.unquoted.mcc}
         '2': {name: punctuation.definition.mapping.mcc}
       patterns:
-      - include: '#json-attributes'
       - include: '#hover-event-json'
       - include: '#click-event-json'
       - include: '#score-json'
       - include: '#pages-json'
       - include: '#entity-data'
-      - include: '#nbt-json-array'
+      - include: '#json-attributes'
       - include: '#json-string'
+      - include: '#nbt-json-array'
       - include: '#json-err'
-      - include: '#err-chars' #Should be last
+      - include: '#err-chars'
       end: '([\}\]]),?'
       endCaptures:
         '1': {name: punctuation.definition.mapping.mcc}
@@ -441,7 +447,7 @@ repository:
   commands:
     patterns:
     - name: keyword.control.mcc
-      match: '/\b(achievement|blockdata|clear|clone|defaultgamemode|difficulty|effect|enchant|entitydata|execute|fill|gamemode|gamerule|give|help|kill|list|locate|me|particle|playsound|replaceitem|say|scoreboard|searge|seed|setblock|setidletimeout|setworldspawn|spawnpoint|spreadplayers|stats|stopsound|summon|teleport|tellraw|tell|testforblocks|testforblock|testfor|time|title|toggledownfall|tp|trigger|weather|worldborder)\b'
+      match: '\b/?(achievement|blockdata|clear|clone|defaultgamemode|difficulty|effect|enchant|entitydata|execute|fill|gamemode|gamerule|give|help|kill|list|locate|me|particle|playsound|replaceitem|say|scoreboard|searge|seed|setblock|setidletimeout|setworldspawn|spawnpoint|spreadplayers|stats|stopsound|summon|teleport|tellraw|tell|testforblocks|testforblock|testfor|time|title|toggledownfall|tp|trigger|weather|worldborder)\b'
     - name: support.type.mcc
       match: '\b(food|add|clear|block|entity|destroy|set|on|off|reload|remove|replace|true|false|start|stop|day|night|clear|rain|thunder|peaceful|easy|normal|hard|hollow|keep|outline|survival|creative|adventure|spectator|dummy|trigger|deathCount|playerKillCount|totalKillCount|health|list|sidebar|belowName|objectives|players|teams|list|setdisplay|list|reset|enable|test|operation|empty|join|leave|option|color|commandBlockOutput|disableElytraMovementCheck|doDaylightCycle|doEntityDrops|doFireTick|doMobLoot|doMobSpawning|doTileDrops|doWeatherCycle|keepInventory|logAdminCommands|maxEntityCramming|mobGriefing|naturalRegeneration|randomTickSpeed|reducedDebugInfo|sendCommandFeedback|showDeathMessages|spawnRadius|spectatorsGenerateChunks|tag|AffectedBlocks|AffectedEntities|AffectedItems|QueryResult|SuccessCount)\b'
     - name: constant.language.mcc
@@ -526,7 +532,7 @@ repository:
         captures:
           '1': {name: string.unquoted.mcc}
           '2': {name: keyword.operator.assignment.mcc}
-      - match: '(type)(=!?)(area_effect_cloud|armor_stand|arrow|bat|blaze|boat|cave_spider|chest_minecart|chicken|commandblock_minecart|cow|creeper|donkey|dragon_fireball|egg|elder_guardian|ender_crystal|ender_dragon|ender_pearl|enderman|endermite|eye_of_ender_signal|falling_block|fireball|fireworks_rocket|furnace_minecart|ghast|giant|guardian|hopper_minecart|horse|husk|item_frame|item|leash_knot|magma_cube|minecart|mooshroom|mule|ocelot|painting|pig|polar_bear|potion|rabbit|sheep|shulker_bullet|shulker|silverfish|skeleton_horse|skeleton|slime|small_fireball|snowball|snowman|spawner_minecart|spectral_arrow|spider|squid|stray|tnt_minecart|tnt|villager_golem|villager|witch|wither_skeleton|wither_skull|wither|wolf|xp_bottle|xp_orb|zombie_horse|zombie_pigman|zombie_villager|zombie),?'
+      - match: '(type)(=!?)(player|area_effect_cloud|armor_stand|arrow|bat|blaze|boat|cave_spider|chest_minecart|chicken|commandblock_minecart|cow|creeper|donkey|dragon_fireball|egg|elder_guardian|ender_crystal|ender_dragon|ender_pearl|enderman|endermite|eye_of_ender_signal|falling_block|fireball|fireworks_rocket|furnace_minecart|ghast|giant|guardian|hopper_minecart|horse|husk|item_frame|item|leash_knot|magma_cube|minecart|mooshroom|mule|ocelot|painting|pig|polar_bear|potion|rabbit|sheep|shulker_bullet|shulker|silverfish|skeleton_horse|skeleton|slime|small_fireball|snowball|snowman|spawner_minecart|spectral_arrow|spider|squid|stray|tnt_minecart|tnt|villager_golem|villager|witch|wither_skeleton|wither_skull|wither|wolf|xp_bottle|xp_orb|zombie_horse|zombie_pigman|zombie_villager|zombie),?'
         captures:
           '1': {name: string.unquoted.mcc}
           '2': {name: keyword.operator.assignment.mcc}
@@ -570,6 +576,6 @@ repository:
 
   err-chars: # If {} or [] or " or : characters are matched at this point that means they arent in a json array so make em bold and obvious
     patterns:
-    - match: '[\[\]\{\}:\"\\,]'
+    - match: '[\[\]\{\}:\"\\,=]'
       name: invalid.illegal
 ...

@@ -81,6 +81,8 @@
 					<string>punctuation.definition.mcc</string>
 				</dict>
 			</dict>
+			<key>name</key>
+			<string>mcc.click-event</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -152,10 +154,6 @@
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#json-attributes</string>
-						</dict>
-						<dict>
-							<key>include</key>
 							<string>#hover-event-json</string>
 						</dict>
 						<dict>
@@ -176,11 +174,15 @@
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#nbt-json-array</string>
+							<string>#json-attributes</string>
 						</dict>
 						<dict>
 							<key>include</key>
 							<string>#json-string</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#nbt-json-array</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -297,7 +299,7 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>/\b(achievement|blockdata|clear|clone|defaultgamemode|difficulty|effect|enchant|entitydata|execute|fill|gamemode|gamerule|give|help|kill|list|locate|me|particle|playsound|replaceitem|say|scoreboard|searge|seed|setblock|setidletimeout|setworldspawn|spawnpoint|spreadplayers|stats|stopsound|summon|teleport|tellraw|tell|testforblocks|testforblock|testfor|time|title|toggledownfall|tp|trigger|weather|worldborder)\b</string>
+					<string>\b/?(achievement|blockdata|clear|clone|defaultgamemode|difficulty|effect|enchant|entitydata|execute|fill|gamemode|gamerule|give|help|kill|list|locate|me|particle|playsound|replaceitem|say|scoreboard|searge|seed|setblock|setidletimeout|setworldspawn|spawnpoint|spreadplayers|stats|stopsound|summon|teleport|tellraw|tell|testforblocks|testforblock|testfor|time|title|toggledownfall|tp|trigger|weather|worldborder)\b</string>
 					<key>name</key>
 					<string>keyword.control.mcc</string>
 				</dict>
@@ -478,6 +480,8 @@
 		</dict>
 		<key>entity-data</key>
 		<dict>
+			<key>name</key>
+			<string>mcc.entity-data</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -613,7 +617,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(Fire|Air|Dimension|PortalCooldown|UUIDMost|UUIDLeast|EggLayTime|InLove|Age|ForcedAge|ExplosionRadius|Fuse|DragonPhase|carried(?:Data)?|Life[tT]ime|Temper|Type|Variant|SkeletonTrapTime|ExplosionPower|Size|CatType|ConversionTime|(?:Villager)?Profession|Anger|RabbitType|MoreCarrotTicks|Color|Peek|AttachFace|AP[XYZ]|SkeletonType|Riches|Career(?:Level)?|(?:max)?Uses|Invul|CollarColor|[xyz]Tile|in|shake|inData|pickup|life|[Ii]d|Amplifier|Duration|life|Age|Health|PickupDelay|Count|Damage|Value|Display(?:Data|Offset)|LootTableSeed|Fuel|Weight|Spawn(?:Count|Range)|Delay|(?:Min|Max)SpawnDelay|MaxNearbyEntities|RequiredPlayerRange|TNTFuse|TransferCooldown|TileID|Data|Time|FallHurtMax|ReapplicationDelay|WaitTime|DisabledSlots|(?:Tile)?[X-Z]|Type|Flight|Facing|ItemRotation|[Litp]|Steps|Base|Levels|Primary|Secondary|BrewTime|Fuel|OutputSignal|(?:Burn|Cook)Time|CookTimeTotal|note|block(?:Id|Data)|facing|Record|SkullType|Rot|Slot|lvl|RepairCost|Operation|color|HideFlags|generation|timestamp|type|SuccessCount|ZombieType|ParticleParam[1|2])\s*:\s*(-?\d+s?),?</string>
+					<string>(CustomPotionColor|Amount|Fire|Air|Dimension|PortalCooldown|UUIDMost|UUIDLeast|EggLayTime|InLove|Age|ForcedAge|ExplosionRadius|Fuse|DragonPhase|carried(?:Data)?|Life[tT]ime|Temper|Type|Variant|SkeletonTrapTime|ExplosionPower|Size|CatType|ConversionTime|(?:Villager)?Profession|Anger|RabbitType|MoreCarrotTicks|Color|Peek|AttachFace|AP[XYZ]|SkeletonType|Riches|Career(?:Level)?|(?:max)?Uses|Invul|CollarColor|[xyz]Tile|in|shake|inData|pickup|life|[Ii]d|Amplifier|Duration|life|Age|Health|PickupDelay|Count|Damage|Value|Display(?:Data|Offset)|LootTableSeed|Fuel|Weight|Spawn(?:Count|Range)|Delay|(?:Min|Max)SpawnDelay|MaxNearbyEntities|RequiredPlayerRange|TNTFuse|TransferCooldown|TileID|Data|Time|FallHurtMax|ReapplicationDelay|WaitTime|DisabledSlots|(?:Tile)?[X-Z]|Type|Flight|Facing|ItemRotation|[Litp]|Steps|Base|Levels|Primary|Secondary|BrewTime|Fuel|OutputSignal|(?:Burn|Cook)Time|CookTimeTotal|note|block(?:Id|Data)|facing|Record|SkullType|Rot|Slot|lvl|RepairCost|Operation|color|HideFlags|generation|timestamp|type|SuccessCount|ZombieType|ParticleParam[1|2])\s*:\s*(-?\d+s?),?</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -630,7 +634,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(CustomName|(?:Affected(?:Blocks|Entities|Items)|QueryResult|SuccessCount)(?:Objective|Name)|OwnerName|OwnerUUID|HurtBy|inTile|Potion|Owner|Thrower|Type|DisplayTile|LootTable|EntityId|LastOutput|Block|Particle|Motive|id?|Pattern|Lock|Item|ExtraType|Signature|Value|AttributeName|Name|Slot|SkullOwner|profileId|profileName|url)\s*:\s*([^,}]+),?</string>
+					<string>(Team|Attributes|CustomName|(?:Affected(?:Blocks|Entities|Items)|QueryResult|SuccessCount)(?:Objective|Name)|OwnerName|OwnerUUID|HurtBy|inTile|Potion|Owner|Thrower|Type|DisplayTile|LootTable|EntityId|LastOutput|Block|Particle|Motive|id?|Pattern|Lock|Item|ExtraType|Signature|Value|AttributeName|Name|Slot|SkullOwner|profileId|profileName|url)\s*:\s*([^,}]+),?</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -689,10 +693,6 @@
 							<array>
 								<dict>
 									<key>include</key>
-									<string>#json-attributes</string>
-								</dict>
-								<dict>
-									<key>include</key>
 									<string>#hover-event-json</string>
 								</dict>
 								<dict>
@@ -713,11 +713,15 @@
 								</dict>
 								<dict>
 									<key>include</key>
-									<string>$self</string>
+									<string>#json-attributes</string>
 								</dict>
 								<dict>
 									<key>include</key>
 									<string>#json-string</string>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>$self</string>
 								</dict>
 								<dict>
 									<key>include</key>
@@ -795,10 +799,6 @@
 							<array>
 								<dict>
 									<key>include</key>
-									<string>#json-attributes</string>
-								</dict>
-								<dict>
-									<key>include</key>
 									<string>#hover-event-json</string>
 								</dict>
 								<dict>
@@ -819,11 +819,15 @@
 								</dict>
 								<dict>
 									<key>include</key>
-									<string>$self</string>
+									<string>#json-attributes</string>
 								</dict>
 								<dict>
 									<key>include</key>
 									<string>#json-string</string>
+								</dict>
+								<dict>
+									<key>include</key>
+									<string>$self</string>
 								</dict>
 								<dict>
 									<key>include</key>
@@ -869,10 +873,6 @@
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#json-attributes</string>
-						</dict>
-						<dict>
-							<key>include</key>
 							<string>#hover-event-json</string>
 						</dict>
 						<dict>
@@ -893,11 +893,15 @@
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#nbt-json-array</string>
+							<string>#json-attributes</string>
 						</dict>
 						<dict>
 							<key>include</key>
 							<string>#json-string</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#nbt-json-array</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -1147,7 +1151,7 @@
 								</dict>
 							</dict>
 							<key>match</key>
-							<string>(type)(=!?)(area_effect_cloud|armor_stand|arrow|bat|blaze|boat|cave_spider|chest_minecart|chicken|commandblock_minecart|cow|creeper|donkey|dragon_fireball|egg|elder_guardian|ender_crystal|ender_dragon|ender_pearl|enderman|endermite|eye_of_ender_signal|falling_block|fireball|fireworks_rocket|furnace_minecart|ghast|giant|guardian|hopper_minecart|horse|husk|item_frame|item|leash_knot|magma_cube|minecart|mooshroom|mule|ocelot|painting|pig|polar_bear|potion|rabbit|sheep|shulker_bullet|shulker|silverfish|skeleton_horse|skeleton|slime|small_fireball|snowball|snowman|spawner_minecart|spectral_arrow|spider|squid|stray|tnt_minecart|tnt|villager_golem|villager|witch|wither_skeleton|wither_skull|wither|wolf|xp_bottle|xp_orb|zombie_horse|zombie_pigman|zombie_villager|zombie),?</string>
+							<string>(type)(=!?)(player|area_effect_cloud|armor_stand|arrow|bat|blaze|boat|cave_spider|chest_minecart|chicken|commandblock_minecart|cow|creeper|donkey|dragon_fireball|egg|elder_guardian|ender_crystal|ender_dragon|ender_pearl|enderman|endermite|eye_of_ender_signal|falling_block|fireball|fireworks_rocket|furnace_minecart|ghast|giant|guardian|hopper_minecart|horse|husk|item_frame|item|leash_knot|magma_cube|minecart|mooshroom|mule|ocelot|painting|pig|polar_bear|potion|rabbit|sheep|shulker_bullet|shulker|silverfish|skeleton_horse|skeleton|slime|small_fireball|snowball|snowman|spawner_minecart|spectral_arrow|spider|squid|stray|tnt_minecart|tnt|villager_golem|villager|witch|wither_skeleton|wither_skull|wither|wolf|xp_bottle|xp_orb|zombie_horse|zombie_pigman|zombie_villager|zombie),?</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -1175,7 +1179,7 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>[\[\]\{\}:\"\\,]</string>
+					<string>[\[\]\{\}:\"\\,=]</string>
 					<key>name</key>
 					<string>invalid.illegal</string>
 				</dict>
@@ -1213,6 +1217,8 @@
 					<string>punctuation.definition.mcc</string>
 				</dict>
 			</dict>
+			<key>name</key>
+			<string>mcc.hover-event</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -1284,10 +1290,6 @@
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#json-attributes</string>
-						</dict>
-						<dict>
-							<key>include</key>
 							<string>#hover-event-json</string>
 						</dict>
 						<dict>
@@ -1308,11 +1310,15 @@
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#nbt-json-array</string>
+							<string>#json-attributes</string>
 						</dict>
 						<dict>
 							<key>include</key>
 							<string>#json-string</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#nbt-json-array</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -1363,6 +1369,8 @@
 		</dict>
 		<key>json-attributes</key>
 		<dict>
+			<key>name</key>
+			<string>mcc.json-attributes</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -1518,10 +1526,6 @@
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#json-attributes</string>
-						</dict>
-						<dict>
-							<key>include</key>
 							<string>#hover-event-json</string>
 						</dict>
 						<dict>
@@ -1542,11 +1546,15 @@
 						</dict>
 						<dict>
 							<key>include</key>
-							<string>#nbt-json-array</string>
+							<string>#json-attributes</string>
 						</dict>
 						<dict>
 							<key>include</key>
 							<string>#json-string</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#nbt-json-array</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -1644,11 +1652,13 @@
 					<string>punctuation.definition.mcc</string>
 				</dict>
 			</dict>
+			<key>name</key>
+			<string>mcc.nbt-json-array</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#json-attributes</string>
+					<string>#entity-data</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -1668,15 +1678,15 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#entity-data</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>$self</string>
+					<string>#json-attributes</string>
 				</dict>
 				<dict>
 					<key>include</key>
 					<string>#json-string</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>$self</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -1744,6 +1754,8 @@
 					<string>punctuation.definition.mcc</string>
 				</dict>
 			</dict>
+			<key>name</key>
+			<string>mcc.pages-json</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -1783,14 +1795,6 @@
 					<array>
 						<dict>
 							<key>include</key>
-							<string>#nbt-json-array</string>
-						</dict>
-						<dict>
-							<key>include</key>
-							<string>#json-attributes</string>
-						</dict>
-						<dict>
-							<key>include</key>
 							<string>#hover-event-json</string>
 						</dict>
 						<dict>
@@ -1808,6 +1812,10 @@
 						<dict>
 							<key>include</key>
 							<string>#entity-data</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#json-attributes</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -1878,6 +1886,8 @@
 					<string>punctuation.definition.mcc</string>
 				</dict>
 			</dict>
+			<key>name</key>
+			<string>mcc.score-json</string>
 			<key>patterns</key>
 			<array>
 				<dict>

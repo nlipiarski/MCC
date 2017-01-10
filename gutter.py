@@ -70,6 +70,7 @@ class UpdateGutterCommand(sublime_plugin.TextCommand):
 						newType = newType[0:-6]
 						self.add_code_region(newType+newConditional + newAuto, line)
 						newType = "chain"
+						newAuto = "true";
 					else:
 						self.add_code_region(newType+newConditional + newAuto, line)
 
