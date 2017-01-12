@@ -299,7 +299,7 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>\/?(achievement|blockdata|clear|clone|defaultgamemode|difficulty|effect|enchant|entitydata|execute|fill|gamemode|gamerule|give|help|kill|list|locate|me|particle|playsound|replaceitem|say|scoreboard|searge|seed|setblock|setidletimeout|setworldspawn|spawnpoint|spreadplayers|stats|stopsound|summon|teleport|tellraw|tell|testforblocks|testforblock|testfor|time|title|toggledownfall|tp|trigger|weather|worldborder)\b</string>
+					<string>(?:\s|^)\/?(achievement|blockdata|clear|clone|defaultgamemode|difficulty|effect|enchant|entitydata|execute|fill|gamemode|gamerule|give|help|kill|list|locate|me|particle|playsound|replaceitem|say|scoreboard|searge|seed|setblock|setidletimeout|setworldspawn|spawnpoint|spreadplayers|stats|stopsound|summon|teleport|tellraw|tell|testforblocks|testforblock|testfor|time|title|toggledownfall|tp|trigger|weather|worldborder)\b</string>
 					<key>name</key>
 					<string>keyword.control.mcc</string>
 				</dict>
@@ -311,7 +311,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\b((?:dark_)?(?:blue|green|aqua|red|purple|gray)|black|gold|light_purple|yellow|white|area_effect_cloud|area_effect_cloud|armor_stand|arrow|bat|blaze|boat|cave_spider|chest_minecart|chicken|commandblock_minecart|cow|creeper|donkey|dragon_fireball|egg|elder_guardian|ender_crystal|ender_dragon|ender_pearl|enderman|endermite|eye_of_ender_signal|falling_block|fireball|fireworks_rocket|furnace_minecart|ghast|giant|guardian|hopper_minecart|horse|husk|item_frame|item|leash_knot|magma_cube|minecart|mooshroom|mule|ocelot|painting|pig|polar_bear|potion|rabbit|sheep|shulker_bullet|shulker|silverfish|skeleton_horse|skeleton|slime|small_fireball|snowball|snowman|spawner_minecart|spectral_arrow|spider|squid|stray|tnt_minecart|tnt|villager_golem|villager|evocation_illager|vindication_illager|witch|wither_skeleton|wither_skull|wither|wolf|xp_bottle|xp_orb|zombie_horse|zombie_pigman|zombie_villager|zombie)\b</string>
+					<string>\b((?:dark_)?(?:blue|green|aqua|red|purple|gray)|black|gold|light_purple|yellow|white|area_effect_cloud|area_effect_cloud|armor_stand|arrow|bat|blaze|boat|cave_spider|chest_minecart|chicken|commandblock_minecart|cow|creeper|donkey|dragon_fireball|egg|elder_guardian|ender_crystal|ender_dragon|ender_pearl|enderman|endermite|eye_of_ender_signal|falling_block|fireball|fireworks_rocket|furnace_minecart|ghast|giant|guardian|hopper_minecart|horse|husk|item_frame|item|leash_knot|magma_cube|minecart|mooshroom|mule|ocelot|painting|pig|polar_bear|potion|rabbit|sheep|shulker_bullet|shulker|silverfish|skeleton_horse|skeleton|slime|small_fireball|snowball|snowman|spawner_minecart|spectral_arrow|spider|squid|stray|tnt_minecart|tnt|villager_golem|villager|evocation_illager|vindication_illager|witch|wither_skeleton|wither_skull|wither|wolf|xp_bottle|xp_orb|zombie_horse|zombie_pigman|zombie_villager|zombie|(?:evocation|vindication)_illager|vex)\b</string>
 					<key>name</key>
 					<string>constant.language.mcc</string>
 				</dict>
@@ -352,7 +352,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(slot\.([A-Za-z]+)\.((?:[A-Za-z]+)|(?:\d+)))</string>
+					<string>\b(slot\.([A-Za-z]+)\.((?:[A-Za-z]+)|(?:\d+)))\b</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -369,7 +369,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(stat\.(animalsBred|armorCleaned|bannerCleaned|beaconInteraction|boatOneCm|brewingstandInteraction|cakeSlicesEaten|cauldronFilled|cauldronUsed|chestOpened|climbOneCm|craftingTableInteraction|crouchOneCm|damageDealt|damageTaken|deaths|dispenserInspected|diveOneCm|drop|dropperInspected|enderchestOpened|fallOneCm|fishCaught|flowerPotted|flyOneCm|furnaceInteraction|hopperInspected|horseOneCm|itemEnchanted|jump|junkFished|leaveGame|minecartOneCm|mobKills|noteblockPlayed|noteblockTuned|pigOneCm|playerKills|playOneMinute|recordPlayed|sneakTime|sprintOneCm|swimOneCm|talkedToVillager|timeSinceDeath|sleepInBed|tradedWithVillager|trappedChestTriggered|treasureFished|walkOneCm))</string>
+					<string>\b(stat\.(animalsBred|armorCleaned|bannerCleaned|beaconInteraction|boatOneCm|brewingstandInteraction|cakeSlicesEaten|cauldronFilled|cauldronUsed|chestOpened|climbOneCm|craftingTableInteraction|crouchOneCm|damageDealt|damageTaken|deaths|dispenserInspected|diveOneCm|drop|dropperInspected|enderchestOpened|fallOneCm|fishCaught|flowerPotted|flyOneCm|furnaceInteraction|hopperInspected|horseOneCm|itemEnchanted|jump|junkFished|leaveGame|minecartOneCm|mobKills|noteblockPlayed|noteblockTuned|pigOneCm|playerKills|playOneMinute|recordPlayed|sneakTime|sprintOneCm|swimOneCm|talkedToVillager|timeSinceDeath|sleepInBed|tradedWithVillager|trappedChestTriggered|treasureFished|walkOneCm))\b</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -401,7 +401,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(stat\.((?:craft|use|break)Item|pickup|drop)\.(?:(\w+)\.(\w+)|(\w+)))</string>
+					<string>\b(stat\.((?:craft|use|break)Item|pickup|drop)\.(?:(\w+)\.(\w+)|(\w+)))\b</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -423,7 +423,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(stat\.(killEntity|entityKilledBy)\.(area_effect_cloud|armor_stand|arrow|bat|blaze|boat|cave_spider|chest_minecart|chicken|commandblock_minecart|cow|creeper|donkey|dragon_fireball|egg|elder_guardian|ender_crystal|ender_dragon|ender_pearl|enderman|endermite|eye_of_ender_signal|falling_block|fireball|fireworks_rocket|furnace_minecart|ghast|giant|guardian|hopper_minecart|horse|husk|item_frame|item|leash_knot|magma_cube|minecart|mooshroom|mule|ocelot|painting|pig|polar_bear|potion|rabbit|sheep|shulker_bullet|shulker|silverfish|skeleton_horse|skeleton|slime|small_fireball|snowball|snowman|spawner_minecart|spectral_arrow|spider|squid|stray|tnt_minecart|tnt|villager_golem|villager|evocation_illager|vindication_illager|witch|wither_skeleton|wither_skull|wither|wolf|xp_bottle|xp_orb|zombie_horse|zombie_pigman|zombie_villager|zombie))</string>
+					<string>\b(stat\.(killEntity|entityKilledBy)\.(area_effect_cloud|armor_stand|arrow|bat|blaze|boat|cave_spider|chest_minecart|chicken|commandblock_minecart|cow|creeper|donkey|dragon_fireball|egg|elder_guardian|ender_crystal|ender_dragon|ender_pearl|enderman|endermite|eye_of_ender_signal|falling_block|fireball|fireworks_rocket|furnace_minecart|ghast|giant|guardian|hopper_minecart|horse|husk|item_frame|item|leash_knot|magma_cube|minecart|mooshroom|mule|ocelot|painting|pig|polar_bear|potion|rabbit|sheep|shulker_bullet|shulker|silverfish|skeleton_horse|skeleton|slime|small_fireball|snowball|snowman|spawner_minecart|spectral_arrow|spider|squid|stray|tnt_minecart|tnt|villager_golem|villager|evocation_illager|vindication_illager|witch|wither_skeleton|wither_skull|wither|wolf|xp_bottle|xp_orb|zombie_horse|zombie_pigman|zombie_villager|zombie))\b</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -440,7 +440,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>((?:teamkill|killedByTeam)\.((?:dark_)?(?:blue|green|aqua|red|purple|gray)|black|gold|light_purple|yellow|white))</string>
+					<string>\b((?:teamkill|killedByTeam)\.((?:dark_)?(?:blue|green|aqua|red|purple|gray)|black|gold|light_purple|yellow|white))\b</string>
 				</dict>
 			</array>
 		</dict>
@@ -1596,7 +1596,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(((?:\\+)?\")type\2)\s*:\s*(\2?)(area_effect_cloud|armor_stand|arrow|bat|blaze|boat|cave_spider|chest_minecart|chicken|commandblock_minecart|cow|creeper|donkey|dragon_fireball|egg|elder_guardian|ender_crystal|ender_dragon|ender_pearl|enderman|endermite|eye_of_ender_signal|falling_block|fireball|fireworks_rocket|furnace_minecart|ghast|giant|guardian|hopper_minecart|horse|husk|item_frame|item|leash_knot|magma_cube|minecart|mooshroom|mule|ocelot|painting|pig|polar_bear|potion|rabbit|sheep|shulker_bullet|shulker|silverfish|skeleton_horse|skeleton|slime|small_fireball|snowball|snowman|spawner_minecart|spectral_arrow|spider|squid|stray|tnt_minecart|tnt|villager_golem|villager|evocation_illager|vindication_illager|witch|wither_skeleton|wither_skull|wither|wolf|xp_bottle|xp_orb|zombie_horse|zombie_pigman|zombie_villager|zombie)(\3),?</string>
+					<string>(((?:\\+)?\")type\2)\s*:\s*(\2?)(area_effect_cloud|armor_stand|arrow|bat|blaze|boat|cave_spider|chest_minecart|chicken|commandblock_minecart|cow|creeper|donkey|dragon_fireball|egg|elder_guardian|ender_crystal|ender_dragon|ender_pearl|enderman|endermite|eye_of_ender_signal|falling_block|fireball|fireworks_rocket|furnace_minecart|ghast|giant|guardian|hopper_minecart|horse|husk|item_frame|item|leash_knot|magma_cube|minecart|mooshroom|mule|ocelot|painting|pig|polar_bear|potion|rabbit|sheep|shulker_bullet|shulker|silverfish|skeleton_horse|skeleton|slime|small_fireball|snowball|snowman|spawner_minecart|spectral_arrow|spider|squid|stray|tnt_minecart|tnt|villager_golem|villager|evocation_illager|vindication_illager|witch|wither_skeleton|wither_skull|wither|wolf|xp_bottle|xp_orb|zombie_horse|zombie_pigman|zombie_villager|zombie|(?:evocation|vindication)_illager|vex)(\3),?</string>
 				</dict>
 			</array>
 		</dict>
