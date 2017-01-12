@@ -60,17 +60,16 @@ class UpdateGutterCommand(sublime_plugin.TextCommand):
 			except KeyError:
 				newAuto = lastAuto
 
-			firstLine = True
+
 			for line in self.view.lines(codeRegion):
 				if ("comment" in self.view.scope_name(line.begin())):
 					continue
 				if(re.search(r"^\s*\/",self.view.substr(line)) and not re.search(r"^\s*\/\/", self.view.substr(line))):
-					if (firstLine and (newType == "impulse-chain" or  newType == "repeating-chain")):
-						firstLine = False
+					if (newType == "impulse-chain" or  newType == "repeating-chain"):
 						newType = newType[0:-6]
-						self.add_code_region(newType+newConditional + newAuto, line)
+						self.add_code_region(newType + newConditional + newAuto, line)
 						newType = "chain"
-						newAuto = "true";
+						newAuto = ""
 					else:
 						self.add_code_region(newType+newConditional + newAuto, line)
 
