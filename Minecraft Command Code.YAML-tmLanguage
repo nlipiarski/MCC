@@ -425,7 +425,7 @@ repository:
       endCaptures:
         '1': {name: string.quoted.mcc}
     - name: json.arrays.mcc
-      begin: '(Passengers|Tags|CommandStats|SelectedItem|Items?|ArmorItems?|SaddleItem|Inventory|Offers|Recipes|buyB?|sell|tag|CustomPotionEffects|Potion|SpawnPotentials|Properties|SpawnData|TileEntityData|Effects|[0-4]|Equipment|HandItems|Pose|BeamTarget|FireworksItem|Explosions?|Fireworks|Colors|FadeColors|Owner|Target|Patterns|ExitPortal|RecordItem|Textures|CanDestroy|CanPlaceOn|ench|StoredEnchantments|BlockEntityTag|AttributeModifiers|display|Lore|SkullOwner|textures|Value|SKIN|CAPE|EntityTag|Decorations)\s*:\s*([\[\{])' #Arrays/Lists
+      begin: '(Entity|RootVehicle|Passengers|Tags|CommandStats|SelectedItem|Items?|ArmorItems?|SaddleItem|Inventory|Offers|Recipes|buyB?|sell|tag|CustomPotionEffects|Potion|SpawnPotentials|Properties|SpawnData|TileEntityData|Effects|[0-4]|Equipment|HandItems|Pose|BeamTarget|FireworksItem|Explosions?|Fireworks|Colors|FadeColors|Owner|Target|Patterns|ExitPortal|RecordItem|Textures|CanDestroy|CanPlaceOn|ench|StoredEnchantments|BlockEntityTag|AttributeModifiers|display|Lore|SkullOwner|textures|Value|SKIN|CAPE|EntityTag|Decorations)\s*:\s*([\[\{])' #Arrays/Lists
       beginCaptures:
         '1': {name: string.unquoted.mcc}
         '2': {name: punctuation.definition.mapping.mcc}
