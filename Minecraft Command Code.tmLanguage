@@ -583,7 +583,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(CanPickUpLoot|LeftHanded|OnGround|Invulnerable|CustomNameVisible|Silent|Glowing|BatFlags|IsChickenJockey|Powered|ignited|PlayerSpawned|Bred|ChestedHorse|EatingHaystack|HasReproduced|Tame|Saddle|SkeletonTrap|Elder|wasOnGround|IsBaby|CanBreakDoors|Sheared|Willing|rewardExp|PlayerCreated|Angry|player|inGround|Ambient|ShowParticles|CustomDisplayTile|Enabled|TrackOutput|DropItem|HurtEntities|Marker|Invisible|NoBasePlate|Gravity|ShowArms|Small|ShowBottom|Flicker|Trail|powered|auto|ExactTeleport|extending|Unbreakable|resolved|isPublic|map_is_scaling|NoGravity|Count|PersistenceRequired|NoAI)\s*:\s*([01]b?),?</string>
+					<string>(Johnny|CanPickUpLoot|LeftHanded|OnGround|Invulnerable|CustomNameVisible|Silent|Glowing|BatFlags|IsChickenJockey|Powered|ignited|PlayerSpawned|Bred|ChestedHorse|EatingHaystack|HasReproduced|Tame|Saddle|SkeletonTrap|Elder|wasOnGround|IsBaby|CanBreakDoors|Sheared|Willing|rewardExp|PlayerCreated|Angry|player|inGround|Ambient|ShowParticles|CustomDisplayTile|Enabled|TrackOutput|DropItem|HurtEntities|Marker|Invisible|NoBasePlate|Gravity|ShowArms|Small|ShowBottom|Flicker|Trail|powered|auto|ExactTeleport|extending|Unbreakable|resolved|isPublic|map_is_scaling|NoGravity|Count|PersistenceRequired|NoAI)\s*:\s*([01]b?),?</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -1393,11 +1393,11 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(((?:\\+)?\")(?:text|insertion|title|author|translate)\2)\s*:\s*((?:\"(?:[^\\\"]|\\.)*\")|(?:\\\"(?:[^\\\"]|\\[^\"])*\\\")),?</string>
+					<string>(((?:\\+)?\"?)(?:text|insertion|title|author|translate)\2)\s*:\s*((?:\"(?:[^\\\"]|\\.)*\")|(?:\\\"(?:[^\\\"]|\\[^\"])*\\\")),?</string>
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(((?:\\+)?\")(?:selector|markerTag)\2)\s*:\s*(\2)</string>
+					<string>(((?:\\+)?\"?)(?:selector|markerTag)\2)\s*:\s*(\2)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>

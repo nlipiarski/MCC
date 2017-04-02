@@ -94,14 +94,14 @@ repository:
   json-attributes:
     name: mcc.json-attributes
     patterns:
-    - match: '(((?:\\+)?\")(?:text|insertion|title|author|translate)\2)\s*:\s*((?:\"(?:[^\\\"]|\\.)*\")|(?:\\\"(?:[^\\\"]|\\[^\"])*\\\")),?' 
+    - match: '(((?:\\+)?\"?)(?:text|insertion|title|author|translate)\2)\s*:\s*((?:\"(?:[^\\\"]|\\.)*\")|(?:\\\"(?:[^\\\"]|\\[^\"])*\\\")),?' 
       captures:
         '1': {name: string.quoted.mcc} 
         '2': {name: punctuation.definition.string}
         '3': {name: string.quoted.mcc}
                    #Matching for the selector: directive
     - name: json.string.selector
-      begin: '(((?:\\+)?\")(?:selector|markerTag)\2)\s*:\s*(\2)'
+      begin: '(((?:\\+)?\"?)(?:selector|markerTag)\2)\s*:\s*(\2)'
       beginCaptures:
         '1': {name: string.quoted.mcc} #The quotes
         '2': {name: punctuation.definition.string} #'Selector'
@@ -352,7 +352,7 @@ repository:
         '7': {name: constant.numeric.mcc}
         '8': {name: constant.numeric.mcc}
         '9': {name: punctuation.definition.mapping.mcc}
-    - match: '(CanPickUpLoot|LeftHanded|OnGround|Invulnerable|CustomNameVisible|Silent|Glowing|BatFlags|IsChickenJockey|Powered|ignited|PlayerSpawned|Bred|ChestedHorse|EatingHaystack|HasReproduced|Tame|Saddle|SkeletonTrap|Elder|wasOnGround|IsBaby|CanBreakDoors|Sheared|Willing|rewardExp|PlayerCreated|Angry|player|inGround|Ambient|ShowParticles|CustomDisplayTile|Enabled|TrackOutput|DropItem|HurtEntities|Marker|Invisible|NoBasePlate|Gravity|ShowArms|Small|ShowBottom|Flicker|Trail|powered|auto|ExactTeleport|extending|Unbreakable|resolved|isPublic|map_is_scaling|NoGravity|Count|PersistenceRequired|NoAI)\s*:\s*([01]b?),?' #Boolean
+    - match: '(Johnny|CanPickUpLoot|LeftHanded|OnGround|Invulnerable|CustomNameVisible|Silent|Glowing|BatFlags|IsChickenJockey|Powered|ignited|PlayerSpawned|Bred|ChestedHorse|EatingHaystack|HasReproduced|Tame|Saddle|SkeletonTrap|Elder|wasOnGround|IsBaby|CanBreakDoors|Sheared|Willing|rewardExp|PlayerCreated|Angry|player|inGround|Ambient|ShowParticles|CustomDisplayTile|Enabled|TrackOutput|DropItem|HurtEntities|Marker|Invisible|NoBasePlate|Gravity|ShowArms|Small|ShowBottom|Flicker|Trail|powered|auto|ExactTeleport|extending|Unbreakable|resolved|isPublic|map_is_scaling|NoGravity|Count|PersistenceRequired|NoAI)\s*:\s*([01]b?),?' #Boolean
       captures:
         '1': {name: string.unquoted.mcc} 
         '2': {name: constant.numeric.mcc}
