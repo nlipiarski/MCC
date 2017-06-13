@@ -4,10 +4,10 @@
 <dict>
 	<key>fileTypes</key>
 	<array>
-		<string>mcc</string>
+		<string>mcfunction</string>
 	</array>
 	<key>name</key>
-	<string>Minecraft Command Code</string>
+	<string>Minecraft Commands</string>
 	<key>patterns</key>
 	<array>
 		<dict>
@@ -58,17 +58,17 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>string.quoted.mcc</string>
+					<string>string.quoted.mcfunction</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.string.mcc</string>
+					<string>punctuation.definition.string.mcfunction</string>
 				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.mcc</string>
+					<string>punctuation.definition.mcfunction</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -78,11 +78,11 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.mcc</string>
+					<string>punctuation.definition.mcfunction</string>
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>mcc.click-event</string>
+			<string>mcfunction.click-event</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -91,27 +91,27 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcc</string>
+							<string>punctuation.definition.string.mcfunction</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcc</string>
+							<string>punctuation.definition.string.mcfunction</string>
 						</dict>
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>constant.language.mcc</string>
+							<string>constant.language.mcfunction</string>
 						</dict>
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcc</string>
+							<string>punctuation.definition.string.mcfunction</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -125,17 +125,17 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcc</string>
+							<string>punctuation.definition.string.mcfunction</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.mcc</string>
+							<string>punctuation.definition.mcfunction</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -145,11 +145,11 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.mcc</string>
+							<string>punctuation.definition.mcfunction</string>
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>json.click-event.value.mcc</string>
+					<string>json.click-event.value.mcfunction</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -202,22 +202,22 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcc</string>
+							<string>punctuation.definition.string.mcfunction</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.control.mcc</string>
+							<string>keyword.control.mcfunction</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -227,11 +227,11 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>json.attribute.command.mcc</string>
+					<string>json.attribute.command.mcfunction</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -270,22 +270,22 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcc</string>
+							<string>punctuation.definition.string.mcfunction</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcc</string>
+							<string>constant.numeric.mcfunction</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -301,19 +301,19 @@
 					<key>match</key>
 					<string>(?:\s|^|\b)\/?(achievement|blockdata|clear|clone|defaultgamemode|difficulty|effect|enchant|entitydata|execute|fill|gamemode|gamerule|give|help|kill|list|locate|me|particle|playsound|replaceitem|say|scoreboard|searge|seed|setblock|setidletimeout|setworldspawn|spawnpoint|spreadplayers|stats|stopsound|summon|teleport|tellraw|tell|testforblocks|testforblock|testfor|time|title|toggledownfall|tp|trigger|weather|worldborder)\b</string>
 					<key>name</key>
-					<string>keyword.control.mcc</string>
+					<string>keyword.control.mcfunction</string>
 				</dict>
 				<dict>
 					<key>match</key>
 					<string>\b(subtitle|actionbar|clear|reset|times|food|add|clear|block|entity|destroy|set|on|off|reload|remove|replace|true|false|start|stop|day|night|clear|rain|thunder|peaceful|easy|normal|hard|hollow|keep|outline|survival|creative|adventure|spectator|dummy|trigger|deathCount|playerKillCount|totalKillCount|health|list|sidebar|belowName|objectives|players|teams|list|setdisplay|list|reset|enable|test|operation|empty|join|leave|option|color|commandBlockOutput|disableElytraMovementCheck|doDaylightCycle|doEntityDrops|doFireTick|doMobLoot|doMobSpawning|doTileDrops|doWeatherCycle|keepInventory|logAdminCommands|maxEntityCramming|mobGriefing|naturalRegeneration|randomTickSpeed|reducedDebugInfo|sendCommandFeedback|showDeathMessages|spawnRadius|spectatorsGenerateChunks|tag|AffectedBlocks|AffectedEntities|AffectedItems|QueryResult|SuccessCount)\b</string>
 					<key>name</key>
-					<string>support.type.mcc</string>
+					<string>support.type.mcfunction</string>
 				</dict>
 				<dict>
 					<key>match</key>
 					<string>\b((?:dark_)?(?:blue|green|aqua|red|purple|gray)|black|gold|light_purple|yellow|white|area_effect_cloud|area_effect_cloud|armor_stand|arrow|bat|blaze|boat|cave_spider|chest_minecart|chicken|commandblock_minecart|cow|creeper|donkey|dragon_fireball|egg|elder_guardian|ender_crystal|ender_dragon|ender_pearl|enderman|endermite|eye_of_ender_signal|falling_block|fireball|fireworks_rocket|furnace_minecart|ghast|giant|guardian|hopper_minecart|horse|husk|item_frame|item|leash_knot|magma_cube|minecart|mooshroom|mule|ocelot|painting|pig|polar_bear|potion|rabbit|sheep|shulker_bullet|shulker|silverfish|skeleton_horse|skeleton|slime|small_fireball|snowball|snowman|spawner_minecart|spectral_arrow|spider|squid|stray|tnt_minecart|tnt|villager_golem|villager|witch|wither_skeleton|wither_skull|wither|wolf|xp_bottle|xp_orb|zombie_horse|zombie_pigman|zombie_villager|zombie|(?:evocation|vindication)_illager|vex)\b</string>
 					<key>name</key>
-					<string>constant.language.mcc</string>
+					<string>constant.language.mcfunction</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -321,12 +321,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>support.type.mcc</string>
+							<string>support.type.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcc</string>
+							<string>string.unquoted.mcfunction</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -338,7 +338,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcc</string>
+							<string>string.unquoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -360,7 +360,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcc</string>
+							<string>string.unquoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -377,27 +377,27 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcc</string>
+							<string>string.unquoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>constant.language.mcc</string>
+							<string>constant.language.mcfunction</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>support.type.mcc</string>
+							<string>support.type.mcfunction</string>
 						</dict>
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcc</string>
+							<string>constant.numeric.mcfunction</string>
 						</dict>
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcc</string>
+							<string>constant.numeric.mcfunction</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -409,17 +409,17 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcc</string>
+							<string>string.unquoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>constant.language.mcc</string>
+							<string>constant.language.mcfunction</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>support.type.mcc</string>
+							<string>support.type.mcfunction</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -431,12 +431,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcc</string>
+							<string>string.unquoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>constant.language.mcc</string>
+							<string>constant.language.mcfunction</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -454,7 +454,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>comment.line.mcc</string>
+							<string>comment.line.mcfunction</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -466,7 +466,7 @@
 					<key>end</key>
 					<string>(\*/)</string>
 					<key>name</key>
-					<string>comment.block.mcc</string>
+					<string>comment.block.mcfunction</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -474,14 +474,14 @@
 					<key>end</key>
 					<string>(!!)</string>
 					<key>name</key>
-					<string>comment.line.mcc</string>
+					<string>comment.line.mcfunction</string>
 				</dict>
 			</array>
 		</dict>
 		<key>entity-data</key>
 		<dict>
 			<key>name</key>
-			<string>mcc.entity-data</string>
+			<string>mcfunction.entity-data</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -490,27 +490,27 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcc</string>
+							<string>string.unquoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcc</string>
+							<string>constant.numeric.mcfunction</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcc</string>
+							<string>constant.numeric.mcfunction</string>
 						</dict>
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcc</string>
+							<string>constant.numeric.mcfunction</string>
 						</dict>
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.mapping.mcc</string>
+							<string>punctuation.definition.mapping.mcfunction</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -522,47 +522,47 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcc</string>
+							<string>string.unquoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.mapping.mcc</string>
+							<string>punctuation.definition.mapping.mcfunction</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcc</string>
+							<string>constant.numeric.mcfunction</string>
 						</dict>
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcc</string>
+							<string>constant.numeric.mcfunction</string>
 						</dict>
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcc</string>
+							<string>constant.numeric.mcfunction</string>
 						</dict>
 						<key>6</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcc</string>
+							<string>constant.numeric.mcfunction</string>
 						</dict>
 						<key>7</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcc</string>
+							<string>constant.numeric.mcfunction</string>
 						</dict>
 						<key>8</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcc</string>
+							<string>constant.numeric.mcfunction</string>
 						</dict>
 						<key>9</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.mapping.mcc</string>
+							<string>punctuation.definition.mapping.mcfunction</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -574,12 +574,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcc</string>
+							<string>string.unquoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcc</string>
+							<string>constant.numeric.mcfunction</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -591,12 +591,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcc</string>
+							<string>string.unquoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcc</string>
+							<string>constant.numeric.mcfunction</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -608,12 +608,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcc</string>
+							<string>string.unquoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcc</string>
+							<string>constant.numeric.mcfunction</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -625,12 +625,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcc</string>
+							<string>string.unquoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -644,12 +644,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcc</string>
+							<string>string.unquoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -659,11 +659,11 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>json.attribute.command.mcc</string>
+					<string>json.attribute.command.mcfunction</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -674,7 +674,7 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>punctuation.definition.mcc</string>
+									<string>punctuation.definition.mcfunction</string>
 								</dict>
 							</dict>
 							<key>end</key>
@@ -684,11 +684,11 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>punctuation.definition.mcc</string>
+									<string>punctuation.definition.mcfunction</string>
 								</dict>
 							</dict>
 							<key>name</key>
-							<string>json.attribute.command.json.mcc</string>
+							<string>json.attribute.command.json.mcfunction</string>
 							<key>patterns</key>
 							<array>
 								<dict>
@@ -755,7 +755,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcc</string>
+							<string>string.unquoted.mcfunction</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -765,11 +765,11 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>json.string.texts.mcc</string>
+					<string>json.string.texts.mcfunction</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -780,7 +780,7 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>punctuation.definition.mcc</string>
+									<string>punctuation.definition.mcfunction</string>
 								</dict>
 							</dict>
 							<key>end</key>
@@ -790,11 +790,11 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>punctuation.definition.mcc</string>
+									<string>punctuation.definition.mcfunction</string>
 								</dict>
 							</dict>
 							<key>name</key>
-							<string>json.attribute.command.json.mcc</string>
+							<string>json.attribute.command.json.mcfunction</string>
 							<key>patterns</key>
 							<array>
 								<dict>
@@ -849,12 +849,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcc</string>
+							<string>string.unquoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.mapping.mcc</string>
+							<string>punctuation.definition.mapping.mcfunction</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -864,11 +864,11 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.mapping.mcc</string>
+							<string>punctuation.definition.mapping.mcfunction</string>
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>json.arrays.mcc</string>
+					<string>json.arrays.mcfunction</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -925,37 +925,37 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.function.mcc</string>
+							<string>entity.name.function.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.function.mcc</string>
+							<string>entity.name.function.mcfunction</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>support.type.mcc</string>
+							<string>support.type.mcfunction</string>
 						</dict>
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>support.type.mcc</string>
+							<string>support.type.mcfunction</string>
 						</dict>
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>support.type.mcc</string>
+							<string>support.type.mcfunction</string>
 						</dict>
 						<key>6</key>
 						<dict>
 							<key>name</key>
-							<string>support.type.mcc</string>
+							<string>support.type.mcfunction</string>
 						</dict>
 						<key>7</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.function.mcc</string>
+							<string>entity.name.function.mcfunction</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -969,27 +969,27 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.function.mcc</string>
+							<string>entity.name.function.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.function.mcc</string>
+							<string>entity.name.function.mcfunction</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>support.type.mcc</string>
+							<string>support.type.mcfunction</string>
 						</dict>
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>support.type.mcc</string>
+							<string>support.type.mcfunction</string>
 						</dict>
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>support.type.mcc</string>
+							<string>support.type.mcfunction</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -999,7 +999,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.function.mcc</string>
+							<string>entity.name.function.mcfunction</string>
 						</dict>
 					</dict>
 					<key>patterns</key>
@@ -1010,17 +1010,17 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>string.unquoted.mcc</string>
+									<string>string.unquoted.mcfunction</string>
 								</dict>
 								<key>2</key>
 								<dict>
 									<key>name</key>
-									<string>keyword.operator.assignment.mcc</string>
+									<string>keyword.operator.assignment.mcfunction</string>
 								</dict>
 								<key>3</key>
 								<dict>
 									<key>name</key>
-									<string>support.type.mcc</string>
+									<string>support.type.mcfunction</string>
 								</dict>
 							</dict>
 							<key>match</key>
@@ -1032,17 +1032,17 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>string.unquoted.mcc</string>
+									<string>string.unquoted.mcfunction</string>
 								</dict>
 								<key>2</key>
 								<dict>
 									<key>name</key>
-									<string>keyword.operator.assignment.mcc</string>
+									<string>keyword.operator.assignment.mcfunction</string>
 								</dict>
 								<key>3</key>
 								<dict>
 									<key>name</key>
-									<string>support.type.mcc</string>
+									<string>support.type.mcfunction</string>
 								</dict>
 							</dict>
 							<key>match</key>
@@ -1054,17 +1054,17 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>string.unquoted.mcc</string>
+									<string>string.unquoted.mcfunction</string>
 								</dict>
 								<key>2</key>
 								<dict>
 									<key>name</key>
-									<string>keyword.operator.assignment.mcc</string>
+									<string>keyword.operator.assignment.mcfunction</string>
 								</dict>
 								<key>3</key>
 								<dict>
 									<key>name</key>
-									<string>support.type.mcc</string>
+									<string>support.type.mcfunction</string>
 								</dict>
 							</dict>
 							<key>match</key>
@@ -1076,17 +1076,17 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>string.unquoted.mcc</string>
+									<string>string.unquoted.mcfunction</string>
 								</dict>
 								<key>2</key>
 								<dict>
 									<key>name</key>
-									<string>keyword.operator.assignment.mcc</string>
+									<string>keyword.operator.assignment.mcfunction</string>
 								</dict>
 								<key>3</key>
 								<dict>
 									<key>name</key>
-									<string>support.type.mcc</string>
+									<string>support.type.mcfunction</string>
 								</dict>
 							</dict>
 							<key>match</key>
@@ -1098,17 +1098,17 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>string.unquoted.mcc</string>
+									<string>string.unquoted.mcfunction</string>
 								</dict>
 								<key>2</key>
 								<dict>
 									<key>name</key>
-									<string>keyword.operator.assignment.mcc</string>
+									<string>keyword.operator.assignment.mcfunction</string>
 								</dict>
 								<key>3</key>
 								<dict>
 									<key>name</key>
-									<string>support.type.mcc</string>
+									<string>support.type.mcfunction</string>
 								</dict>
 							</dict>
 							<key>match</key>
@@ -1120,12 +1120,12 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>string.unquoted.mcc</string>
+									<string>string.unquoted.mcfunction</string>
 								</dict>
 								<key>2</key>
 								<dict>
 									<key>name</key>
-									<string>keyword.operator.assignment.mcc</string>
+									<string>keyword.operator.assignment.mcfunction</string>
 								</dict>
 							</dict>
 							<key>match</key>
@@ -1137,17 +1137,17 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>string.unquoted.mcc</string>
+									<string>string.unquoted.mcfunction</string>
 								</dict>
 								<key>2</key>
 								<dict>
 									<key>name</key>
-									<string>keyword.operator.assignment.mcc</string>
+									<string>keyword.operator.assignment.mcfunction</string>
 								</dict>
 								<key>3</key>
 								<dict>
 									<key>name</key>
-									<string>support.type.mcc</string>
+									<string>support.type.mcfunction</string>
 								</dict>
 							</dict>
 							<key>match</key>
@@ -1165,7 +1165,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.function.mcc</string>
+							<string>entity.name.function.mcfunction</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1194,17 +1194,17 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>string.quoted.mcc</string>
+					<string>string.quoted.mcfunction</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.string.mcc</string>
+					<string>punctuation.definition.string.mcfunction</string>
 				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.mcc</string>
+					<string>punctuation.definition.mcfunction</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -1214,11 +1214,11 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.mcc</string>
+					<string>punctuation.definition.mcfunction</string>
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>mcc.hover-event</string>
+			<string>mcfunction.hover-event</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -1227,27 +1227,27 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcc</string>
+							<string>punctuation.definition.string.mcfunction</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcc</string>
+							<string>punctuation.definition.string.mcfunction</string>
 						</dict>
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>constant.language.mcc</string>
+							<string>constant.language.mcfunction</string>
 						</dict>
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcc</string>
+							<string>punctuation.definition.string.mcfunction</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1261,17 +1261,17 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcc</string>
+							<string>punctuation.definition.string.mcfunction</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.mcc</string>
+							<string>punctuation.definition.mcfunction</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -1281,11 +1281,11 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.mcc</string>
+							<string>punctuation.definition.mcfunction</string>
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>json.hover-event.value.mcc</string>
+					<string>json.hover-event.value.mcfunction</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -1336,22 +1336,22 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcc</string>
+							<string>punctuation.definition.string.mcfunction</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcc</string>
+							<string>constant.numeric.mcfunction</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1370,7 +1370,7 @@
 		<key>json-attributes</key>
 		<dict>
 			<key>name</key>
-			<string>mcc.json-attributes</string>
+			<string>mcfunction.json-attributes</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -1379,7 +1379,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -1389,7 +1389,7 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1403,7 +1403,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -1413,7 +1413,7 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -1423,7 +1423,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -1446,7 +1446,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -1456,7 +1456,7 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>constant.language.mcc</string>
+							<string>constant.language.mcfunction</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1468,7 +1468,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -1483,7 +1483,7 @@
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>constant.language.mcc</string>
+							<string>constant.language.mcfunction</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1497,17 +1497,17 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcc</string>
+							<string>punctuation.definition.string.mcfunction</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.mcc</string>
+							<string>punctuation.definition.mcfunction</string>
 						</dict>
 					</dict>
 					<key>captures</key>
@@ -1515,13 +1515,13 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.mcc</string>
+							<string>punctuation.definition.mcfunction</string>
 						</dict>
 					</dict>
 					<key>end</key>
 					<string>([\]\}]),?</string>
 					<key>name</key>
-					<string>json.array.with-extra.mcc</string>
+					<string>json.array.with-extra.mcfunction</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -1572,27 +1572,27 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcc</string>
+							<string>punctuation.definition.string.mcfunction</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcc</string>
+							<string>punctuation.definition.string.mcfunction</string>
 						</dict>
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>constant.language.mcc</string>
+							<string>constant.language.mcfunction</string>
 						</dict>
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcc</string>
+							<string>punctuation.definition.string.mcfunction</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1622,7 +1622,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1639,7 +1639,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.mcc</string>
+					<string>punctuation.definition.mcfunction</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -1649,11 +1649,11 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.mcc</string>
+					<string>punctuation.definition.mcfunction</string>
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>mcc.nbt-json-array</string>
+			<string>mcfunction.nbt-json-array</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -1706,7 +1706,7 @@
 					<key>match</key>
 					<string>\b(~?-?\d*(?:\.\d+)?)\b</string>
 					<key>name</key>
-					<string>constant.numeric.mcc</string>
+					<string>constant.numeric.mcfunction</string>
 				</dict>
 			</array>
 		</dict>
@@ -1718,7 +1718,7 @@
 					<key>match</key>
 					<string>[-+/*%^]?=</string>
 					<key>name</key>
-					<string>keyword.operator.assignment.mcc</string>
+					<string>keyword.operator.assignment.mcfunction</string>
 				</dict>
 			</array>
 		</dict>
@@ -1731,17 +1731,17 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>string.quoted.mcc</string>
+					<string>string.quoted.mcfunction</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.string.mcc</string>
+					<string>punctuation.definition.string.mcfunction</string>
 				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.mcc</string>
+					<string>punctuation.definition.mcfunction</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -1751,11 +1751,11 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.mcc</string>
+					<string>punctuation.definition.mcfunction</string>
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>mcc.pages-json</string>
+			<string>mcfunction.pages-json</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -1766,12 +1766,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcc</string>
+							<string>punctuation.definition.string.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.mapping.mcc</string>
+							<string>punctuation.definition.mapping.mcfunction</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -1781,12 +1781,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.mapping.mcc</string>
+							<string>punctuation.definition.mapping.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcc</string>
+							<string>punctuation.definition.string.mcfunction</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -1841,12 +1841,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcc</string>
+							<string>punctuation.definition.string.mcfunction</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1863,17 +1863,17 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>string.quoted.mcc</string>
+					<string>string.quoted.mcfunction</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.string.mcc</string>
+					<string>punctuation.definition.string.mcfunction</string>
 				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.mcc</string>
+					<string>punctuation.definition.mcfunction</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -1883,11 +1883,11 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.mcc</string>
+					<string>punctuation.definition.mcfunction</string>
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>mcc.score-json</string>
+			<string>mcfunction.score-json</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -1898,17 +1898,17 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcc</string>
+							<string>punctuation.definition.string.mcfunction</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcc</string>
+							<string>punctuation.definition.string.mcfunction</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -1918,7 +1918,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcc</string>
+							<string>punctuation.definition.string.mcfunction</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -1931,7 +1931,7 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>string.quoted.mcc</string>
+									<string>string.quoted.mcfunction</string>
 								</dict>
 							</dict>
 							<key>match</key>
@@ -1953,17 +1953,17 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcc</string>
+							<string>punctuation.definition.string.mcfunction</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1983,7 +1983,7 @@
 					<key>match</key>
 					<string>(!\w+|# .+$)</string>
 					<key>name</key>
-					<string>keyword.control.mcc</string>
+					<string>keyword.control.mcfunction</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -1993,7 +1993,7 @@
 					<key>match</key>
 					<string>(\$\{\w+\}|\$\w+)</string>
 					<key>name</key>
-					<string>entity.name.mcc</string>
+					<string>entity.name.mcfunction</string>
 				</dict>
 			</array>
 		</dict>
@@ -2006,7 +2006,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctionation.definition.mcc</string>
+					<string>punctionation.definition.mcfunction</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -2016,7 +2016,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.mcc</string>
+					<string>punctuation.definition.mcfunction</string>
 				</dict>
 			</dict>
 			<key>patterns</key>
@@ -2029,12 +2029,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -2044,7 +2044,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 					</dict>
 					<key>patterns</key>
@@ -2065,12 +2065,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>constant.language.mcc</string>
+							<string>constant.language.mcfunction</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -2082,12 +2082,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>constant.language.mcc</string>
+							<string>constant.language.mcfunction</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -2099,12 +2099,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -2130,7 +2130,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>string.quoted.mcfunction</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -2145,7 +2145,7 @@
 		</dict>
 	</dict>
 	<key>scopeName</key>
-	<string>source.mcc</string>
+	<string>source.mcfunction</string>
 	<key>uuid</key>
 	<string>0da65be4-5aac-4b6f-8071-1aadb970b8d9</string>
 </dict>

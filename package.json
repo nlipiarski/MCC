@@ -1,0 +1,26 @@
+{
+    "name": "mcfunction",
+    "displayName": "Minecraft Commands",
+    "description": "Syntax highlighter for Minecraft's commands.",
+    "version": "0.0.1",
+    "publisher": " Nathan Liparski, Matthew 'Moesh' Dryden",
+    "engines": {
+        "vscode": "^1.12.0"
+    },
+    "categories": [
+        "Languages"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "mcfunction",
+            "aliases": ["Minecraft Commands", "mcfunction"],
+            "extensions": [".mcfunction"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "mcfunction",
+            "scopeName": "source.mcfunction",
+            "path": "./syntaxes/mcfunction.tmLanguage"
+        }]
+    }
+}

@@ -1,44 +1,65 @@
-# Minecraft Command Code Syntax Highlighter
+# mcfunction README
 
-*Created by [Nathan Liparski](http://twitter.com/NateLipiarski) with input and testing by [Moesh](http://moesh.ca/about).*
+This is the README for your extension "mcfunction". After writing up a brief description, we recommend including the following sections.
 
-## Using MCC Will Help Make Your Code Maintainable
+## Features
 
-Minecraft Map Making is more complex than ever.
+Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
 
-Besides learning how commands, scoreboards, and entities interact with each other, we also have to keep a mental network of what command is in each block. MCC aims to aid mechanics (formerly known as command blockers) in writing maintainable code through adding support for syntax highlighting.
+For example if there is an image subfolder under your extension project workspace:
 
-Minecraft Commands are constantly envolving. By writing your commands into a text document rather than Command Blocks, you're able to have a good overview of what needs to be changed. We've made it even more enticing by adding syntax highlighting to all Minecraft commands *which can be put into Command Blocks*.
+\!\[feature X\]\(images/feature-x.png\)
 
+> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
 
+## Requirements
 
-***No Syntax Highlighting***
-![No Syntax Highlighting](http://i.imgur.com/oWt7Ovs.png)
-***MCC Syntax Highlighting with All Hollow's Eve Theme.***
-![An Example of MCC](http://i.imgur.com/MCRj5g8.png)
-***MCC Syntax Highlighting with Cobalt Theme.***
-![An Example of MCC](http://i.imgur.com/vxwyGxU.png)
-***MCC Syntax Highlighting with Solarized (Light) Theme.***
-![An example of MCC](http://i.imgur.com/MpRvnS8.png)
-***MCC Syntax Highlighting with Bliss Theme.***
-![An Example of MCC](http://i.imgur.com/c0026hJ.png)
+If you have any requirements or dependencies, add a section describing those and how to install and configure them.
 
-Minecraft Command Code also plays nicely with [Smelt](http://smelt.gnasp.com) Code Compiler by Gnasp, which means you can make and deploy changes quickly.
+## Extension Settings
 
-## Installation
+Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
 
-Sublime is an extremely powerful, but kind of complicated, text editor. Learning how to use it effectively will be key to keeping your code maintainable.
+For example:
 
-### Instructions
+This extension contributes the following settings:
 
-*Installing Package Control can be scary, but just follow the instructions carefuly. You'll be OK.*
+* `myExtension.enable`: enable/disable this extension
+* `myExtension.thing`: set to `blah` to do something
 
-1. Install [Sublime](https://www.sublimetext.com/)
-2. Install [Package Control Plugin](https://packagecontrol.io/installation) (double-check your Sublime version)
-3. With Sublime opened, press Ctrl+Shift+P to open the Command Palette
-4. Type "install package" into the Command Palette and select "Package Control: Install Package"
-5. Type "MinecraftCommandCode" to filter the packages and select "Minecraft Command Code Syntax Highlighter"
+## Known Issues
 
-Now any file with an .mcc extension will use the Minecraft Command Code syntax highlighting.
+Calling out known issues can help limit users opening duplicate issues against your extension.
 
-If you run into any issues, feel free to send an email to [Moesh](mailto:moesh@moesh.ca) with the details or open an issue on the [github issue page](https://github.com/42iscool42/MCC/issues).
+## Release Notes
+
+Users appreciate release notes as you update your extension.
+
+### 1.0.0
+
+Initial release of ...
+
+### 1.0.1
+
+Fixed issue #.
+
+### 1.1.0
+
+Added features X, Y, and Z.
+
+-----------------------------------------------------------------------------------------------------------
+
+## Working with Markdown
+
+**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
+
+* Split the editor (`Cmd+\` on OSX or `Ctrl+\` on Windows and Linux)
+* Toggle preview (`Shift+CMD+V` on OSX or `Shift+Ctrl+V` on Windows and Linux)
+* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (OSX) to see a list of Markdown snippets
+
+### For more information
+
+* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
+* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+
+**Enjoy!**
