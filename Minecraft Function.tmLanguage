@@ -7,7 +7,7 @@
 		<string>mcfunction</string>
 	</array>
 	<key>name</key>
-	<string>Minecraft Functions</string>
+	<string>Minecraft Function</string>
 	<key>patterns</key>
 	<array>
 		<dict>
@@ -295,7 +295,7 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>(?:\s|^|\b)\/?(advancement|blockdata|clear|clone|defaultgamemode|difficulty|effect|enchant|entitydata|execute|fill|gamemode|gamerule|give|help|kill|list|locate|me|particle|playsound|replaceitem|say|scoreboard|searge|seed|setblock|setidletimeout|setworldspawn|spawnpoint|recipe|function|spreadplayers|stats|stopsound|summon|teleport|tellraw|tell|testforblocks|testforblock|testfor|time|title|toggledownfall|tp|trigger|weather|worldborder)\b</string>
+					<string>(?:\s|^|\b)\/?(advancement|blockdata|clear|clone|defaultgamemode|difficulty|effect|enchant|entitydata|execute|fill|gamemode|gamerule|give|help|kill|list|locate|me|particle|playsound|replaceitem|say|scoreboard|searge|seed|setblock|setidletimeout|setworldspawn|spawnpoint|recipe|spreadplayers|stats|stopsound|summon|teleport|tellraw|tell|testforblocks|testforblock|testfor|time|title|toggledownfall|tp|trigger|weather|worldborder)\b</string>
 					<key>name</key>
 					<string>keyword.control.mcfunction</string>
 				</dict>
