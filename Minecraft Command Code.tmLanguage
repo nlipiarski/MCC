@@ -321,6 +321,28 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
+							<string>keyword.control.mcc</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>support.type.mcc</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>string.unquoted.mcc</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(function)( [A-Za-z0-9_-]+:)([A-Za-z0-9_\/-]+)</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
 							<string>support.type.mcc</string>
 						</dict>
 						<key>2</key>
