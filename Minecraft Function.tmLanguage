@@ -16,6 +16,10 @@
 		</dict>
 		<dict>
 			<key>include</key>
+			<string>#multiline-json</string>
+		</dict>
+		<dict>
+			<key>include</key>
 			<string>#nbt-json-array</string>
 		</dict>
 		<dict>
@@ -40,7 +44,7 @@
 		</dict>
 		<dict>
 			<key>include</key>
-			<string>#err-chars</string>
+			<string>#errors</string>
 		</dict>
 	</array>
 	<key>repository</key>
@@ -48,23 +52,23 @@
 		<key>click-event-json</key>
 		<dict>
 			<key>begin</key>
-			<string>(((?:\\+)?\")clickEvent\2)\s*:\s*([\[\{])</string>
+			<string>(((?:\\+)?\")clickEvent\2)[ \t]*:[ \t]*([\[\{])</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>string.quoted.mcfunction</string>
+					<string>string.quoted.mcc</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.string.mcfunction</string>
+					<string>punctuation.definition.string.mcc</string>
 				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.mcfunction</string>
+					<string>punctuation.definition.mcc</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -74,11 +78,11 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.mcfunction</string>
+					<string>punctuation.definition.mcc</string>
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>mcfunction.click-event</string>
+			<string>mcc.click-event</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -87,51 +91,51 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcfunction</string>
+							<string>punctuation.definition.string.mcc</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcfunction</string>
+							<string>punctuation.definition.string.mcc</string>
 						</dict>
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>constant.language.mcfunction</string>
+							<string>constant.language.mcc</string>
 						</dict>
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcfunction</string>
+							<string>punctuation.definition.string.mcc</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(((?:\\+)?\")action\2)\s*:\s*(\2)((?:run|suggest)_command|open_url|change_page)(\2),?</string>
+					<string>(((?:\\+)?\")action\2)[ \t]*:[ \t]*(\2)((?:run|suggest)_command|open_url|change_page)(\2),?</string>
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(((?:\\+)?\")value\2)\s*:\s*\2?([\[\{])</string>
+					<string>(((?:\\+)?\")value\2)[ \t]*:[ \t]*\2?([\[\{])</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcfunction</string>
+							<string>punctuation.definition.string.mcc</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.mcfunction</string>
+							<string>punctuation.definition.mcc</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -141,11 +145,11 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.mcfunction</string>
+							<string>punctuation.definition.mcc</string>
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>json.click-event.value.mcfunction</string>
+					<string>json.click-event.value.mcc</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -192,28 +196,28 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(((?:\\+)?\")value\2)\s*:\s*(\2)</string>
+					<string>(((?:\\+)?\")value\2)[ \t]*:[ \t]*(\2)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcfunction</string>
+							<string>punctuation.definition.string.mcc</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.control.mcfunction</string>
+							<string>keyword.control.mcc</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -223,11 +227,11 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>json.attribute.command.mcfunction</string>
+					<string>json.attribute.command.mcc</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -266,26 +270,26 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcfunction</string>
+							<string>punctuation.definition.string.mcc</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcfunction</string>
+							<string>constant.numeric.mcc</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(((?:\\+)?\")value\2)\s*:\s*(?:((?:\"(?:[^\\\"]|\\.)*\")|(?:\\\"(?:[^\\\"]|\\(?:\\\\)+\"|\\[^\"])*\\\"))|(\d+)),?</string>
+					<string>(((?:\\+)?\")value\2)[ \t]*:[ \t]*(?:((?:\"(?:[^\\\"]|\\.)*\")|(?:\\\"(?:[^\\\"]|\\(?:\\\\)+\"|\\[^\"])*\\\"))|(\d+)),?</string>
 				</dict>
 			</array>
 		</dict>
@@ -294,22 +298,39 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.control.mcc</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>support.type.mcc</string>
+						</dict>
+					</dict>
 					<key>match</key>
-					<string>(?:\s|^|\b)\/?(advancement|blockdata|clear|clone|defaultgamemode|difficulty|effect|enchant|entitydata|execute|fill|gamemode|gamerule|give|help|kill|list|locate|me|particle|playsound|replaceitem|say|scoreboard|searge|seed|setblock|setidletimeout|setworldspawn|spawnpoint|recipe|spreadplayers|stats|stopsound|summon|teleport|tellraw|tell|testforblocks|testforblock|testfor|time|title|toggledownfall|tp|trigger|weather|worldborder)\b</string>
-					<key>name</key>
-					<string>keyword.control.mcfunction</string>
+					<string>(?:[ \t]|^|\b)(recipe) (give)\b</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\b(actionbar|add|adventure|AffectedBlocks|AffectedEntities|AffectedItems|announceAdvancements|belowName|block|clear|color|commandBlockOutput|creative|day|deathCount|destroy|disableElytraMovementCheck|doDaylightCycle|doEntityDrops|doFireTick|doLimitedCrafting|doMobLoot|doMobSpawning|doTileDrops|doWeatherCycle|dummy|easy|empty|enable|entity|everything|false|food|from|gameLoopFunction|grant|hard|health|hollow|if|join|keepInventory|keep|leave|list|logAdminCommands|maxCommandChainLength|maxEntityCramming|mobGriefing|naturalRegeneration|night|normal|objectives|off|only|on|operation|option|outline|peaceful|playerKillCount|players|QueryResult|rain|randomTickSpeed|reducedDebugInfo|reload|remove|replace|reset|revoke|sendCommandFeedback|setdisplay|set|showDeathMessages|sidebar|spawnRadius|spectatorsGenerateChunks|spectator|start|stop|subtitle|SuccessCount|survival|tag|teams|test|through|thunder|times|totalKillCount|trigger|true|until)\b</string>
+					<string>(?:[ \t]|^|\b)(advancement|blockdata|clear|clone|defaultgamemode|difficulty|effect|enchant|entitydata|execute|fill|gamemode|gamerule|give|help|kill|list|locate|me|particle|playsound|replaceitem|say|scoreboard|searge|seed|setblock|setidletimeout|setworldspawn|spawnpoint|recipe|spreadplayers|stats|stopsound|summon|teleport|tellraw|tell|testforblocks|testforblock|testfor|time|title|toggledownfall|tp|trigger|weather|worldborder)\b</string>
 					<key>name</key>
-					<string>support.type.mcfunction</string>
+					<string>keyword.control.mcc</string>
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>\b((?:dark_)?(?:blue|green|aqua|red|purple|gray)|black|gold|light_purple|yellow|white|(?:illusion|evocation|vindication)_illager|(?:chest|commandblock|furnace|hopper|spawner|tnt)_|(?:minecart)|(?:(?:skeleton|zombie)_|)(?:horse)|(?:illusion|evocation|vindication)_illager|(?:zombie)(?:_(?:pigman|villager)|)|area_effect_cloud|armor_stand|arrow|bat|blaze|boat|cave_spider|chicken|cow|creeper|donkey|dragon_fireball|egg|elder_guardian|ender_(?:pearl|crystal|dragon)|enderman|endermite|eye_of_ender_signal|falling_block|fireball|fireworks_rocket|ghast|giant|guardian|husk|item_frame|item|leash_knot|magma_cube|mooshroom|mule|ocelot|painting|pig|polar_bear|potion|rabbit|sheep|shulker_bullet|shulker|silverfish|skeleton_horse|skeleton|slime|small_fireball|snowball|snowman|spectral_arrow|spider|squid|stray|tnt|vex|villager_golem|villager|witch|wither_skeleton|wither|wolf|xp_(?:bottle|orb))\b</string>
+					<string>\b(while|unless|actionbar|add|adventure|AffectedBlocks|AffectedEntities|AffectedItems|announceAdvancements|belowName|block|clear|color|commandBlockOutput|creative|day|deathCount|destroy|disableElytraMovementCheck|doDaylightCycle|doEntityDrops|doFireTick|doLimitedCrafting|doMobLoot|doMobSpawning|doTileDrops|doWeatherCycle|dummy|easy|empty|enable|entity|everything|false|food|from|gameLoopFunction|grant|hard|health|hollow|if|join|keepInventory|keep|leave|list|logAdminCommands|maxCommandChainLength|maxEntityCramming|mobGriefing|naturalRegeneration|night|normal|objectives|off|only|on|operation|option|outline|peaceful|playerKillCount|players|QueryResult|rain|randomTickSpeed|reducedDebugInfo|reload|remove|replace|reset|revoke|sendCommandFeedback|setdisplay|set|showDeathMessages|sidebar|spawnRadius|spectatorsGenerateChunks|spectator|start|stop|subtitle|SuccessCount|survival|tag|teams|test|through|thunder|times|totalKillCount|trigger|true|until)\b</string>
 					<key>name</key>
-					<string>constant.language.mcfunction</string>
+					<string>support.type.mcc</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>\b((?:dark_)?(?:blue|green|aqua|red|purple|gray)|black|gold|light_purple|yellow|white|(?:chest|commandblock|furnace|hopper|spawner|tnt)_|(?:minecart)|llamas|evocation_fangs|lightning_bolt|llama_spit|parrot|(?:(?:skeleton|zombie)_|)(?:horse)|(?:illusion|evocation|vindication)_illager|(?:zombie)(?:_(?:pigman|villager)|)|area_effect_cloud|armor_stand|arrow|bat|blaze|boat|cave_spider|chicken|cow|creeper|donkey|dragon_fireball|egg|elder_guardian|ender_(?:pearl|crystal|dragon)|enderman|endermite|eye_of_ender_signal|falling_block|fireball|fireworks_rocket|ghast|giant|guardian|husk|item_frame|item|leash_knot|magma_cube|mooshroom|mule|ocelot|painting|pig|polar_bear|potion|rabbit|sheep|shulker_bullet|shulker|silverfish|skeleton_horse|skeleton|slime|small_fireball|snowball|snowman|spectral_arrow|spider|squid|stray|tnt|vex|villager_golem|villager|witch|wither_skeleton|wither|wolf|xp_(?:bottle|orb))\b</string>
+					<key>name</key>
+					<string>constant.language.mcc</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -329,9 +350,14 @@
 							<key>name</key>
 							<string>string.unquoted.mcc</string>
 						</dict>
+						<key>4</key>
+						<dict>
+							<key>name</key>
+							<string>invalid.illegal</string>
+						</dict>
 					</dict>
 					<key>match</key>
-					<string>(function)( [A-Za-z0-9_-]+:)([A-Za-z0-9\/_-]+)</string>
+					<string>(function) ([a-z_1-9]+:)([a-z_1-9]+(?:\/[a-z_1-9]+)*)(\/?)</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -339,12 +365,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>support.type.mcfunction</string>
+							<string>support.type.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcfunction</string>
+							<string>string.unquoted.mcc</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -356,7 +382,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcfunction</string>
+							<string>string.unquoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -378,7 +404,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcfunction</string>
+							<string>string.unquoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -395,27 +421,27 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcfunction</string>
+							<string>string.unquoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>constant.language.mcfunction</string>
+							<string>constant.language.mcc</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>support.type.mcfunction</string>
+							<string>support.type.mcc</string>
 						</dict>
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcfunction</string>
+							<string>constant.numeric.mcc</string>
 						</dict>
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcfunction</string>
+							<string>constant.numeric.mcc</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -427,17 +453,17 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcfunction</string>
+							<string>string.unquoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>constant.language.mcfunction</string>
+							<string>constant.language.mcc</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>support.type.mcfunction</string>
+							<string>support.type.mcc</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -449,12 +475,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcfunction</string>
+							<string>string.unquoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>constant.language.mcfunction</string>
+							<string>constant.language.mcc</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -476,14 +502,22 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(#.*)$</string>
+					<string>(^#.*)$</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(/\*)</string>
+					<key>end</key>
+					<string>(\*/)</string>
+					<key>name</key>
+					<string>invalid.illegal</string>
 				</dict>
 			</array>
 		</dict>
 		<key>entity-data</key>
 		<dict>
 			<key>name</key>
-			<string>mcfunction.entity-data</string>
+			<string>mcc.entity-data</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -492,31 +526,31 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcfunction</string>
+							<string>string.unquoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcfunction</string>
+							<string>constant.numeric.mcc</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcfunction</string>
+							<string>constant.numeric.mcc</string>
 						</dict>
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcfunction</string>
+							<string>constant.numeric.mcc</string>
 						</dict>
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.mapping.mcfunction</string>
+							<string>punctuation.definition.mapping.mcc</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(?:Pos|Motion|direction|power|Body|(?:Left|Right)(?:Arm|Leg)|Head)\s*:\s*(\[)(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?\s*)(\]),?</string>
+					<string>(?:Pos|Motion|direction|power|Body|(?:Left|Right)(?:Arm|Leg)|Head)[ \t]*:[ \t]*(\[)(-?\d+(?:\.\d+)?),[ \t]*(-?\d+(?:\.\d+)?),[ \t]*(-?\d+(?:\.\d+)?[ \t]*)(\]),?</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -524,51 +558,51 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcfunction</string>
+							<string>string.unquoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.mapping.mcfunction</string>
+							<string>punctuation.definition.mapping.mcc</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcfunction</string>
+							<string>constant.numeric.mcc</string>
 						</dict>
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcfunction</string>
+							<string>constant.numeric.mcc</string>
 						</dict>
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcfunction</string>
+							<string>constant.numeric.mcc</string>
 						</dict>
 						<key>6</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcfunction</string>
+							<string>constant.numeric.mcc</string>
 						</dict>
 						<key>7</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcfunction</string>
+							<string>constant.numeric.mcc</string>
 						</dict>
 						<key>8</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcfunction</string>
+							<string>constant.numeric.mcc</string>
 						</dict>
 						<key>9</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.mapping.mcfunction</string>
+							<string>punctuation.definition.mapping.mcc</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(Rotation|RightArm|LeftArm|Body|Head|LeftLeg|RightLeg)\s*:\s*(\[)(?:(?:(\d+):)?(-?\d+(?:\.\d+)?[f|F]?),\s*)(?:(?:(?:(\d+):)?(-?\d+(?:\.\d+)?[f|F]?),\s*))?(?:(?:(\d+):)?(-?\d+(?:\.\d+)?[f|F]?\s*))?(\]),?</string>
+					<string>(Rotation|RightArm|LeftArm|Body|Head|LeftLeg|RightLeg)[ \t]*:[ \t]*(\[)(?:(?:(\d+):)?(-?\d+(?:\.\d+)?[f|F]?),[ \t]*)(?:(?:(?:(\d+):)?(-?\d+(?:\.\d+)?[f|F]?),[ \t]*))?(?:(?:(\d+):)?(-?\d+(?:\.\d+)?[f|F]?[ \t]*))?(\]),?</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -576,16 +610,16 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcfunction</string>
+							<string>string.unquoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcfunction</string>
+							<string>constant.numeric.mcc</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(Johnny|CanPickUpLoot|LeftHanded|OnGround|Invulnerable|CustomNameVisible|Silent|Glowing|BatFlags|IsChickenJockey|Powered|ignited|PlayerSpawned|Bred|ChestedHorse|EatingHaystack|HasReproduced|Tame|Saddle|SkeletonTrap|Elder|wasOnGround|IsBaby|CanBreakDoors|Sheared|Willing|rewardExp|PlayerCreated|Angry|player|inGround|Ambient|ShowParticles|CustomDisplayTile|Enabled|TrackOutput|DropItem|HurtEntities|Marker|Invisible|NoBasePlate|Gravity|ShowArms|Small|ShowBottom|Flicker|Trail|powered|auto|ExactTeleport|extending|Unbreakable|resolved|isPublic|map_is_scaling|NoGravity|Count|PersistenceRequired|NoAI)\s*:\s*([01]b?),?</string>
+					<string>(Johnny|CanPickUpLoot|LeftHanded|OnGround|Invulnerable|CustomNameVisible|Silent|Glowing|BatFlags|IsChickenJockey|Powered|ignited|PlayerSpawned|Bred|ChestedHorse|EatingHaystack|HasReproduced|Tame|Saddle|SkeletonTrap|Elder|wasOnGround|IsBaby|CanBreakDoors|Sheared|Willing|rewardExp|PlayerCreated|Angry|player|inGround|Ambient|ShowParticles|CustomDisplayTile|Enabled|TrackOutput|DropItem|HurtEntities|Marker|Invisible|NoBasePlate|Gravity|ShowArms|Small|ShowBottom|Flicker|Trail|powered|auto|ExactTeleport|extending|Unbreakable|resolved|isPublic|map_is_scaling|NoGravity|Count|PersistenceRequired|NoAI)[ \t]*:[ \t]*([01]b?),?</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -593,16 +627,16 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcfunction</string>
+							<string>string.unquoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcfunction</string>
+							<string>constant.numeric.mcc</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(FallDistance|damage|Push[XZ]|FallHurtAmount|DurationOnUse|Radius(?:OnUse|PerTick)?|ItemDropChance|T[XYZ]D|progress|Amount|[xz]|rot)\s*:\s*(-?\d*(?:\.\d+)),?</string>
+					<string>(FallDistance|damage|Push[XZ]|FallHurtAmount|DurationOnUse|Radius(?:OnUse|PerTick)?|ItemDropChance|T[XYZ]D|progress|Amount|[xz]|rot)[ \t]*:[ \t]*(-?\d*(?:\.\d+)),?</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -610,16 +644,16 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcfunction</string>
+							<string>string.unquoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcfunction</string>
+							<string>constant.numeric.mcc</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(CustomPotionColor|Amount|Fire|Air|Dimension|PortalCooldown|UUIDMost|UUIDLeast|EggLayTime|InLove|Age|ForcedAge|ExplosionRadius|Fuse|DragonPhase|carried(?:Data)?|Life[tT]ime|Temper|Type|Variant|SkeletonTrapTime|ExplosionPower|Size|CatType|ConversionTime|(?:Villager)?Profession|Anger|RabbitType|MoreCarrotTicks|Color|Peek|AttachFace|AP[XYZ]|SkeletonType|Riches|Career(?:Level)?|(?:max)?Uses|Invul|CollarColor|[xyz]Tile|in|shake|inData|pickup|life|[Ii]d|Amplifier|Duration|life|Age|Health|PickupDelay|Count|Damage|Value|Display(?:Data|Offset)|LootTableSeed|Fuel|Weight|Spawn(?:Count|Range)|Delay|(?:Min|Max)SpawnDelay|MaxNearbyEntities|RequiredPlayerRange|TNTFuse|TransferCooldown|TileID|Data|Time|FallHurtMax|ReapplicationDelay|WaitTime|DisabledSlots|(?:Tile)?[X-Z]|Type|Flight|Facing|ItemRotation|[Litp]|Steps|Base|Levels|Primary|Secondary|BrewTime|Fuel|OutputSignal|(?:Burn|Cook)Time|CookTimeTotal|note|block(?:Id|Data)|facing|Record|SkullType|Rot|Slot|lvl|RepairCost|Operation|color|HideFlags|generation|timestamp|type|SuccessCount|ZombieType|ParticleParam[1|2])\s*:\s*(-?\d+s?),?</string>
+					<string>(CustomPotionColor|Amount|Fire|Air|Dimension|PortalCooldown|UUIDMost|UUIDLeast|EggLayTime|InLove|Age|ForcedAge|ExplosionRadius|Fuse|DragonPhase|carried(?:Data)?|Life[tT]ime|Temper|Type|Variant|SkeletonTrapTime|ExplosionPower|Size|CatType|ConversionTime|(?:Villager)?Profession|Anger|RabbitType|MoreCarrotTicks|Color|Peek|AttachFace|AP[XYZ]|SkeletonType|Riches|Career(?:Level)?|(?:max)?Uses|Invul|CollarColor|[xyz]Tile|in|shake|inData|pickup|life|[Ii]d|Amplifier|Duration|life|Age|Health|PickupDelay|Count|Damage|Value|Display(?:Data|Offset)|LootTableSeed|Fuel|Weight|Spawn(?:Count|Range)|Delay|(?:Min|Max)SpawnDelay|MaxNearbyEntities|RequiredPlayerRange|TNTFuse|TransferCooldown|TileID|Data|Time|FallHurtMax|ReapplicationDelay|WaitTime|DisabledSlots|(?:Tile)?[X-Z]|Type|Flight|Facing|ItemRotation|[Litp]|Steps|Base|Levels|Primary|Secondary|BrewTime|Fuel|OutputSignal|(?:Burn|Cook)Time|CookTimeTotal|note|block(?:Id|Data)|facing|Record|SkullType|Rot|Slot|lvl|RepairCost|Operation|color|HideFlags|generation|timestamp|type|SuccessCount|ZombieType|ParticleParam[1|2])[ \t]*:[ \t]*(-?\d+s?),?</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -627,31 +661,31 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcfunction</string>
+							<string>string.unquoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(Team|Attributes|CustomName|(?:Affected(?:Blocks|Entities|Items)|QueryResult|SuccessCount)(?:Objective|Name)|OwnerName|OwnerUUID|HurtBy|inTile|Potion|Owner|Thrower|Type|DisplayTile|LootTable|EntityId|LastOutput|Block|Particle|Motive|id?|Pattern|Lock|ExtraType|Signature|Value|AttributeName|Name|Slot|SkullOwner|profileId|profileName|url)\s*:\s*([^,}]+),?</string>
+					<string>(Team|Attributes|CustomName|(?:Affected(?:Blocks|Entities|Items)|QueryResult|SuccessCount)(?:Objective|Name)|OwnerName|OwnerUUID|HurtBy|inTile|Potion|Owner|Thrower|Type|DisplayTile|LootTable|EntityId|LastOutput|Block|Particle|Motive|id?|Pattern|Lock|ExtraType|Signature|Value|AttributeName|Name|Slot|SkullOwner|profileId|profileName|url)[ \t]*:[ \t]*([^,}]+),?</string>
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(Command)\s*:\s*((?:\\+)?\")</string>
+					<string>(Command)[ \t]*:[ \t]*((?:\\+)?\")</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcfunction</string>
+							<string>string.unquoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -661,22 +695,22 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>json.attribute.command.mcfunction</string>
+					<string>json.attribute.command.mcc</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>begin</key>
-							<string>([\{\[])\s*</string>
+							<string>([\{\[])[ \t]*</string>
 							<key>beginCaptures</key>
 							<dict>
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>punctuation.definition.mcfunction</string>
+									<string>punctuation.definition.mcc</string>
 								</dict>
 							</dict>
 							<key>end</key>
@@ -686,11 +720,11 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>punctuation.definition.mcfunction</string>
+									<string>punctuation.definition.mcc</string>
 								</dict>
 							</dict>
 							<key>name</key>
-							<string>json.attribute.command.json.mcfunction</string>
+							<string>json.attribute.command.json.mcc</string>
 							<key>patterns</key>
 							<array>
 								<dict>
@@ -751,38 +785,43 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(Text[1-4])\s*:\s*(\2)</string>
+					<string>(Text[1-4])[ \t]*:[ \t]*((?:\\+)?\")</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcfunction</string>
+							<string>string.unquoted.mcc</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>string.quoted.mcc</string>
 						</dict>
 					</dict>
 					<key>end</key>
-					<string>((?:\\+)?\"?),?</string>
+					<string>((?:\\+)?\"),?</string>
 					<key>endCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>json.string.texts.mcfunction</string>
+					<string>json.attribute.texts.mcc</string>
 					<key>patterns</key>
 					<array>
 						<dict>
 							<key>begin</key>
-							<string>([\{\[])\s*</string>
+							<string>([\{\[])[ \t]*</string>
 							<key>beginCaptures</key>
 							<dict>
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>punctuation.definition.mcfunction</string>
+									<string>punctuation.definition.mcc</string>
 								</dict>
 							</dict>
 							<key>end</key>
@@ -792,11 +831,11 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>punctuation.definition.mcfunction</string>
+									<string>punctuation.definition.mcc</string>
 								</dict>
 							</dict>
 							<key>name</key>
-							<string>json.attribute.command.json.mcfunction</string>
+							<string>json.attribute.command.json.mcc</string>
 							<key>patterns</key>
 							<array>
 								<dict>
@@ -841,22 +880,34 @@
 								</dict>
 							</array>
 						</dict>
+						<dict>
+							<key>include</key>
+							<string>#commands</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#entity-selector</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#number</string>
+						</dict>
 					</array>
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(Entity|RootVehicle|Passengers|Tags|CommandStats|SelectedItem|Items?|ArmorItems?|SaddleItem|Inventory|Offers|Recipes|buyB?|sell|tag|CustomPotionEffects|Potion|SpawnPotentials|Properties|SpawnData|TileEntityData|Effects|[0-4]|Equipment|HandItems|Pose|BeamTarget|FireworksItem|Explosions?|Fireworks|Colors|FadeColors|Owner|Target|Patterns|ExitPortal|RecordItem|Textures|CanDestroy|CanPlaceOn|ench|StoredEnchantments|BlockEntityTag|AttributeModifiers|display|Lore|SkullOwner|textures|Value|SKIN|CAPE|EntityTag|Decorations)\s*:\s*([\[\{])</string>
+					<string>(Entity|RootVehicle|Passengers|Tags|CommandStats|SelectedItem|Items?|ArmorItems?|SaddleItem|Inventory|Offers|Recipes|buyB?|sell|tag|CustomPotionEffects|Potion|SpawnPotentials|Properties|SpawnData|TileEntityData|Effects|[0-4]|Equipment|HandItems|Pose|BeamTarget|FireworksItem|Explosions?|Fireworks|Colors|FadeColors|Owner|Target|Patterns|ExitPortal|RecordItem|Textures|CanDestroy|CanPlaceOn|ench|StoredEnchantments|BlockEntityTag|AttributeModifiers|display|Lore|SkullOwner|textures|Value|SKIN|CAPE|EntityTag|Decorations)[ \t]*:[ \t]*([\[\{])</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.unquoted.mcfunction</string>
+							<string>string.unquoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.mapping.mcfunction</string>
+							<string>punctuation.definition.mapping.mcc</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -866,11 +917,11 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.mapping.mcfunction</string>
+							<string>punctuation.definition.mapping.mcc</string>
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>json.arrays.mcfunction</string>
+					<string>json.arrays.mcc</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -927,71 +978,71 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.function.mcfunction</string>
+							<string>entity.name.function.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.function.mcfunction</string>
+							<string>entity.name.function.mcc</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>support.type.mcfunction</string>
+							<string>support.type.mcc</string>
 						</dict>
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>support.type.mcfunction</string>
+							<string>support.type.mcc</string>
 						</dict>
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>support.type.mcfunction</string>
+							<string>support.type.mcc</string>
 						</dict>
 						<key>6</key>
 						<dict>
 							<key>name</key>
-							<string>support.type.mcfunction</string>
+							<string>support.type.mcc</string>
 						</dict>
 						<key>7</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.function.mcfunction</string>
+							<string>entity.name.function.mcc</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(@[apers])(\[)(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?(-?\d+\s*)(])</string>
+					<string>(@[apers])(\[)(?:(-?\d+),[ \t]*)?(?:(-?\d+),[ \t]*)?(?:(-?\d+),[ \t]*)?(-?\d+[ \t]*)(])</string>
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(\@[aeprs])(\[)(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?</string>
+					<string>(\@[apers])(\[)(?:(-?\d+),[ \t]*)?(?:(-?\d+),[ \t]*)?(?:(-?\d+),[ \t]*)?</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.function.mcfunction</string>
+							<string>entity.name.function.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.function.mcfunction</string>
+							<string>entity.name.function.mcc</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>support.type.mcfunction</string>
+							<string>support.type.mcc</string>
 						</dict>
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>support.type.mcfunction</string>
+							<string>support.type.mcc</string>
 						</dict>
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>support.type.mcfunction</string>
+							<string>support.type.mcc</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -1001,7 +1052,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.function.mcfunction</string>
+							<string>entity.name.function.mcc</string>
 						</dict>
 					</dict>
 					<key>patterns</key>
@@ -1012,21 +1063,26 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>string.unquoted.mcfunction</string>
+									<string>string.unquoted.mcc</string>
 								</dict>
 								<key>2</key>
 								<dict>
 									<key>name</key>
-									<string>keyword.operator.assignment.mcfunction</string>
+									<string>support.type.mcc</string>
 								</dict>
 								<key>3</key>
 								<dict>
 									<key>name</key>
-									<string>support.type.mcfunction</string>
+									<string>keyword.operator.assignment.mcc</string>
+								</dict>
+								<key>4</key>
+								<dict>
+									<key>name</key>
+									<string>support.type.mcc</string>
 								</dict>
 							</dict>
 							<key>match</key>
-							<string>(d?[xyz]|[rl]m?|c|score_[0-z]{1,16}(?:_min)?)(=)(-?\d+),?</string>
+							<string>(d?[xyz]|[rl]m?|c|score_([0-z]{1,16})(?:_min)?)(=)(-?\d+),?</string>
 						</dict>
 						<dict>
 							<key>captures</key>
@@ -1034,21 +1090,21 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>string.unquoted.mcfunction</string>
+									<string>string.unquoted.mcc</string>
 								</dict>
 								<key>2</key>
 								<dict>
 									<key>name</key>
-									<string>keyword.operator.assignment.mcfunction</string>
+									<string>keyword.operator.assignment.mcc</string>
 								</dict>
 								<key>3</key>
 								<dict>
 									<key>name</key>
-									<string>support.type.mcfunction</string>
+									<string>support.type.mcc</string>
 								</dict>
 							</dict>
 							<key>match</key>
-							<string>(m)(=)([!][0-3]|-1),?</string>
+							<string>(m)(=!?)([0-3]|-1),?</string>
 						</dict>
 						<dict>
 							<key>captures</key>
@@ -1056,17 +1112,17 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>string.unquoted.mcfunction</string>
+									<string>string.unquoted.mcc</string>
 								</dict>
 								<key>2</key>
 								<dict>
 									<key>name</key>
-									<string>keyword.operator.assignment.mcfunction</string>
+									<string>keyword.operator.assignment.mcc</string>
 								</dict>
 								<key>3</key>
 								<dict>
 									<key>name</key>
-									<string>support.type.mcfunction</string>
+									<string>support.type.mcc</string>
 								</dict>
 							</dict>
 							<key>match</key>
@@ -1078,17 +1134,17 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>string.unquoted.mcfunction</string>
+									<string>string.unquoted.mcc</string>
 								</dict>
 								<key>2</key>
 								<dict>
 									<key>name</key>
-									<string>keyword.operator.assignment.mcfunction</string>
+									<string>keyword.operator.assignment.mcc</string>
 								</dict>
 								<key>3</key>
 								<dict>
 									<key>name</key>
-									<string>support.type.mcfunction</string>
+									<string>support.type.mcc</string>
 								</dict>
 							</dict>
 							<key>match</key>
@@ -1100,17 +1156,17 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>string.unquoted.mcfunction</string>
+									<string>string.unquoted.mcc</string>
 								</dict>
 								<key>2</key>
 								<dict>
 									<key>name</key>
-									<string>keyword.operator.assignment.mcfunction</string>
+									<string>keyword.operator.assignment.mcc</string>
 								</dict>
 								<key>3</key>
 								<dict>
 									<key>name</key>
-									<string>support.type.mcfunction</string>
+									<string>support.type.mcc</string>
 								</dict>
 							</dict>
 							<key>match</key>
@@ -1122,12 +1178,12 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>string.unquoted.mcfunction</string>
+									<string>string.unquoted.mcc</string>
 								</dict>
 								<key>2</key>
 								<dict>
 									<key>name</key>
-									<string>keyword.operator.assignment.mcfunction</string>
+									<string>keyword.operator.assignment.mcc</string>
 								</dict>
 							</dict>
 							<key>match</key>
@@ -1139,21 +1195,21 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>string.unquoted.mcfunction</string>
+									<string>string.unquoted.mcc</string>
 								</dict>
 								<key>2</key>
 								<dict>
 									<key>name</key>
-									<string>keyword.operator.assignment.mcfunction</string>
+									<string>keyword.operator.assignment.mcc</string>
 								</dict>
 								<key>3</key>
 								<dict>
 									<key>name</key>
-									<string>support.type.mcfunction</string>
+									<string>support.type.mcc</string>
 								</dict>
 							</dict>
 							<key>match</key>
-							<string>(type)(=!?)(player|(?:chest|commandblock|furnace|hopper|spawner|tnt)_|(?:minecart)|(?:(?:skeleton|zombie)_|)(?:horse)|(?:illusion|evocation|vindication)_illager|(?:zombie)(?:_(?:pigman|villager)|)|area_effect_cloud|armor_stand|arrow|bat|blaze|boat|cave_spider|chicken|cow|creeper|donkey|dragon_fireball|egg|elder_guardian|ender_(?:pearl|crystal|dragon)|enderman|endermite|eye_of_ender_signal|falling_block|fireball|fireworks_rocket|ghast|giant|guardian|husk|item_frame|item|leash_knot|magma_cube|mooshroom|mule|ocelot|painting|pig|polar_bear|potion|rabbit|sheep|shulker_bullet|shulker|silverfish|skeleton_horse|skeleton|slime|small_fireball|snowball|snowman|spectral_arrow|spider|squid|stray|tnt|vex|villager_golem|villager|witch|wither_skeleton|wither|wolf|xp_(?:bottle|orb)),?</string>
+							<string>(type)(=!?)(llamas|evocation_fangs|lightning_bolt|llama_spit|parrot|player|(?:chest|commandblock|furnace|hopper|spawner|tnt)_|(?:minecart)|(?:(?:skeleton|zombie)_|)(?:horse)|(?:illusion|evocation|vindication)_illager|(?:zombie)(?:_(?:pigman|villager)|)|area_effect_cloud|armor_stand|arrow|bat|blaze|boat|cave_spider|chicken|cow|creeper|donkey|dragon_fireball|egg|elder_guardian|ender_(?:pearl|crystal|dragon)|enderman|endermite|eye_of_ender_signal|falling_block|fireball|fireworks_rocket|ghast|giant|guardian|husk|item_frame|item|leash_knot|magma_cube|mooshroom|mule|ocelot|painting|pig|polar_bear|potion|rabbit|sheep|shulker_bullet|shulker|silverfish|skeleton_horse|skeleton|slime|small_fireball|snowball|snowman|spectral_arrow|spider|squid|stray|tnt|vex|villager_golem|villager|witch|wither_skeleton|wither|wolf|xp_(?:bottle|orb)),?</string>
 						</dict>
 						<dict>
 							<key>include</key>
@@ -1167,7 +1223,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>entity.name.function.mcfunction</string>
+							<string>entity.name.function.mcc</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1181,7 +1237,19 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>[\[\]\{\}:\"\\,=]</string>
+					<string>[\[\]\{\}:\"\\,=/]</string>
+					<key>name</key>
+					<string>invalid.illegal</string>
+				</dict>
+			</array>
+		</dict>
+		<key>errors</key>
+		<dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>[\[\]\{\}\"\\,=/]</string>
 					<key>name</key>
 					<string>invalid.illegal</string>
 				</dict>
@@ -1190,23 +1258,23 @@
 		<key>hover-event-json</key>
 		<dict>
 			<key>begin</key>
-			<string>(((?:\\+)?\")hoverEvent\2)\s*:\s*([\[\{])\s*</string>
+			<string>(((?:\\+)?\")hoverEvent\2)[ \t]*:[ \t]*([\[\{])[ \t]*</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>string.quoted.mcfunction</string>
+					<string>string.quoted.mcc</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.string.mcfunction</string>
+					<string>punctuation.definition.string.mcc</string>
 				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.mcfunction</string>
+					<string>punctuation.definition.mcc</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -1216,11 +1284,11 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.mcfunction</string>
+					<string>punctuation.definition.mcc</string>
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>mcfunction.hover-event</string>
+			<string>mcc.hover-event</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -1229,51 +1297,51 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcfunction</string>
+							<string>punctuation.definition.string.mcc</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcfunction</string>
+							<string>punctuation.definition.string.mcc</string>
 						</dict>
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>constant.language.mcfunction</string>
+							<string>constant.language.mcc</string>
 						</dict>
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcfunction</string>
+							<string>punctuation.definition.string.mcc</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(((?:\\+)?\")action\2)\s*:\s*(\2)(show_(?:text|item|entity|achievement))(\2),?</string>
+					<string>(((?:\\+)?\")action\2)[ \t]*:[ \t]*(\2)(show_(?:text|item|entity|achievement))(\2),?</string>
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(((?:\\+)?\")value\2)\s*:\s*\2?([\[\{])</string>
+					<string>(((?:\\+)?\")value\2)[ \t]*:[ \t]*\2?([\[\{])</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcfunction</string>
+							<string>punctuation.definition.string.mcc</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.mcfunction</string>
+							<string>punctuation.definition.mcc</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -1283,11 +1351,11 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.mcfunction</string>
+							<string>punctuation.definition.mcc</string>
 						</dict>
 					</dict>
 					<key>name</key>
-					<string>json.hover-event.value.mcfunction</string>
+					<string>json.hover-event.value.mcc</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -1338,26 +1406,26 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcfunction</string>
+							<string>punctuation.definition.string.mcc</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>constant.numeric.mcfunction</string>
+							<string>constant.numeric.mcc</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(((?:\\+)?\")value\2)\s*:\s*((?:\"(?:[^\\\"]|\\.)*\")|(?:\\\"(?:[^\\\"]|\\(?:\\\\)+\"|\\[^\"])*\\\")),?</string>
+					<string>(((?:\\+)?\")value\2)[ \t]*:[ \t]*((?:\"(?:[^\\\"]|\\.)*\")|(?:\\\"(?:[^\\\"]|\\(?:\\\\)+\"|\\[^\"])*\\\")),?</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -1372,7 +1440,7 @@
 		<key>json-attributes</key>
 		<dict>
 			<key>name</key>
-			<string>mcfunction.json-attributes</string>
+			<string>mcc.json-attributes</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -1381,7 +1449,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -1391,21 +1459,21 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(((?:\\+)?\"?)(?:text|insertion|title|author|translate)\2)\s*:\s*((?:\"(?:[^\\\"]|\\.)*\")|(?:\\\"(?:[^\\\"]|\\[^\"])*\\\")),?</string>
+					<string>(((?:\\+)?\"?)(?:text|insertion|title|author|translate)\2)[ \t]*:[ \t]*((?:\"(?:[^\\\"]|\\.)*\")|(?:\\\"(?:[^\\\"]|\\[^\"])*\\\")),?</string>
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(((?:\\+)?\"?)(?:selector|markerTag)\2)\s*:\s*(\2)</string>
+					<string>(((?:\\+)?\"?)(?:selector|markerTag)\2)[ \t]*:[ \t]*(\2)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -1415,7 +1483,7 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -1425,7 +1493,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -1448,7 +1516,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -1458,11 +1526,11 @@
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>constant.language.mcfunction</string>
+							<string>constant.language.mcc</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(((?:\\+)?\")color\2)\s*:\s*(\2(?:none|black|dark_blue|dark_green|dark_aqua|dark_red|dark_purple|gold|gray|dark_gray|blue|green|aqua|red|light_purple|yellow|white)\2),?</string>
+					<string>(((?:\\+)?\")color\2)[ \t]*:[ \t]*(\2(?:none|black|dark_blue|dark_green|dark_aqua|dark_red|dark_purple|gold|gray|dark_gray|blue|green|aqua|red|light_purple|yellow|white)\2),?</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -1470,7 +1538,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
@@ -1485,31 +1553,31 @@
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>constant.language.mcfunction</string>
+							<string>constant.language.mcc</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(((?:\\+)?\")(?:bold|italic|underline|strikethrough|obfuscated|conditional|auto)\2)\s*:\s*(\2?)(true|false)\3,?</string>
+					<string>(((?:\\+)?\")(?:bold|italic|underline|strikethrough|obfuscated|conditional|auto)\2)[ \t]*:[ \t]*(\2?)(true|false)\3,?</string>
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(((?:\\+)?\")(?:with|extra)\2)\s*:\s*([\[\{])</string>
+					<string>(((?:\\+)?\")(?:with|extra)\2)[ \t]*:[ \t]*([\[\{])</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcfunction</string>
+							<string>punctuation.definition.string.mcc</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.mcfunction</string>
+							<string>punctuation.definition.mcc</string>
 						</dict>
 					</dict>
 					<key>captures</key>
@@ -1517,13 +1585,13 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.mcfunction</string>
+							<string>punctuation.definition.mcc</string>
 						</dict>
 					</dict>
 					<key>end</key>
 					<string>([\]\}]),?</string>
 					<key>name</key>
-					<string>json.array.with-extra.mcfunction</string>
+					<string>json.array.with-extra.mcc</string>
 					<key>patterns</key>
 					<array>
 						<dict>
@@ -1574,31 +1642,31 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcfunction</string>
+							<string>punctuation.definition.string.mcc</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcfunction</string>
+							<string>punctuation.definition.string.mcc</string>
 						</dict>
 						<key>4</key>
 						<dict>
 							<key>name</key>
-							<string>constant.language.mcfunction</string>
+							<string>constant.language.mcc</string>
 						</dict>
 						<key>5</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcfunction</string>
+							<string>punctuation.definition.string.mcc</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(((?:\\+)?\")type\2)\s*:\s*(\2?)((?:chest|commandblock|furnace|hopper|spawner|tnt)_|(?:minecart)|(?:(?:skeleton|zombie)_|)(?:horse)|(?:illusion|evocation|vindication)_illager|(?:zombie)(?:_(?:pigman|villager)|)|area_effect_cloud|armor_stand|arrow|bat|blaze|boat|cave_spider|chicken|cow|creeper|donkey|dragon_fireball|egg|elder_guardian|ender_(?:pearl|crystal|dragon)|enderman|endermite|eye_of_ender_signal|falling_block|fireball|fireworks_rocket|ghast|giant|guardian|husk|item_frame|item|leash_knot|magma_cube|mooshroom|mule|ocelot|painting|pig|polar_bear|potion|rabbit|sheep|shulker_bullet|shulker|silverfish|skeleton_horse|skeleton|slime|small_fireball|snowball|snowman|spectral_arrow|spider|squid|stray|tnt|vex|villager_golem|villager|witch|wither_skeleton|wither|wolf|xp_(?:bottle|orb))(\3),?</string>
+					<string>(((?:\\+)?\")type\2)[ \t]*:[ \t]*(\2?)(llamas|evocation_fangs|lightning_bolt|llama_spit|parrot|(?:chest|commandblock|furnace|hopper|spawner|tnt)_|(?:minecart)|(?:(?:skeleton|zombie)_|)(?:horse)|(?:illusion|evocation|vindication)_illager|(?:zombie)(?:_(?:pigman|villager)|)|area_effect_cloud|armor_stand|arrow|bat|blaze|boat|cave_spider|chicken|cow|creeper|donkey|dragon_fireball|egg|elder_guardian|ender_(?:pearl|crystal|dragon)|enderman|endermite|eye_of_ender_signal|falling_block|fireball|fireworks_rocket|ghast|giant|guardian|husk|item_frame|item|leash_knot|magma_cube|mooshroom|mule|ocelot|painting|pig|polar_bear|potion|rabbit|sheep|shulker_bullet|shulker|silverfish|skeleton_horse|skeleton|slime|small_fireball|snowball|snowman|spectral_arrow|spider|squid|stray|tnt|vex|villager_golem|villager|witch|wither_skeleton|wither|wolf|xp_(?:bottle|orb))(\3),?</string>
 				</dict>
 			</array>
 		</dict>
@@ -1608,7 +1676,7 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>(((?:\\+)?\")(?:text|insertion|title|author|translates|selector|color|bold|italic|underline|strikethrough|obfuscated|with|extra|type|hoverEvent|action|value|clickEvent|score|name|objective|pages|Pos|Motion|direction|power|Body|(?:Left|Right)(?:Arm|Leg)|Head|Rotation|FallDistance|damage|Push[XZ]|FallHurtAmount|DurationOnUse|Radius(?:OnUse|PerTick)?|ItemDropChance|T[XYZ]D|progress|Amount|[xz]|rot|Fire|Air|Dimension|PortalCooldown|UUIDMost|UUIDLeast|EggLayTime|InLove|Age|ForcedAge|ExplosionRadius|Fuse|DragonPhase|carried(?:Data)?|Life[tT]ime|Temper|Type|Variant|SkeletonTrapTime|ExplosionPower|Size|CatType|ConversionTime|(?:Villager)?Profession|Anger|RabbitType|MoreCarrotTicks|Color|Peek|AttachFace|AP[XYZ]|SkeletonType|Riches|Career(?:Level)?|(?:max)?Uses|Invul|CollarColor|[xyz]Tile|in|shake|inData|pickup|life|[Ii]d|Amplifier|Duration|life|Age|Health|PickupDelay|Count|Damage|Value|Display(?:Data|Offset)|LootTableSeed|Fuel|Weight|Spawn(?:Count|Range)|Delay|(?:Min|Max)SpawnDelay|MaxNearbyEntities|RequiredPlayerRange|TNTFuse|TransferCooldown|TileID|Data|Time|FallHurtMax|ReapplicationDelay|WaitTime|DisabledSlots|(?:Tile)?[X-Z]|Type|Flight|Facing|ItemRotation|[Litp]|Steps|Base|Levels|Primary|Secondary|BrewTime|Fuel|OutputSignal|(?:Burn|Cook)Time|CookTimeTotal|note|block(?:Id|Data)|facing|Record|SkullType|Rot|Slot|lvl|RepairCost|Operation|color|HideFlags|generation|timestamp|type|OnGround|Invulnerable|CustomNameVisible|Silent|Glowing|BatFlags|IsChickenJockey|Powered|ignited|PlayerSpawned|Bred|ChestedHorse|EatingHaystack|HasReproduced|Tame|Saddle|SkeletonTrap|Elder|wasOnGround|IsBaby|CanBreakDoors|Sheared|Willing|rewardExp|PlayerCreated|Angry|player|inGround|Ambient|ShowParticles|CustomDisplayTile|Enabled|TrackOutput|DropItem|HurtEntities|Marker|Invisible|NoBasePlate|Gravity|ShowArms|Small|ShowBottom|Flicker|Trail|powered|auto|ExactTeleport|extending|Unbreakable|resolved|isPublic|map_is_scaling|CustomName|(?:Affected(?:Blocks|Entities|Items)|QueryResult|SuccessCount)(?:Objective|Name)|OwnerName|OwnerUUID|HurtBy|inTile|Potion|Owner|Thrower|Type|DisplayTile|LootTable|EntityId|Command|LastOutput|Block|Particle|Motive|id?|Pattern|Lock|Item|Text[1-4]|ExtraType|Signature|Value|AttributeName|Name|Slot|SkullOwner|profileId|profileName|url|Passengers|Tags|CommandStats|Items?|ArmorItems?|SaddleItem|Inventory|Offers|Recipes|buyB?|sell|tag|CustomPotionEffects|Potion|SpawnPotentials|Properties|SpawnData|TileEntityData|Effects|[0-4]|Equipment|HandItems|Pose|BeamTarget|FireworksItem|Explosions?|Fireworks|Colors|FadeColors|Owner|Target|Patterns|ExitPortal|RecordItem|Textures|CanDestroy|CanPlaceOn|ench|StoredEnchantments|AttributeModifiers|display|Lore|SkullOwner|textures|Value|SKIN|CAPE|EntityTag|Decorations)\2)\s*:</string>
+					<string>(((?:\\+)?\")(?:text|insertion|title|author|translates|selector|color|bold|italic|underline|strikethrough|obfuscated|with|extra|type|hoverEvent|action|value|clickEvent|score|name|objective|pages|Pos|Motion|direction|power|Body|(?:Left|Right)(?:Arm|Leg)|Head|Rotation|FallDistance|damage|Push[XZ]|FallHurtAmount|DurationOnUse|Radius(?:OnUse|PerTick)?|ItemDropChance|T[XYZ]D|progress|Amount|[xz]|rot|Fire|Air|Dimension|PortalCooldown|UUIDMost|UUIDLeast|EggLayTime|InLove|Age|ForcedAge|ExplosionRadius|Fuse|DragonPhase|carried(?:Data)?|Life[tT]ime|Temper|Type|Variant|SkeletonTrapTime|ExplosionPower|Size|CatType|ConversionTime|(?:Villager)?Profession|Anger|RabbitType|MoreCarrotTicks|Color|Peek|AttachFace|AP[XYZ]|SkeletonType|Riches|Career(?:Level)?|(?:max)?Uses|Invul|CollarColor|[xyz]Tile|in|shake|inData|pickup|life|[Ii]d|Amplifier|Duration|life|Age|Health|PickupDelay|Count|Damage|Value|Display(?:Data|Offset)|LootTableSeed|Fuel|Weight|Spawn(?:Count|Range)|Delay|(?:Min|Max)SpawnDelay|MaxNearbyEntities|RequiredPlayerRange|TNTFuse|TransferCooldown|TileID|Data|Time|FallHurtMax|ReapplicationDelay|WaitTime|DisabledSlots|(?:Tile)?[X-Z]|Type|Flight|Facing|ItemRotation|[Litp]|Steps|Base|Levels|Primary|Secondary|BrewTime|Fuel|OutputSignal|(?:Burn|Cook)Time|CookTimeTotal|note|block(?:Id|Data)|facing|Record|SkullType|Rot|Slot|lvl|RepairCost|Operation|color|HideFlags|generation|timestamp|type|OnGround|Invulnerable|CustomNameVisible|Silent|Glowing|BatFlags|IsChickenJockey|Powered|ignited|PlayerSpawned|Bred|ChestedHorse|EatingHaystack|HasReproduced|Tame|Saddle|SkeletonTrap|Elder|wasOnGround|IsBaby|CanBreakDoors|Sheared|Willing|rewardExp|PlayerCreated|Angry|player|inGround|Ambient|ShowParticles|CustomDisplayTile|Enabled|TrackOutput|DropItem|HurtEntities|Marker|Invisible|NoBasePlate|Gravity|ShowArms|Small|ShowBottom|Flicker|Trail|powered|auto|ExactTeleport|extending|Unbreakable|resolved|isPublic|map_is_scaling|CustomName|(?:Affected(?:Blocks|Entities|Items)|QueryResult|SuccessCount)(?:Objective|Name)|OwnerName|OwnerUUID|HurtBy|inTile|Potion|Owner|Thrower|Type|DisplayTile|LootTable|EntityId|Command|LastOutput|Block|Particle|Motive|id?|Pattern|Lock|Item|Text[1-4]|ExtraType|Signature|Value|AttributeName|Name|Slot|SkullOwner|profileId|profileName|url|Passengers|Tags|CommandStats|Items?|ArmorItems?|SaddleItem|Inventory|Offers|Recipes|buyB?|sell|tag|CustomPotionEffects|Potion|SpawnPotentials|Properties|SpawnData|TileEntityData|Effects|[0-4]|Equipment|HandItems|Pose|BeamTarget|FireworksItem|Explosions?|Fireworks|Colors|FadeColors|Owner|Target|Patterns|ExitPortal|RecordItem|Textures|CanDestroy|CanPlaceOn|ench|StoredEnchantments|AttributeModifiers|display|Lore|SkullOwner|textures|Value|SKIN|CAPE|EntityTag|Decorations)\2)[ \t]*:</string>
 					<key>name</key>
 					<string>invalid.illegal</string>
 				</dict>
@@ -1624,7 +1692,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1641,7 +1709,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.mcfunction</string>
+					<string>punctuation.definition.mcc</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -1651,13 +1719,25 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.mcfunction</string>
+					<string>punctuation.definition.mcc</string>
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>mcfunction.nbt-json-array</string>
+			<string>mcc.nbt-json-array</string>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>invalid.illegal</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>\n</string>
+				</dict>
 				<dict>
 					<key>include</key>
 					<string>#entity-data</string>
@@ -1708,7 +1788,7 @@
 					<key>match</key>
 					<string>\b(~?-?\d*(?:\.\d+)?)\b</string>
 					<key>name</key>
-					<string>constant.numeric.mcfunction</string>
+					<string>constant.numeric.mcc</string>
 				</dict>
 			</array>
 		</dict>
@@ -1717,33 +1797,45 @@
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>constant.string.mcc</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(#\w+)</string>
+				</dict>
+				<dict>
 					<key>match</key>
 					<string>[-+/*%^]?=</string>
 					<key>name</key>
-					<string>keyword.operator.assignment.mcfunction</string>
+					<string>keyword.operator.assignment.mcc</string>
 				</dict>
 			</array>
 		</dict>
 		<key>pages-json</key>
 		<dict>
 			<key>begin</key>
-			<string>(((?:\\+)?\")pages\2)\s*:\s*([\[\{])</string>
+			<string>(((?:\\+)?\")pages\2)[ \t]*:[ \t]*([\[\{])</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>string.quoted.mcfunction</string>
+					<string>string.quoted.mcc</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.string.mcfunction</string>
+					<string>punctuation.definition.string.mcc</string>
 				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.mcfunction</string>
+					<string>punctuation.definition.mcc</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -1753,11 +1845,11 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.mcfunction</string>
+					<string>punctuation.definition.mcc</string>
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>mcfunction.pages-json</string>
+			<string>mcc.pages-json</string>
 			<key>patterns</key>
 			<array>
 				<dict>
@@ -1768,12 +1860,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcfunction</string>
+							<string>punctuation.definition.string.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.mapping.mcfunction</string>
+							<string>punctuation.definition.mapping.mcc</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -1783,12 +1875,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.mapping.mcfunction</string>
+							<string>punctuation.definition.mapping.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcfunction</string>
+							<string>punctuation.definition.string.mcc</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -1843,12 +1935,12 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcfunction</string>
+							<string>punctuation.definition.string.mcc</string>
 						</dict>
 					</dict>
 					<key>match</key>
@@ -1859,23 +1951,23 @@
 		<key>score-json</key>
 		<dict>
 			<key>begin</key>
-			<string>(((?:\\+)?\")score\2)\s*:\s*([\[\{])</string>
+			<string>(((?:\\+)?\")score\2)[ \t]*:[ \t]*([\[\{])</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>string.quoted.mcfunction</string>
+					<string>string.quoted.mcc</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.string.mcfunction</string>
+					<string>punctuation.definition.string.mcc</string>
 				</dict>
 				<key>3</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.mcfunction</string>
+					<string>punctuation.definition.mcc</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -1885,32 +1977,32 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.mcfunction</string>
+					<string>punctuation.definition.mcc</string>
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>mcfunction.score-json</string>
+			<string>mcc.score-json</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>begin</key>
-					<string>(((?:\\+)?\")name\2)\s*:\s*(\2)</string>
+					<string>(((?:\\+)?\")name\2)[ \t]*:[ \t]*(\2)</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcfunction</string>
+							<string>punctuation.definition.string.mcc</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcfunction</string>
+							<string>punctuation.definition.string.mcc</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -1920,7 +2012,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcfunction</string>
+							<string>punctuation.definition.string.mcc</string>
 						</dict>
 					</dict>
 					<key>name</key>
@@ -1933,7 +2025,7 @@
 								<key>1</key>
 								<dict>
 									<key>name</key>
-									<string>string.quoted.mcfunction</string>
+									<string>string.quoted.mcc</string>
 								</dict>
 							</dict>
 							<key>match</key>
@@ -1955,21 +2047,21 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>punctuation.definition.string.mcfunction</string>
+							<string>punctuation.definition.string.mcc</string>
 						</dict>
 						<key>3</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(((?:\\+)?\")objective\2)\s*:\s*(\2[\w-]+\2),?</string>
+					<string>(((?:\\+)?\")objective\2)[ \t]*:[ \t]*(\2[\w-]+\2),?</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -1987,7 +2079,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcfunction</string>
+							<string>string.quoted.mcc</string>
 						</dict>
 						<key>2</key>
 						<dict>
