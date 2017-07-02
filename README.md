@@ -1,29 +1,33 @@
-# Minecraft Command Code Syntax Highlighter
+# Minecraft Command Code: A Syntax Highlighter
 
 *Created by [Nathan Liparski](http://twitter.com/NateLipiarski) with input and testing by [Moesh](http://moesh.ca/about).*
 
-## Using MCC Will Help Make Your Code Maintainable
+## Using MCC Will Make Your Code Maintainable
 
-Minecraft Map Making is more complex than ever.
+__ Latest news__
 
-Besides learning how commands, scoreboards, and entities interact with each other, we also have to keep a mental network of what command is in each block. MCC aims to aid mechanics (formerly known as command blockers) in writing maintainable code through adding support for syntax highlighting.
+The v1.12 update of **Minecraft: Java Edition** introduced functions! Now is **Mine Command Code**'s time to shine! Of course, we haven't forgotten about our friends over at [Smelt](http://smelt.gnasp.com). That's why we've decided to provide explicit support for both .mcc and .mcfunction files!
 
-Minecraft Commands are constantly envolving. By writing your commands into a text document rather than Command Blocks, you're able to have a good overview of what needs to be changed. We've made it even more enticing by adding syntax highlighting to all Minecraft commands *which can be put into Command Blocks*.
+__What is Minecraft Command Code?__
 
+Minecraft Command Code is a syntax highlighter built for Sublime Text! Our goal is to provide practical highlighting to support as many themes as possible. We attempt to strike a balance between categorization and readability, meaning the code highlights the relevant parts of the logic while checking for errors in the rigid structure of NBT, JSON, the scoreboard, and commands themselves.
+
+__Well, what does it look like?__
 
 
 ***No Syntax Highlighting***
-![No Syntax Highlighting](http://i.imgur.com/oWt7Ovs.png)
-***MCC Syntax Highlighting with All Hollow's Eve Theme.***
-![An Example of MCC](http://i.imgur.com/MCRj5g8.png)
-***MCC Syntax Highlighting with Cobalt Theme.***
-![An Example of MCC](http://i.imgur.com/vxwyGxU.png)
-***MCC Syntax Highlighting with Solarized (Light) Theme.***
-![An example of MCC](http://i.imgur.com/MpRvnS8.png)
-***MCC Syntax Highlighting with Bliss Theme.***
-![An Example of MCC](http://i.imgur.com/c0026hJ.png)
+![No Syntax Highlighting](http://i.imgur.com/bIwktmC.png)
+***All Hollow's Eve Theme.***
+![An Example of MCC](http://i.imgur.com/IWRKmvx.png)
+***Cobalt Theme.***
+![An Example of MCC](http://i.imgur.com/nNyIvqv.png)
+***Solarized (Light) Theme.***
+![An example of MCC](http://i.imgur.com/Aq6fMMc.png)
+***Monokai Bright Theme.***
+![An Example of MCC](http://i.imgur.com/XzPCI2y.png)
+***Monokai Bright Theme.***
+![An Example of MCC](http://i.imgur.com/XzPCI2y.png)
 
-Minecraft Command Code also plays nicely with [Smelt](http://smelt.gnasp.com) Code Compiler by Gnasp, which means you can make and deploy changes quickly.
 
 ## Installation
 
