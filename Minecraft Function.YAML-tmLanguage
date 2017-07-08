@@ -75,7 +75,7 @@ repository:
         '1': {name: string.quoted.mcc}
         '2': {name: punctuation.definition.string}
         '3': {name: constant.language.mcc}
-    - match: '(((?:\\+)?\")(?:bold|italic|underline|strikethrough|obfuscated|conditional|auto)\2)[ \t]*:[ \t]*(\2?)(true|false)\3,?' #Booleans
+    - match: '(((?:\\+)?\")(?:bold|italic|underlined?|strikethrough|obfuscated|conditional|auto)\2)[ \t]*:[ \t]*(\2?)(true|false)\3,?' #Booleans
       captures:
         '1': {name: string.quoted.mcc} #Quotes
         '2': {name: punctuation.definition.string}
@@ -408,12 +408,12 @@ repository:
 
   commands:
     patterns:
-    - match: '(?:[ \t]|^|\b)(recipe) (give)\b'
+    - match: '(?:[ \t]|^|\b)(recipe) (give|take)\b'
       captures:
         '1': {name: keyword.control.mcc}
         '2': {name: support.type.mcc}
     - name: keyword.control.mcc
-      match: '(?:[ \t]|^|\b)(advancement|blockdata|clear|clone|defaultgamemode|difficulty|effect|enchant|entitydata|execute|fill|gamemode|gamerule|give|help|kill|list|locate|me|particle|playsound|replaceitem|say|scoreboard|searge|seed|setblock|setidletimeout|setworldspawn|spawnpoint|recipe|spreadplayers|stats|stopsound|summon|teleport|tellraw|tell|testforblocks|testforblock|testfor|time|title|toggledownfall|tp|trigger|weather|worldborder)\b'
+      match: '(?:[ \t]|^|\b)(xp|advancement|blockdata|clear|clone|defaultgamemode|difficulty|effect|enchant|entitydata|execute|fill|gamemode|gamerule|give|help|kill|list|locate|me|particle|playsound|replaceitem|say|scoreboard|searge|seed|setblock|setidletimeout|setworldspawn|spawnpoint|recipe|spreadplayers|stats|stopsound|summon|teleport|tellraw|tell|testforblocks|testforblock|testfor|time|title|toggledownfall|tp|trigger|weather|worldborder)\b'
     - name: support.type.mcc
       match: '\b(while|unless|actionbar|add|adventure|AffectedBlocks|AffectedEntities|AffectedItems|announceAdvancements|belowName|block|clear|color|commandBlockOutput|creative|day|deathCount|destroy|disableElytraMovementCheck|doDaylightCycle|doEntityDrops|doFireTick|doLimitedCrafting|doMobLoot|doMobSpawning|doTileDrops|doWeatherCycle|dummy|easy|empty|enable|entity|everything|false|food|from|gameLoopFunction|grant|hard|health|hollow|if|join|keepInventory|keep|leave|list|logAdminCommands|maxCommandChainLength|maxEntityCramming|mobGriefing|naturalRegeneration|night|normal|objectives|off|only|on|operation|option|outline|peaceful|playerKillCount|players|QueryResult|rain|randomTickSpeed|reducedDebugInfo|reload|remove|replace|reset|revoke|sendCommandFeedback|setdisplay|set|showDeathMessages|sidebar|spawnRadius|spectatorsGenerateChunks|spectator|start|stop|subtitle|SuccessCount|survival|tag|teams|test|through|thunder|times|totalKillCount|trigger|true|until)\b'
     - name: constant.language.mcc
@@ -457,7 +457,7 @@ repository:
   entity-selector:
     patterns:
     #This is the selecter where there are no keys used
-    - match: '(@[apers])(\[)(?:(-?\d+),[ \t]*)?(?:(-?\d+),[ \t]*)?(?:(-?\d+),[ \t]*)?(-?\d+[ \t]*)(])'
+    - match: '(@[apers])(\[)(?:(-?\d+),[ \t]*)?(?:(-?\d+),[ \t]*)?(?:(-?\d+),[ \t]*)?(-?\d+[ \t]*)(\])'
       captures:
         '1': {name: entity.name.function.mcc}
         '2': {name: entity.name.function.mcc}
@@ -481,7 +481,7 @@ repository:
           '2': {name: support.type.mcc}
           '3': {name: keyword.operator.assignment.mcc}
           '4': {name: support.type.mcc}
-      - match: '(m)(=!?)([0-3]|-1),?'
+      - match: '(m)(=!?)(sp|[0-3csa]|-1),?'
         captures:
           '1': {name: string.unquoted.mcc}
           '2': {name: keyword.operator.assignment.mcc}
@@ -515,7 +515,7 @@ repository:
       endCaptures:
         '1': {name: entity.name.function.mcc}
     #Highlights your basic entity selector
-    - match: '(@[aeprs]|\*)[^\[]'
+    - match: '(@[aeprs]|\*)(?!\[)'
       captures:
         '1': {name: entity.name.function.mcc}
 
@@ -535,12 +535,12 @@ repository:
 
   number:
     patterns:
-    - match: '\b(~?-?\d*(?:\.\d+)?)\b'
+    - match: (?:\s|^)(~?-?\d*\.?\d+L?)(?:\s|$)'
       name: constant.numeric.mcc
 
   json-err:
     patterns:
-    - match: '(((?:\\+)?\")(?:text|insertion|title|author|translates|selector|color|bold|italic|underline|strikethrough|obfuscated|with|extra|type|hoverEvent|action|value|clickEvent|score|name|objective|pages|Pos|Motion|direction|power|Body|(?:Left|Right)(?:Arm|Leg)|Head|Rotation|FallDistance|damage|Push[XZ]|FallHurtAmount|DurationOnUse|Radius(?:OnUse|PerTick)?|ItemDropChance|T[XYZ]D|progress|Amount|[xz]|rot|Fire|Air|Dimension|PortalCooldown|UUIDMost|UUIDLeast|EggLayTime|InLove|Age|ForcedAge|ExplosionRadius|Fuse|DragonPhase|carried(?:Data)?|Life[tT]ime|Temper|Type|Variant|SkeletonTrapTime|ExplosionPower|Size|CatType|ConversionTime|(?:Villager)?Profession|Anger|RabbitType|MoreCarrotTicks|Color|Peek|AttachFace|AP[XYZ]|SkeletonType|Riches|Career(?:Level)?|(?:max)?Uses|Invul|CollarColor|[xyz]Tile|in|shake|inData|pickup|life|[Ii]d|Amplifier|Duration|life|Age|Health|PickupDelay|Count|Damage|Value|Display(?:Data|Offset)|LootTableSeed|Fuel|Weight|Spawn(?:Count|Range)|Delay|(?:Min|Max)SpawnDelay|MaxNearbyEntities|RequiredPlayerRange|TNTFuse|TransferCooldown|TileID|Data|Time|FallHurtMax|ReapplicationDelay|WaitTime|DisabledSlots|(?:Tile)?[X-Z]|Type|Flight|Facing|ItemRotation|[Litp]|Steps|Base|Levels|Primary|Secondary|BrewTime|Fuel|OutputSignal|(?:Burn|Cook)Time|CookTimeTotal|note|block(?:Id|Data)|facing|Record|SkullType|Rot|Slot|lvl|RepairCost|Operation|color|HideFlags|generation|timestamp|type|OnGround|Invulnerable|CustomNameVisible|Silent|Glowing|BatFlags|IsChickenJockey|Powered|ignited|PlayerSpawned|Bred|ChestedHorse|EatingHaystack|HasReproduced|Tame|Saddle|SkeletonTrap|Elder|wasOnGround|IsBaby|CanBreakDoors|Sheared|Willing|rewardExp|PlayerCreated|Angry|player|inGround|Ambient|ShowParticles|CustomDisplayTile|Enabled|TrackOutput|DropItem|HurtEntities|Marker|Invisible|NoBasePlate|Gravity|ShowArms|Small|ShowBottom|Flicker|Trail|powered|auto|ExactTeleport|extending|Unbreakable|resolved|isPublic|map_is_scaling|CustomName|(?:Affected(?:Blocks|Entities|Items)|QueryResult|SuccessCount)(?:Objective|Name)|OwnerName|OwnerUUID|HurtBy|inTile|Potion|Owner|Thrower|Type|DisplayTile|LootTable|EntityId|Command|LastOutput|Block|Particle|Motive|id?|Pattern|Lock|Item|Text[1-4]|ExtraType|Signature|Value|AttributeName|Name|Slot|SkullOwner|profileId|profileName|url|Passengers|Tags|CommandStats|Items?|ArmorItems?|SaddleItem|Inventory|Offers|Recipes|buyB?|sell|tag|CustomPotionEffects|Potion|SpawnPotentials|Properties|SpawnData|TileEntityData|Effects|[0-4]|Equipment|HandItems|Pose|BeamTarget|FireworksItem|Explosions?|Fireworks|Colors|FadeColors|Owner|Target|Patterns|ExitPortal|RecordItem|Textures|CanDestroy|CanPlaceOn|ench|StoredEnchantments|AttributeModifiers|display|Lore|SkullOwner|textures|Value|SKIN|CAPE|EntityTag|Decorations)\2)[ \t]*:'
+    - match: '(((?:\\+)?\")(?:text|insertion|title|author|translates|selector|color|bold|italic|underlined?|strikethrough|obfuscated|with|extra|type|hoverEvent|action|value|clickEvent|score|name|objective|pages|Pos|Motion|direction|power|Body|(?:Left|Right)(?:Arm|Leg)|Head|Rotation|FallDistance|damage|Push[XZ]|FallHurtAmount|DurationOnUse|Radius(?:OnUse|PerTick)?|ItemDropChance|T[XYZ]D|progress|Amount|[xz]|rot|Fire|Air|Dimension|PortalCooldown|UUIDMost|UUIDLeast|EggLayTime|InLove|Age|ForcedAge|ExplosionRadius|Fuse|DragonPhase|carried(?:Data)?|Life[tT]ime|Temper|Type|Variant|SkeletonTrapTime|ExplosionPower|Size|CatType|ConversionTime|(?:Villager)?Profession|Anger|RabbitType|MoreCarrotTicks|Color|Peek|AttachFace|AP[XYZ]|SkeletonType|Riches|Career(?:Level)?|(?:max)?Uses|Invul|CollarColor|[xyz]Tile|in|shake|inData|pickup|life|[Ii]d|Amplifier|Duration|life|Age|Health|PickupDelay|Count|Damage|Value|Display(?:Data|Offset)|LootTableSeed|Fuel|Weight|Spawn(?:Count|Range)|Delay|(?:Min|Max)SpawnDelay|MaxNearbyEntities|RequiredPlayerRange|TNTFuse|TransferCooldown|TileID|Data|Time|FallHurtMax|ReapplicationDelay|WaitTime|DisabledSlots|(?:Tile)?[X-Z]|Type|Flight|Facing|ItemRotation|[Litp]|Steps|Base|Levels|Primary|Secondary|BrewTime|Fuel|OutputSignal|(?:Burn|Cook)Time|CookTimeTotal|note|block(?:Id|Data)|facing|Record|SkullType|Rot|Slot|lvl|RepairCost|Operation|color|HideFlags|generation|timestamp|type|OnGround|Invulnerable|CustomNameVisible|Silent|Glowing|BatFlags|IsChickenJockey|Powered|ignited|PlayerSpawned|Bred|ChestedHorse|EatingHaystack|HasReproduced|Tame|Saddle|SkeletonTrap|Elder|wasOnGround|IsBaby|CanBreakDoors|Sheared|Willing|rewardExp|PlayerCreated|Angry|player|inGround|Ambient|ShowParticles|CustomDisplayTile|Enabled|TrackOutput|DropItem|HurtEntities|Marker|Invisible|NoBasePlate|Gravity|ShowArms|Small|ShowBottom|Flicker|Trail|powered|auto|ExactTeleport|extending|Unbreakable|resolved|isPublic|map_is_scaling|CustomName|(?:Affected(?:Blocks|Entities|Items)|QueryResult|SuccessCount)(?:Objective|Name)|OwnerName|OwnerUUID|HurtBy|inTile|Potion|Owner|Thrower|Type|DisplayTile|LootTable|EntityId|Command|LastOutput|Block|Particle|Motive|id?|Pattern|Lock|Item|Text[1-4]|ExtraType|Signature|Value|AttributeName|Name|Slot|SkullOwner|profileId|profileName|url|Passengers|Tags|CommandStats|Items?|ArmorItems?|SaddleItem|Inventory|Offers|Recipes|buyB?|sell|tag|CustomPotionEffects|Potion|SpawnPotentials|Properties|SpawnData|TileEntityData|Effects|[0-4]|Equipment|HandItems|Pose|BeamTarget|FireworksItem|Explosions?|Fireworks|Colors|FadeColors|Owner|Target|Patterns|ExitPortal|RecordItem|Textures|CanDestroy|CanPlaceOn|ench|StoredEnchantments|AttributeModifiers|display|Lore|SkullOwner|textures|Value|SKIN|CAPE|EntityTag|Decorations)\2)[ \t]*:'
       name: invalid.illegal
 
   string:
