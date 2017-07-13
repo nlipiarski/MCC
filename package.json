@@ -3,7 +3,7 @@
     "displayName": "Marshal Command Code",
     "description": "Syntax Highlighting for Minecraft Command Code.",
     "version": "1.0.0",
-    "publisher": "Nathan Liparski, Matthew 'Moesh' Dryden",
+    "publisher": "dinner-party-games",
     "engines": {
         "vscode": "^1.12.0"
     },
