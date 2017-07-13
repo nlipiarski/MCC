@@ -1,8 +1,8 @@
 {
-    "name": "mcfunction",
+    "name": "marshal-command-code",
     "displayName": "Marshal Command Code",
     "description": "Syntax Highlighting for Minecraft Command Code.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "publisher": "dinner-party-games",
     "engines": {
         "vscode": "^1.12.0"

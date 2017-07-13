@@ -1,65 +1,34 @@
-# mcfunction README
+# Minecraft Command Code: A Syntax Highlighter
 
-This is the README for your extension "mcfunction". After writing up a brief description, we recommend including the following sections.
+*Created by [Nathan Liparski](http://twitter.com/NateLipiarski) with input and testing by [Moesh](http://twitter.com/leMoesh).*
 
-## Features
+## Using MCC Will Make Your Code Maintainable
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+__Latest news__
 
-For example if there is an image subfolder under your extension project workspace:
+The v1.12 update of **Minecraft: Java Edition** introduced functions! Now is **Mine Command Code**'s time to shine! Of course, we haven't forgotten about our friends over at [Smelt](http://smelt.gnasp.com). That's why we've decided to provide explicit support for both .mcc and .mcfunction files!
 
-\!\[feature X\]\(images/feature-x.png\)
+__What is Minecraft Command Code?__
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+Minecraft Command Code is a syntax highlighter built for Sublime Text! Our goal is to provide practical highlighting to support as many themes as possible. We attempt to strike a balance between categorization and readability, meaning the code highlights the relevant parts of the logic while checking for errors in the rigid structure of NBT, JSON, the scoreboard, and commands themselves.
 
-## Requirements
+__Well, what does it look like?__
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+***No Syntax Highlighting***
+![No Syntax Highlighting](https://i.imgur.com/bIwktmC.png)
+***All Hollow's Eve Theme.***
+![An Example of MCC](https://i.imgur.com/IWRKmvx.png)
+***Cobalt Theme.***
+![An Example of MCC](https://i.imgur.com/nNyIvqv.png)
+***Solarized (Light) Theme.***
+![An example of MCC](https://i.imgur.com/Aq6fMMc.png)
+***Monokai Bright Theme.***
+![An Example of MCC](https://i.imgur.com/XzPCI2y.png)
 
-## Extension Settings
+## Installation
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+Support has come for VSCode! Simply search for "Marhsal Command Code" from the Extensions icon!
 
-For example:
+Now any file with an .mcc extension will use the Minecraft Command Code syntax highlighting.
 
-This extension contributes the following settings:
-
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on OSX or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on OSX or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (OSX) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+If you run into any issues, open an issue on the [github issue page](https://github.com/42iscool42/MCC/issues).
