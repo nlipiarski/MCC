@@ -1,0 +1,535 @@
+%YAML 1.2
+---
+name: MCC Beta
+scope: source.mcc
+fileTypes: [mcc]
+uuid: 8e5bef64-35eb-42da-9e20-a8087402a8bf
+
+variables:
+  entity: 'llamas|evocation_fangs|lightning_bolt|llama_spit|parrot|(?:chest_|commandblock_|furnace_|hopper_|spawner_|tnt_)?minecart|(?:skeleton_|zombie_)?horse|(?:illusion|evocation|vindication)_illager|(?:zombie)(?:_pigman|_villager)?|area_effect_cloud|armor_stand|arrow|bat|blaze|boat|cave_spider|chicken|cow|creeper|donkey|dragon_fireball|egg|elder_guardian|ender_(?:pearl|crystal|dragon)|enderman|endermite|eye_of_ender_signal|falling_block|fireball|fireworks_rocket|ghast|giant|guardian|husk|item_frame|item|leash_knot|magma_cube|mooshroom|mule|ocelot|painting|pig|polar_bear|potion|rabbit|sheep|shulker_bullet|shulker|silverfish|skeleton_horse|skeleton|slime|small_fireball|snowball|snowman|spectral_arrow|spider|squid|stray|tnt|vex|villager_golem|villager|witch|wither_skeleton|wither|wolf|xp_(?:bottle|orb)'
+  color: 'none|black|dark_blue|dark_green|dark_aqua|dark_red|dark_purple|gold|gray|dark_gray|blue|green|aqua|red|light_purple|yellow|white'
+  float_tags: '(?:Absorption|FallHurt)Amount|DurationOnUse|FallDistance|Health|ItemDropChance|progress|Radius(?:OnUse|PerTick)?|[0-4]'
+  double_tags: 'Amount|Base|damage|Push[XZ]|T[XYZ]D|rot|[xyz]'
+  byte_tags: 'Ambient|Amplifier|Angry|AttachFace|auto|BatFlags|Bred|Can(?:BreakDoors|PickUpLoot)|ChestedHorse|(?:Collar)?Color|Count|conditionMet|crit|Custom(?:DisplayTile|NameVisible)|damage|(?:in)?Data|DropItem|EatingHaystack|Enabled|ExactTeleport|ExplosionRadius|extending|Facing|FallFlying|Flicker|Flight|Fuel|Glowing|Health|HurtEntities|Id|ignited|ignoreEntities|inGround|In(?:visible|vulnerable)|Is(?:Baby|ChickenJockey)|isMovable|ItemRotation|Johnny|Leashed|LeftHanded|LightPopulated|Marker|No(?:AI|BasePlate|Gravity)|note|(?:was)?OnGround|Peek|PersistenceRequired|pickup|player|Player(?:Created|Spawned)|powered|Pumpkin|rewardExp|Rot|Saddle|shake|Sheared|Show(?:Arms|Bottom|Particles)|Silent|Sitting|SkeletonTrap|(?:Skull)?Type|Slot|Small|source|SplashPotion|Tame|TerrainPopulated|TrackOutput|Trail|type|UpdateLastExecution|Willing|[VY]'
+  short_tags: 'Age|Air|Anger|CookTime(?:Total)?|(?:(?:Max|Min)Spawn|Pickup)Delay|(?:Burn|Cook|Hurt)Time|carried(?:Data)?|Damage|Delay|DeathTime|Fire|Fuel|Fuse|Health|life|MaxNearbyEntities|PotionId|RequiredPlayerRange|Spawn(?:Count|Range)|Value'
+  int_tags: '(?:AP|Bound|Tile|pos|size|Spawn)[XYZ]|(?:Forced)?Age|Base|block(?:Data|Id)|(?:Brew|Conversion)Time|Career(?:Level)?|(?:Cat|Rabbit)Type|color|(?:Custom|CustomPotion)?Color|DisplayData|Data(?:Version)?|Dimension|DisabledSlots|DisplayOffset|DragonPhase|Duration|(?:EggLay|SkeletonTrap|Wait)?Time|ExplosionPower|facing|FallHurtMax|food(?:level|TickTimer)|generation|HideFlags|HurtByTimestamp|In(?:Love|vul)|Levels|life|Life(?:Ticks|[Tt]ime)?|map_scale_direction|MapColor|MoreCarrotTicks|Operation|OutputSignal|ParticleParam[12]|playerGameType|(?:Portal|Transfer)?Cooldown|Primary|Profession|ReapplicationDelay|Record|RepairCost|Riches|Score|Secondary|SelectedItemSlot|Size|SpellTicks|Steps|Strength|SuccessCount|TNTFuse|Temper|TileID|Variant|Warmup|Weight|uses|maxUses|[xz]Pos|Xp(?:Level|Seed|Total)|[xyz](?:Tile)?|[LMptXYZ]'
+  long_tags: 'Age|(?:ConversionPlayer|LoveCause|UUID)(?:Most|Least)|(?:Death)?LootTableSeed|InhabitedTime|Last(?:Execution|Update)|[LM]'
+  string_tags: 'Affected(?:Blocks|Entities|Items)(?:Name|Objective)|author|Block|carried|Command|CustomName|(?:Death)?LootTable|DisplayTile|HurtBy|[iI]d|inTile|Item|LastOutput|Lock|metadata|mirror|mode|Motive|ownerName|(?:QueryResult|SuccessCount)(?:Name|Objective)|[nN]ame|Owner(?:UUID)?|Particle|Pattern|Potion|rotation|Signature|Team|Text[0-4]|Thrower|Type|Value|i'
+  compound_tags: 'Attributes|Entity|RootVehicle|Passengers|Tags|CommandStats|SelectedItem|Items?|ArmorItems?|SaddleItem|Inventory|Offers|Recipes|buyB?|sell|tag|CustomPotionEffects|Potion|SpawnPotentials|Properties|SpawnData|TileEntityData|Effects|[0-4]|HandItems|Pose|BeamTarget|FireworksItem|Explosions?|Fireworks|Colors|FadeColors|Lore|Owner|Target|Patterns|ExitPortal|RecordItem|Textures|CanDestroy|CanPlaceOn|ench|StoredEnchantments|BlockEntityTag|AttributeModifiers|display|Lore|SkullOwner|textures|Value|SKIN|CAPE|EntityTag|Decorations'
+
+contexts:
+  main:
+  - include: comments
+  - include: smelt
+  - include: json
+  - include: entity-selector
+  - include: commands
+  - include: constants
+  - include: err-char
+
+  comments:
+  - match: '//.*$'
+    scope: comment.single-line.mcc
+  - match: '/\*'
+    set:
+      - meta_scope: comment.multi-line.mcc
+      - match: '\*/'
+        pop: true
+
+  smelt: 
+  - scope: keyword.control.mcc
+    match: '(!\w+|# .+$)'
+  - match: '>{'
+    push: smelt-json
+  - scope: entity.name.mcc
+    match: '(\$\{\w+\}|\$\w+)'
+
+  smelt-json:
+  - meta_scope:  source.mcc.json.smelt
+  - match: '(\"executeAs\")\s*(:)\s*(\")'
+    captures:
+      '1': string.quoted.mcc
+      '2': punctuation.definition.json.mcc
+      '3': string.quoted.mcc
+    push: [json-string, entity-selector]
+  - match: '(\"type\")\s*:\s*(\"((?:impulse|repeating)(?:-chain)?|chain)\")'
+    captures:
+      '1': string.quoted.mcc
+      '2': string.quoted.mcc
+      '3': constant.language.mcc
+    push: comma
+  - match: '(\"(?:auto|conditional)\")\s*:\s*(true|false)'
+    captures:
+      '1': string.quoted.mcc
+      '2': constant.language.mcc
+    push: comma
+  - match: '(\"markerTag\")\s*:\s*(\")'
+    captures:
+      '1': string.quoted.mcc
+      '2': string.quoted.mcc
+    push: json-string
+  - match: '}'
+    pop: true
+
+
+  json:
+  - match: '\{'
+    set:
+    - meta_scope: source.mcc.json.curly-bracket
+    - include: json-attributes
+    - match: '\}'
+      pop: true
+    - include: err-char
+  - match: '\['
+    set:
+    - meta_scope: source.mcc.json.straight-bracket
+    - include: json-attributes
+    - match: '\]'
+      pop: true
+    - include: err-char
+
+  json-attributes:
+  - match: '(\"(?:text|insertion|title|author|translate)\")\s*(:)'
+    captures:
+      '1': string.quoted.mcc
+      '2': punctuation.definition.json.mcc
+      '3': string.quoted.mcc
+    push: [json-string, pre-string]
+  - match: '(\"(?:selector|markerTag)\")\s*(:)\s*(\")'
+    captures:
+      '1': string.quoted.mcc 
+      '2': punctuation.definition.json.mcc
+      '3': string.quoted.mcc
+    push: [json-string, entity-selector]
+  - match: '(\"color\")\s*(:)\s*(\"({{color}})\")'
+    captures:
+      '1': string.quoted.mcc
+      '2': punctuation.definition.json.string
+      '3': string.quoted.mcc
+      '4': constant.language.mcc
+    push: comma
+  - match: '(\"(?:bold|italic|underlined?|strikethrough|obfuscated|conditional|auto)\")\s*(:)\s*(true|false)' #Booleans
+    captures:
+      '1': string.quoted.mcc #Quotes
+      '2': punctuation.definition.json.mcc
+      '3': constant.language.mcc #Boolean value
+    push: comma
+  - match: '(\"(?:with|extra)\")\s*(:)'
+    captures:
+      '1': string.quoted.mcc
+      '2': punctuation.definition.json.mcc
+    push: [comma, json, pre-json]
+  - match: '(\"type\")\s*(:)\s*(\"({{entity}})\")'
+    captures:
+      '1': string.quoted.mcc
+      '2': punctuation.definition.json.mcc
+      '3': string.quoted.mcc
+      '4': constant.language.mcc
+    push: comma
+  - match: '(\"hoverEvent\")\s*(:)'
+    captures:
+      '1': string.quoted.mcc
+      '2': punctuation.definition.json.mcc
+    push: [comma, hover-event, pre-json]
+  - match: '(\"clickEvent\")\s*(:)'
+    captures:
+      '1': string.quoted.mcc
+      '2': punctuation.definition.json.mcc
+    push: [comma, click-event]
+  - match: '(\"score\")\s*(:)'
+    captures:
+      '1': string.quoted.mcc
+      '2': punctuation.definition.json.mcc
+    push: [comma, score, pre-json]
+  - match: '(\"pages\")\s*:\s*'
+    captures:
+      '1': string.quoted.mcc
+    push: [comma, pages, pre-json]
+  - match: '(Command)\s*:\s*(\")'
+    captures:
+      '1': string.unquoted.mcc
+      '2': string.quoted.mcc
+    push: json-string #ToDo add Command Recognition
+  - match: '(Text[1-4])\s*:\s*(\")'
+    captures:
+      '1': string.unquoted.mcc
+      '2': string.quoted.mcc
+    push: json-string #ToDo: Add JSON recognition shizzle
+  - include: nbt-attributes
+  - include: json-string
+
+  nbt-attributes:  
+  - match: '(Pos|Motion|direction|power|Body|(?:Left|Right)(?:Arm|Leg)|Head)\s*:\s*(\[)(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?\s*)(\])'
+    captures:
+      '1': string.unquoted.mcc
+      '2': punctuation.definition.nbt.mcc
+      '3': constant.numeric.mcc
+      '4': constant.numeric.mcc #The numbers
+      '5': constant.numeric.mcc
+      '6': punctuation.definition.nbt.mcc
+    push: comma
+  - match: '(Rotation|RightArm|LeftArm|Body|Head|LeftLeg|RightLeg)\s*:\s*(\[)(?:(?:(\d+):)?(-?\d+(?:\.\d+)?f?),\s*)(?:(?:(\d+):)?(-?\d+(?:\.\d+)?f?),\s*)?(?:(\d+):)?(-?\d+(?:\.\d+)?f?\s*)?(\])'
+    captures:
+      '1': string.unquoted.mcc
+      '2': punctuation.definition.nbt.mcc
+      '3': constant.numeric.mcc
+      '4': constant.numeric.mcc
+      '5': constant.numeric.mcc
+      '6': constant.numeric.mcc
+      '7': constant.numeric.mcc
+      '8': constant.numeric.mcc
+      '9': punctuation.definition.nbt.mcc
+    push: comma
+  #Float
+  - match: '({{float_tags}})\s*:\s*(-?\d+\.\d+f?)'
+    captures:
+      '1': string.unquoted.mcc
+      '2': constant.numeric.mcc
+    push: comma
+    #Double
+  - match: '({{double_tags}})\s*:\s*(-?\d*\.\d+d?)'
+    captures:
+      '1': string.unquoted.mcc
+      '2': constant.numeric.mcc
+    push: comma
+  #Bytes
+  - match: '({{byte_tags}})\s*:\s*(\d+b?)'
+    captures:
+      '1': string.unquoted.mcc
+      '2': constant.numeric.mcc
+    push: comma
+    #Short
+  - match: '({{short_tags}})\s*:\s*(-?\d+s?)'
+    captures:
+      '1': string.unquoted.mcc
+      '2': constant.numeric.mcc
+    push: comma
+    #Integer
+  - match: '({{int_tags}})\s*:\s*(-?\d+)'
+    captures:
+      '1': string.unquoted.mcc
+      '2': constant.numeric.mcc
+    push: comma
+    #Long
+  - match: '({{long_tags}})\s*:\s*(-?\d+L?)'
+    captures:
+      '1': string.unquoted.mcc
+      '2': constant.numeric.mcc
+    push: comma
+    #Special Integer Array things. (Ooh, aah, special.  How special? Very special.)
+  - match: '((?:Fade)?Colors)\s*:\s*'
+    captures:
+      '1': string.unquoted.mcc
+    push: [comma, int-array, pre-json]
+    #Compound Tags and Lists
+  - match: '({{compound_tags}})\s*:\s*' #ToDo: add more specific highlighting where possible, EG successthing
+    captures:
+      '1': string.unquoted.mcc
+    push: [comma, json, pre-json]
+  - match: '({{string_tags}})\s*:' #String
+    captures:
+      '1': string.unquoted.mcc
+      '2': string.quoted.mcc
+    push: [json-string, pre-string]
+  - match: '"'
+    scope: string.quoted
+    push: json-string
+
+  hover-event:
+  - match: '{'
+    set:
+    - meta_scope: source.mcc.json.hover-event.curly-bracket
+    - include: hover-event-attributes
+    - match: '}'
+      pop: true
+    - include: err-char
+  - match: '\['
+    set:
+    - meta_scope: source.mcc.json.hover-event.curly-bracket
+    - include: hover-event-attributes
+    - match: '\]'
+      pop: true
+    - include: err-char
+
+  hover-event-attributes:
+  - match: '(\"action\")\s*:\s*(\"(show_(?:text|item|entity|achievement))\")'
+    captures:
+      '1': string.quoted.mcc
+      '2': string.quoted.mcc
+      '3': constant.language.mcc
+    push: comma
+  - match: '(\"value\")\s*:\s*' #ToDo: Add json detection
+    captures:
+      '1': string.quoted.mcc
+    push: [json-string, pre-string]
+
+  click-event:
+  - match: '{'
+    set:
+    - meta_scope: source.mcc.json.click-event.curly-bracket
+    - include: click-event-attributes
+    - match: '}'
+      pop: true
+    - include: err-char
+  - match: '\['
+    set:
+    - meta_scope: source.mcc.json.click-event.curly-bracket
+    - include: click-event-attributes
+    - match: '\]'
+      pop: true
+    - include: err-char
+
+  click-event-attributes:
+  - match: '(\"action\")\s*:\s*(\"((?:run|suggest)_command|open_url|change_page)\")'
+    captures:
+      '1': string.quoted.mcc
+      '2': string.quoted.mcc
+      '3': constant.language.mcc
+    push: comma
+  - match: '(\"value\")\s*:\s*' #ToDo: Add json detection
+    captures:
+      '1': string.quoted.mcc
+    push: [json-string, pre-string]
+
+  score:
+  - match: '{'
+    set:
+    - meta_scope: source.mcc.json.score.curly-bracket
+    - include: score-attributes
+    - match: '}'
+      pop: true
+    - include: err-char
+  - match: '\['
+    set:
+    - meta_scope: source.mcc.json.score.curly-bracket
+    - include: score-attributes
+    - match: '\]'
+      pop: true
+    - include: err-char
+
+  score-attributes: #ToDo: Add json detection
+  - match: '(\"name\")\s*:\s*'
+    captures:
+      '1': string.quoted.mcc
+    push: [json-string, pre-string]
+  - match: '(\"objective\")\s*:\s*(\"[\w-]{1,16}\")'
+    captures:
+      '1': string.quoted.mcc
+      '2': string.quoted.mcc
+    push: comma
+  
+  pages:
+  - match: '\{'
+    set:
+    - meta_scope: source.mcc.json.pages.curly-bracket
+    - include: pages-attributes
+    - match: '\}'
+      pop: true
+    - include: err-char
+  - match: '\['
+    set:
+    - meta_scope: source.mcc.json.pages.curly-bracket
+    - include: pages-attributes
+    - match: '\]'
+      pop: true
+    - include: err-char
+
+  pages-attributes:
+  - match: '"'
+    scope: string.quoted
+    push: json-string
+
+  int-array:
+  - match: '(\[)(I;)'
+    captures:
+      '1': punctuation.definition.nbt.mcc
+      '2': constant.numeric.mcc
+    set:
+    - meta_scope: source.mcc.nbt.int-array
+    - match: '(-?\d+)'
+      captures:
+        '1': constant.numeric.mcc
+      push: comma
+    - match: '\]'
+      pop: true
+    - include: err-char
+
+  entity-selector:
+  - match: '(@[apers])(\[)(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?(-?\d+\s*)(\])'
+    captures:
+      '1': entity.name.function.mcc
+      '2': entity.name.function.mcc
+      '3': support.type.mcc
+      '4': support.type.mcc
+      '5': support.type.mcc
+      '6': support.type.mcc
+      '7': entity.name.function.mcc
+    pop: true
+  - match: '(\@[apers])(\[)(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?'
+    captures:
+      '1': entity.name.function.mcc
+      '2': entity.name.function.mcc
+      '3': support.type.mcc
+      '4': support.type.mcc
+      '5': support.type.mcc
+    set: entity-selector-parameters
+    #Highlights your basic entity selector
+  - match: '(@[aeprs]|\*)(?!\[)'
+    captures:
+      '1': entity.name.function.mcc
+    pop: true
+
+  entity-selector-parameters:
+  - meta_scope: source.mcc.entity-selector.paramaters
+  - match: '(d?[xyz]|[rl]m?|c|score_([\w-]{1,16})(?:_min)?)(=)(-?\d+)'
+    captures:
+      '1': string.unquoted.mcc
+      '2': support.type.mcc
+      '3': keyword.operator.assignment.mcc
+      '4': support.type.mcc
+    push: comma
+  - match: '(m)(=!?)(sp|[0-3csa]|-1)'
+    captures:
+      '1': string.unquoted.mcc
+      '2': keyword.operator.assignment.mcc
+      '3': support.type.mcc
+    push: comma
+  - match: '(r[xy]m?)(=)(-?\d+(?:\.\d+)?)'
+    captures:
+      '1': string.unquoted.mcc
+      '2': keyword.operator.assignment.mcc
+      '3': support.type.mcc
+    push: comma
+  - match: '(name)(=!?)([\w-]+)'
+    captures:
+      '1': string.unquoted.mcc
+      '2': keyword.operator.assignment.mcc
+      '3': support.type.mcc
+    push: comma
+  - match: '(team|tag)(=!?)([\w-]+)'
+    captures:
+      '1': string.unquoted.mcc
+      '2': keyword.operator.assignment.mcc
+      '3': support.type.mcc
+    push: comma
+  - match: '(team)(=)' #This is here because team= is valid
+    captures:
+      '1': string.unquoted.mcc
+      '2': keyword.operator.assignment.mcc
+    push: comma
+  - match: '(type)(=!?)({{entity}})'
+    captures:
+      '1': string.unquoted.mcc
+      '2': keyword.operator.assignment.mcc
+      '3': support.type.mcc
+    push: comma
+  - match: '\]'
+    scope: 
+    pop: true
+  
+  comma:
+  - meta_content_scope: source.mcc.comma
+  - match: ','
+    set: post-comma
+  - match: '(\s|\b|^|)(?=[\]\}])'
+    pop: true
+  - match: '[^\s]'
+    scope: invalid.illegal
+
+  post-comma:
+  - meta_scope: source.mcc.post-comma
+  - match: '[\}\],]'
+    scope: invalid.illegal
+  - match: '(\s|\b|^|)(?=[\w\"\{\[-])'
+    pop: true
+
+  json-string:
+  - meta_content_scope: string.quoted.mcc
+  - match: '\\.'
+    scope: constant.character.escape.mcc
+  - match: '"'
+    set: comma
+
+  pre-string:
+  - meta_content_scope: source.mcc.pre-string
+  - match: '"'
+    pop: true
+  - match: '[^\s]'
+    scope: invalid.illegal
+
+  pre-json:
+  - meta_content_scope: source.mcc.pre-json
+  - match: '(\s|\b|^|)(?=[\{\[])'
+    pop: true
+  - match: '[^\s]'
+    scope: invalid.illegal
+
+  err-char:
+  - match: '[^\s]'
+    scope: invalid.illegal
+
+  commands:
+  - match: '(?:\s|^|\b)\/?(recipe) (give|take)\b'
+    captures:
+      '1': keyword.control.mcc
+      '2': support.type.mcc
+  - scope: keyword.control.mcc
+    match: '(?:\s|^|\b)\/?(xp|advancement|blockdata|clear|clone|defaultgamemode|difficulty|effect|enchant|entitydata|execute|fill|gamemode|gamerule|give|help|kill|list|locate|me|particle|playsound|replaceitem|say|scoreboard|searge|seed|setblock|setidletimeout|setworldspawn|spawnpoint|recipe|spreadplayers|stats|stopsound|summon|teleport|tellraw|tell|testforblocks|testforblock|testfor|time|title|toggledownfall|tp|trigger|weather|worldborder)\b'
+  - scope: support.type.mcc
+    match: '\b(while|unless|actionbar|add|adventure|AffectedBlocks|AffectedEntities|AffectedItems|announceAdvancements|belowName|block|clear|color|commandBlockOutput|creative|day|deathCount|destroy|disableElytraMovementCheck|doDaylightCycle|doEntityDrops|doFireTick|doLimitedCrafting|doMobLoot|doMobSpawning|doTileDrops|doWeatherCycle|dummy|easy|empty|enable|entity|everything|false|food|from|gameLoopFunction|grant|hard|health|hollow|if|join|keepInventory|keep|leave|list|logAdminCommands|maxCommandChainLength|maxEntityCramming|mobGriefing|naturalRegeneration|night|normal|objectives|off|only|on|operation|option|outline|peaceful|playerKillCount|players|QueryResult|rain|randomTickSpeed|reducedDebugInfo|reload|remove|replace|reset|revoke|sendCommandFeedback|setdisplay|set|showDeathMessages|sidebar|spawnRadius|spectatorsGenerateChunks|spectator|start|stop|subtitle|SuccessCount|survival|tag|teams|test|through|thunder|times|totalKillCount|trigger|true|until)\b'
+  - scope: constant.language.mcc
+    match: '\b((?:dark_)?(?:blue|green|aqua|red|purple|gray)|black|gold|light_purple|yellow|white|(?:chest|commandblock|furnace|hopper|spawner|tnt)_|(?:minecart)|llamas|evocation_fangs|lightning_bolt|llama_spit|parrot|(?:(?:skeleton|zombie)_|)(?:horse)|(?:illusion|evocation|vindication)_illager|(?:zombie)(?:_(?:pigman|villager)|)|area_effect_cloud|armor_stand|arrow|bat|blaze|boat|cave_spider|chicken|cow|creeper|donkey|dragon_fireball|egg|elder_guardian|ender_(?:pearl|crystal|dragon)|enderman|endermite|eye_of_ender_signal|falling_block|fireball|fireworks_rocket|ghast|giant|guardian|husk|item_frame|item|leash_knot|magma_cube|mooshroom|mule|ocelot|painting|pig|polar_bear|potion|rabbit|sheep|shulker_bullet|shulker|silverfish|skeleton_horse|skeleton|slime|small_fireball|snowball|snowman|spectral_arrow|spider|squid|stray|tnt|vex|villager_golem|villager|witch|wither_skeleton|wither|wolf|xp_(?:bottle|orb))\b'
+  - match: '(function) ([a-z_\-1-9]+:)([a-z_\-1-9]+(?:\/[a-z_\-1-9]+)*)(\/?)'
+    captures:
+      '1': keyword.control.mcc
+      '2': support.type.mcc
+      '3': string.unquoted.mcc
+      '4': invalid.illegal
+  - match: '(#\w+)'
+    captures:
+      '1': entity.name.function.mcc
+  - match: '(minecraft:)([A-Za-z_-]+)'
+    captures:
+      '1': support.type.mcc
+      '2': string.unquoted.mcc
+  - match: '\b(slot\.([A-Za-z]+)\.((?:[A-Za-z]+)|(?:\d+)))\b'
+    captures:
+      '1': string.unquoted.mcc
+      '2': constant.numeric
+      '3': constant.numeric
+  - match: '\b(stat\.(animalsBred|armorCleaned|bannerCleaned|beaconInteraction|boatOneCm|brewingstandInteraction|cakeSlicesEaten|cauldronFilled|cauldronUsed|chestOpened|climbOneCm|craftingTableInteraction|crouchOneCm|damageDealt|damageTaken|deaths|dispenserInspected|diveOneCm|drop|dropperInspected|enderchestOpened|fallOneCm|fishCaught|flowerPotted|flyOneCm|furnaceInteraction|hopperInspected|horseOneCm|itemEnchanted|jump|junkFished|leaveGame|minecartOneCm|mobKills|noteblockPlayed|noteblockTuned|pigOneCm|playerKills|playOneMinute|recordPlayed|sneakTime|sprintOneCm|swimOneCm|talkedToVillager|timeSinceDeath|sleepInBed|tradedWithVillager|trappedChestTriggered|treasureFished|walkOneCm))\b'
+    captures:
+      '1': string.unquoted.mcc
+      '2': constant.numeric
+  - match: '\b(stat\.((?:craft|use|break)Item|pickup|drop)\.(?:(\w+)\.(\w+)|(\w+)))\b'
+    captures:
+      '1': string.unquoted.mcc
+      '2': constant.language.mcc
+      '3': support.type.mcc
+      '4': constant.numeric.mcc
+      '5': constant.numeric.mcc
+  - match: '\b(stat\.(killEntity|entityKilledBy)\.({{entity}}))\b'
+    captures:
+      '1': string.unquoted.mcc
+      '2': constant.language.mcc
+      '3': support.type.mcc
+  - match: '\b((?:teamkill|killedByTeam)\.({{color}}))\b'
+    captures:
+      '1': string.unquoted.mcc
+      '2': constant.language.mcc
+
+  constants:
+  - match: '(#\w+)'
+    scope: constant.string.mcc
+  - scope: keyword.operator.assignment.mcc
+    match: '[-+/*%^]?='
+  - match: '\b(~?-?\d*\.?\d+L?)\b'
+    scope: constant.numeric.mcc
+  - match: '"'
+    set:
+      - meta_scope: string.quoted.mcc
+      - match: '\\\.'
+        scope: constant.character.escape.mcc
+      - match: '"'
+        pop: true
+...

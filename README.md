@@ -6,11 +6,11 @@
 
 __Latest news__
 
-The v1.12 update of **Minecraft: Java Edition** introduced functions! Now is **Mine Command Code**'s time to shine! Of course, we haven't forgotten about our friends over at [Smelt](http://smelt.gnasp.com). That's why we've decided to provide explicit support for both .mcc and .mcfunction files!
+The v1.12 update of **Minecraft: Java Edition** introduced functions! Now is **Marshal Command Code**'s time to shine! Of course, we haven't forgotten about our friends over at [Smelt](http://smelt.gnasp.com). That's why we've decided to provide explicit support for Smelt through .mcc and MC Functions through .mcfunction files!
 
-__What is Minecraft Command Code?__
+__What is Marshal Command Code?__
 
-Minecraft Command Code is a syntax highlighter built for Sublime Text! Our goal is to provide practical highlighting to support as many themes as possible. We attempt to strike a balance between categorization and readability, meaning the code highlights the relevant parts of the logic while checking for errors in the rigid structure of NBT, JSON, the scoreboard, and commands themselves.
+Marshal Command Code is a syntax highlighter built for Sublime Text! Our goal is to provide practical highlighting to support as many themes as possible. We attempt to strike a balance between categorization and readability, meaning the code highlights the relevant parts of the logic while checking for errors in the rigid structure of NBT, JSON, the scoreboard, and commands themselves.
 
 __Well, what does it look like?__
 

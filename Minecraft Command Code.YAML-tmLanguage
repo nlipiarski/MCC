@@ -341,7 +341,7 @@ repository:
         '3': {name: constant.numeric.mcc} #The numbers
         '4': {name: constant.numeric.mcc}
         '5': {name: punctuation.definition.mapping.mcc}
-    - match: '(Rotation|RightArm|LeftArm|Body|Head|LeftLeg|RightLeg)\s*:\s*(\[)(?:(?:(\d+):)?(-?\d+(?:\.\d+)?[f|F]?),\s*)(?:(?:(?:(\d+):)?(-?\d+(?:\.\d+)?[f|F]?),\s*))?(?:(?:(\d+):)?(-?\d+(?:\.\d+)?[f|F]?\s*))?(\]),?'
+    - match: '(Rotation|RightArm|LeftArm|Body|Head|LeftLeg|RightLeg)\s*:\s*(\[)(?:(?:(\d+):)?(-?\d+(?:\.\d+)?F?),\s*)(?:(?:(?:(\d+):)?(-?\d+(?:\.\d+)?F?),\s*))?(?:(?:(\d+):)?(-?\d+(?:\.\d+)?F?\s*))?(\]),?'
       captures:
         '1': {name: string.unquoted.mcc}
         '2': {name: punctuation.definition.mapping.mcc}

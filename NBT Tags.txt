@@ -289,14 +289,6 @@ z
 
 Regex: Amount|Base|damage|Push[XZ]|rot|T[XYZ]D|[xyz]
 
-Byte Array:
-Biomes
-Blocks
-Add
-Data
-BlockLight
-SkyLight
-
 String:
 AffectedBlocksName
 AffectedBlocksObjective
