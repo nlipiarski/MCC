@@ -15,15 +15,15 @@ Minecraft Command Code is a syntax highlighter built for Sublime Text! Our goal 
 __Well, what does it look like?__
 
 ***No Syntax Highlighting***
-![No Syntax Highlighting](https://i.imgur.com/bIwktmC.png)
+![No Syntax Highlighting](http://i.imgur.com/bIwktmC.png)
 ***All Hollow's Eve Theme.***
-![An Example of MCC](https://i.imgur.com/IWRKmvx.png)
+![An Example of MCC](http://i.imgur.com/IWRKmvx.png)
 ***Cobalt Theme.***
-![An Example of MCC](https://i.imgur.com/nNyIvqv.png)
+![An Example of MCC](http://i.imgur.com/nNyIvqv.png)
 ***Solarized (Light) Theme.***
-![An example of MCC](https://i.imgur.com/Aq6fMMc.png)
+![An example of MCC](http://i.imgur.com/Aq6fMMc.png)
 ***Monokai Bright Theme.***
-![An Example of MCC](https://i.imgur.com/XzPCI2y.png)
+![An Example of MCC](http://i.imgur.com/XzPCI2y.png)
 
 ## Installation
 
