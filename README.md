@@ -1,4 +1,4 @@
-# Minecraft Command Code: A Syntax Highlighter
+# Maarshal Command Code: A Syntax Highlighter
 
 *Created by [Nathan Liparski](http://twitter.com/NateLipiarski) with input and testing by [Moesh](http://moesh.ca/about).*
 
