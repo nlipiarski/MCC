@@ -37,8 +37,10 @@ ignited
 ignoreEntities
 inData
 inGround
+instabuild
 Invisible
 Invulnerable
+invulnerable
 IsBaby
 IsChickenJockey
 isMovable
@@ -47,7 +49,10 @@ Johnny
 Leashed
 LeftHanded
 LightPopulated
+map_tracking_position
 Marker
+mayBuild
+mayfly
 NoAI
 NoBasePlate
 NoGravity
@@ -64,6 +69,7 @@ Pumpkin
 rewardExp
 Rot
 Saddle
+seenCredits
 shake
 Sheared
 ShowArms
@@ -73,9 +79,11 @@ Silent
 Sitting
 SkeletonTrap
 SkullType
+Sleeping
 Slot
 Small
 source
+SpawnForced
 SplashPotion
 Tame
 TerrainPopulated
@@ -89,7 +97,7 @@ wasOnGround
 Willing
 Y
 
-regex: Ambient|Amplifier|Angry|AttachFace|auto|BatFlags|Bred|Can(?:BreakDoors|PickUpLoot)|ChestedHorse|(?:Collar)?Color|Count|conditionMet|crit|Custom(?:DisplayTile|NameVisible)|damage|(?:in)?Data|DropItem|EatingHaystack|Enabled|ExactTeleport|ExplosionRadius|extending|Facing|FallFlying|Flicker|Flight|Fuel|Glowing|Health|HurtEntities|Id|ignited|ignoreEntities|inGround|In(?:visible|vulnerable)|Is(?:Baby|ChickenJockey)|isMovable|ItemRotation|Johnny|Leashed|LeftHanded|LightPopulated|Marker|No(?:AI|BasePlate|Gravity)|note|(?:was)?OnGround|Peek|PersistenceRequired|pickup|player|Player(?:Created|Spawned)|powered|Pumpkin|rewardExp|Rot|Saddle|shake|Sheared|Show(?:Arms|Bottom|Particles)|Silent|Sitting|SkeletonTrap|(?:Skull)?Type|Slot|Small|source|SplashPotion|Tame|TerrainPopulated|TrackOutput|Trail|type|UpdateLastExecution|Willing|[VY]
+regex: Ambient|Amplifier|Angry|AttachFace|auto|BatFlags|Bred|Can(?:BreakDoors|PickUpLoot)|ChestedHorse|(?:Collar)?Color|Count|conditionMet|crit|Custom(?:DisplayTile|NameVisible)|damage|(?:in)?Data|DropItem|EatingHaystack|Enabled|ExactTeleport|ExplosionRadius|extending|Facing|FallFlying|Flicker|Flight|Fuel|Glowing|Health|HurtEntities|Id|ignited|ignoreEntities|inGround|instabuild|In(?:visible|vulnerable)|invulnerable|Is(?:Baby|ChickenJockey)|isMovable|ItemRotation|Johnny|Leashed|LeftHanded|LightPopulated|map_tracking_position|Marker|may(?:Build|fly)|No(?:AI|BasePlate|Gravity)|note|(?:was)?OnGround|Peek|PersistenceRequired|pickup|player|Player(?:Created|Spawned)|powered|Pumpkin|rewardExp|Rot|Saddle|seenCredits|shake|Sheared|Show(?:Arms|Bottom|Particles)|Silent|Sitting|SkeletonTrap|(?:Skull)?Type|Sleeping|Slot|Small|source|SpawnForced|SplashPotion|Tame|TerrainPopulated|TrackOutput|Trail|type|UpdateLastExecution|Willing|[VY]
 
 Short:
 Age
@@ -115,11 +123,12 @@ MinSpawnDelay
 PickupDelay
 PotionId
 RequiredPlayerRange
+SleepTimer
 SpawnCount
 SpawnRange
 Value
 
-Regex: Age|Air|Anger|CookTime(?:Total)?|((?:Max|Min)Spawn|Pickup)Delay|(?:Burn|Cook|Hurt)Time|carried(?:Data)?|Damage|Delay|DeathTime|Fire|Fuel|Fuse|Health|life|MaxNearbyEntities|PotionId|RequiredPlayerRange|Spawn(?:Count|Range)|Value
+Regex: Age|Air|Anger|CookTime(?:Total)?|(?:(?:Max|Min)Spawn|Pickup)Delay|(?:Burn|Cook|Hurt)Time|carried(?:Data)?|Damage|Delay|DeathTime|Fire|Fuel|Fuse|Health|life|MaxNearbyEntities|PotionId|RequiredPlayerRange|SleepTimer|Spawn(?:Count|Range)|Value
 
 Integer:
 Age
@@ -153,13 +162,13 @@ EggLayTime
 ExplosionPower
 facing
 FallHurtMax
-foodlevel
+foodLevel
 foodTickTimer
 ForcedAge
 Generation
 HideFlags
 HurtByTimestamp
-InLove
+inLove
 Invul
 L
 Levels
@@ -234,10 +243,12 @@ z
 zPos
 zTile
 
-Integer Regex: (?:AP|Bound|Tile|pos|size|Spawn)[XYZ]|(?:Forced)?Age|Base|block(?:Data|Id)|(?:Brew|Conversion)Time|Career(?:Level)?|(?:Cat|Rabbit)Type|color|(?:Custom|CustomPotion)?Color|DisplayData|Data(?:Version)?|Dimension|DisabledSlots|DisplayOffset|DragonPhase|Duration|(?:EggLay|SkeletonTrap|Wait)?Time|ExplosionPower|facing|FallHurtMax|food(?:level|TickTimer)|generation|HideFlags|HurtByTimestamp|In(?:Love|vul)|Levels|life|Life(?:Ticks|[Tt]ime)?|map_scale_direction|MapColor|MoreCarrotTicks|Operation|OutputSignal|ParticleParam[12]|playerGameType|(?:Portal|Transfer)?Cooldown|Primary|Profession|ReapplicationDelay|Record|RepairCost|Riches|Score|Secondary|SelectedItemSlot|Size|SpellTicks|Steps|Strength|SuccessCount|TNTFuse|Temper|TileID|Variant|Warmup|Weight|uses|maxUses|[xz]Pos|Xp(?:Level|Seed|Total)|[xyz](?:Tile)?|[LMptXYZ]
+Integer Regex: (?:AP|Bound|Tile|pos|size|Spawn)[XYZ]|(?:Forced)?Age|Base|block(?:Data|Id)|(?:Brew|Conversion)Time|Career(?:Level)?|(?:Cat|Rabbit)Type|color|(?:Custom|CustomPotion)?Color|DisplayData|Data(?:Version)?|Dimension|DisabledSlots|DisplayOffset|DragonPhase|Duration|(?:EggLay|SkeletonTrap|Wait)?Time|ExplosionPower|facing|FallHurtMax|food(?:Level|TickTimer)|generation|HideFlags|HurtByTimestamp|inLove|Invul|Levels|life|Life(?:Ticks|[Tt]ime)?|map_scale_direction|MapColor|MoreCarrotTicks|Operation|OutputSignal|ParticleParam[12]|playerGameType|(?:Portal|Transfer)?Cooldown|Primary|Profession|ReapplicationDelay|Record|RepairCost|Riches|Score|Secondary|SelectedItemSlot|Size|SpellTicks|Steps|Strength|SuccessCount|TNTFuse|Temper|TileID|Variant|Warmup|Weight|uses|maxUses|[xz]Pos|Xp(?:Level|Seed|Total)|[xyz](?:Tile)?|[LMptXYZ]
 
 Long:
 Age
+AttachLeast
+AttachMost
 ConversionPlayerLeast
 ConversionPlayerMost
 DeathLootTableSeed
@@ -249,10 +260,13 @@ LootTableSeed
 LoveCauseLeast
 LoveCauseMost
 M
+OwnerUUIDLeast
+OwnerUUIDMost
 UUIDLeast
 UUIDMost
+XYZ
 
-Regex: Age|(?:ConversionPlayer|LoveCause|UUID)(?:Most|Least)|(?:Death)?LootTableSeed|InhabitedTime|Last(?:Execution|Update)|[LM]
+Regex: Age|Attach(?:Least|Most)|OwnerUUID(?:Most|Least)|(?:ConversionPlayer|LoveCause|UUID)(?:Most|Least)|(?:Death)?LootTableSeed|InhabitedTime|Last(?:Execution|Update)|[LMXYZ]
 
 Float:
 0
@@ -264,14 +278,19 @@ AbsorptionAmount
 DurationOnUse
 FallDistance
 FallHurtAmount
+flySpeed
+foodExhaustionLevel
+foodSaturationLevel
 Health
 ItemDropChance
 progress
 Radius
 RadiusOnUse
 RadiusPerTick
+walkSpeed
+XpP
 
-Regex: (?:Absorption|FallHurt)Amount|DurationOnUse|FallDistance|Health|ItemDropChance|progress|Radius(?:OnUse|PerTick)?|[0-4]
+Regex: (?:Absorption|FallHurt)Amount|DurationOnUse|FallDistance|food(?:Exhaustion|Saturation)Level|flySpeed|Health|ItemDropChance|progress|Radius(?:OnUse|PerTick)?|walkSpeed|XpP|[0-4]
 
 Double:
 Amount
@@ -311,6 +330,7 @@ inTile
 Item
 LastOutput
 Lock
+LocName
 LootTable
 metadata
 mirror
@@ -339,4 +359,4 @@ Thrower
 Type
 Value
 
-Regex: Affected(?:Blocks|Entities|Items)(?:Name|Objective)|author|Block|carried|Command|CustomName|(?:Death)?LootTable|DisplayTile|HurtBy|[iI]d|inTile|Item|LastOutput|Lock|metadata|mirror|mode|Motive|ownerName|(?:QueryResult|SuccessCount)(?:Name|Objective)|[nN]ame|Owner(?:UUID)?|Particle|Pattern|Potion|rotation|Signature|Team|Text[0-4]|Thrower|Type|Value|i
+Regex: Affected(?:Blocks|Entities|Items)(?:Name|Objective)|author|Block|carried|Command|CustomName|(?:Death)?LootTable|DisplayTile|HurtBy|[iI]d|inTile|Item|LastOutput|Lock|LocName|metadata|mirror|mode|Motive|ownerName|(?:QueryResult|SuccessCount)(?:Name|Objective)|[nN]ame|Owner(?:UUID)?|Particle|Pattern|Potion|rotation|Signature|Team|Text[0-4]|Thrower|Type|Value|i

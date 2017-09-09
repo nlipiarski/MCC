@@ -8,23 +8,23 @@ uuid: 8e5bef64-35eb-42da-9e20-a8087402a8bf
 variables:
   entity: 'llamas|evocation_fangs|lightning_bolt|llama_spit|parrot|(?:chest_|commandblock_|furnace_|hopper_|spawner_|tnt_)?minecart|(?:skeleton_|zombie_)?horse|(?:illusion|evocation|vindication)_illager|(?:zombie)(?:_pigman|_villager)?|area_effect_cloud|armor_stand|arrow|bat|blaze|boat|cave_spider|chicken|cow|creeper|donkey|dragon_fireball|egg|elder_guardian|ender_(?:pearl|crystal|dragon)|enderman|endermite|eye_of_ender_signal|falling_block|fireball|fireworks_rocket|ghast|giant|guardian|husk|item_frame|item|leash_knot|magma_cube|mooshroom|mule|ocelot|painting|pig|polar_bear|potion|rabbit|sheep|shulker_bullet|shulker|silverfish|skeleton_horse|skeleton|slime|small_fireball|snowball|snowman|spectral_arrow|spider|squid|stray|tnt|vex|villager_golem|villager|witch|wither_skeleton|wither|wolf|xp_(?:bottle|orb)'
   color: 'none|black|dark_blue|dark_green|dark_aqua|dark_red|dark_purple|gold|gray|dark_gray|blue|green|aqua|red|light_purple|yellow|white'
-  float_tags: '(?:Absorption|FallHurt)Amount|DurationOnUse|FallDistance|Health|ItemDropChance|progress|Radius(?:OnUse|PerTick)?|[0-4]'
+  float_tags: '(?:Absorption|FallHurt)Amount|DurationOnUse|FallDistance|food(?:Exhaustion|Saturation)Level|flySpeed|Health|ItemDropChance|progress|Radius(?:OnUse|PerTick)?|walkSpeed|XpP|[0-4]'
   double_tags: 'Amount|Base|damage|Push[XZ]|T[XYZ]D|rot|[xyz]'
-  byte_tags: 'Ambient|Amplifier|Angry|AttachFace|auto|BatFlags|Bred|Can(?:BreakDoors|PickUpLoot)|ChestedHorse|(?:Collar)?Color|Count|conditionMet|crit|Custom(?:DisplayTile|NameVisible)|damage|(?:in)?Data|DropItem|EatingHaystack|Enabled|ExactTeleport|ExplosionRadius|extending|Facing|FallFlying|Flicker|Flight|Fuel|Glowing|Health|HurtEntities|Id|ignited|ignoreEntities|inGround|In(?:visible|vulnerable)|Is(?:Baby|ChickenJockey)|isMovable|ItemRotation|Johnny|Leashed|LeftHanded|LightPopulated|Marker|No(?:AI|BasePlate|Gravity)|note|(?:was)?OnGround|Peek|PersistenceRequired|pickup|player|Player(?:Created|Spawned)|powered|Pumpkin|rewardExp|Rot|Saddle|shake|Sheared|Show(?:Arms|Bottom|Particles)|Silent|Sitting|SkeletonTrap|(?:Skull)?Type|Slot|Small|source|SplashPotion|Tame|TerrainPopulated|TrackOutput|Trail|type|UpdateLastExecution|Willing|[VY]'
-  short_tags: 'Age|Air|Anger|CookTime(?:Total)?|(?:(?:Max|Min)Spawn|Pickup)Delay|(?:Burn|Cook|Hurt)Time|carried(?:Data)?|Damage|Delay|DeathTime|Fire|Fuel|Fuse|Health|life|MaxNearbyEntities|PotionId|RequiredPlayerRange|Spawn(?:Count|Range)|Value'
-  int_tags: '(?:AP|Bound|Tile|pos|size|Spawn)[XYZ]|(?:Forced)?Age|Base|block(?:Data|Id)|(?:Brew|Conversion)Time|Career(?:Level)?|(?:Cat|Rabbit)Type|color|(?:Custom|CustomPotion)?Color|DisplayData|Data(?:Version)?|Dimension|DisabledSlots|DisplayOffset|DragonPhase|Duration|(?:EggLay|SkeletonTrap|Wait)?Time|ExplosionPower|facing|FallHurtMax|food(?:level|TickTimer)|generation|HideFlags|HurtByTimestamp|In(?:Love|vul)|Levels|life|Life(?:Ticks|[Tt]ime)?|map_scale_direction|MapColor|MoreCarrotTicks|Operation|OutputSignal|ParticleParam[12]|playerGameType|(?:Portal|Transfer)?Cooldown|Primary|Profession|ReapplicationDelay|Record|RepairCost|Riches|Score|Secondary|SelectedItemSlot|Size|SpellTicks|Steps|Strength|SuccessCount|TNTFuse|Temper|TileID|Variant|Warmup|Weight|uses|maxUses|[xz]Pos|Xp(?:Level|Seed|Total)|[xyz](?:Tile)?|[LMptXYZ]'
-  long_tags: 'Age|(?:ConversionPlayer|LoveCause|UUID)(?:Most|Least)|(?:Death)?LootTableSeed|InhabitedTime|Last(?:Execution|Update)|[LM]'
-  string_tags: 'Affected(?:Blocks|Entities|Items)(?:Name|Objective)|author|Block|carried|Command|CustomName|(?:Death)?LootTable|DisplayTile|HurtBy|[iI]d|inTile|Item|LastOutput|Lock|metadata|mirror|mode|Motive|ownerName|(?:QueryResult|SuccessCount)(?:Name|Objective)|[nN]ame|Owner(?:UUID)?|Particle|Pattern|Potion|rotation|Signature|Team|Text[0-4]|Thrower|Type|Value|i'
-  compound_tags: 'Attributes|Entity|RootVehicle|Passengers|Tags|CommandStats|SelectedItem|Items?|ArmorItems?|SaddleItem|Inventory|Offers|Recipes|buyB?|sell|tag|CustomPotionEffects|Potion|SpawnPotentials|Properties|SpawnData|TileEntityData|Effects|[0-4]|HandItems|Pose|BeamTarget|FireworksItem|Explosions?|Fireworks|Colors|FadeColors|Lore|Owner|Target|Patterns|ExitPortal|RecordItem|Textures|CanDestroy|CanPlaceOn|ench|StoredEnchantments|BlockEntityTag|AttributeModifiers|display|Lore|SkullOwner|textures|Value|SKIN|CAPE|EntityTag|Decorations'
+  byte_tags: 'Ambient|Amplifier|Angry|AttachFace|auto|BatFlags|Bred|Can(?:BreakDoors|PickUpLoot)|ChestedHorse|(?:Collar)?Color|Count|conditionMet|crit|Custom(?:DisplayTile|NameVisible)|damage|(?:in)?Data|DropItem|EatingHaystack|Enabled|ExactTeleport|ExplosionRadius|extending|Facing|FallFlying|Flicker|Flight|Fuel|Glowing|Health|HurtEntities|Id|ignited|ignoreEntities|inGround|instabuild|In(?:visible|vulnerable)|invulnerable|Is(?:Baby|ChickenJockey)|isMovable|ItemRotation|Johnny|Leashed|LeftHanded|LightPopulated|Marker|may(?:Build|fly)|No(?:AI|BasePlate|Gravity)|note|(?:was)?OnGround|Peek|PersistenceRequired|pickup|player|Player(?:Created|Spawned)|powered|Pumpkin|rewardExp|Rot|Saddle|seenCredits|shake|Sheared|Show(?:Arms|Bottom|Particles)|Silent|Sitting|SkeletonTrap|(?:Skull)?Type|Sleeping|Slot|Small|source|SpawnForced|SplashPotion|Tame|TerrainPopulated|TrackOutput|Trail|type|UpdateLastExecution|Willing|[VY]'
+  short_tags: 'Age|Air|Anger|CookTime(?:Total)?|(?:(?:Max|Min)Spawn|Pickup)Delay|(?:Burn|Cook|Hurt)Time|carried(?:Data)?|Damage|Delay|DeathTime|Fire|Fuel|Fuse|Health|life|MaxNearbyEntities|PotionId|RequiredPlayerRange|SleepTimer|Spawn(?:Count|Range)|Value'
+  int_tags: '(?:AP|Bound|Tile|pos|size|Spawn)[XYZ]|(?:Forced)?Age|Base|block(?:Data|Id)|(?:Brew|Conversion)Time|Career(?:Level)?|(?:Cat|Rabbit)Type|color|(?:Custom|CustomPotion)?Color|DisplayData|Data(?:Version)?|Dimension|DisabledSlots|DisplayOffset|DragonPhase|Duration|(?:EggLay|SkeletonTrap|Wait)?Time|ExplosionPower|facing|FallHurtMax|food(?:Level|TickTimer)|generation|HideFlags|HurtByTimestamp|inLove|Invul|Levels|life|Life(?:Ticks|[Tt]ime)?|map_scale_direction|MapColor|MoreCarrotTicks|Operation|OutputSignal|ParticleParam[12]|playerGameType|(?:Portal|Transfer)?Cooldown|Primary|Profession|ReapplicationDelay|Record|RepairCost|Riches|Score|Secondary|SelectedItemSlot|Size|SpellTicks|Steps|Strength|SuccessCount|TNTFuse|Temper|TileID|Variant|Warmup|Weight|uses|maxUses|[xz]Pos|Xp(?:Level|Seed|Total)|[xyz](?:Tile)?|[LMptXYZ]'
+  long_tags: 'Age|(?:ConversionPlayer|LoveCause|UUID)(?:Most|Least)|(?:Death)?LootTableSeed|InhabitedTime|Last(?:Execution|Update)|[LMXYZ]'
+  string_tags: 'Affected(?:Blocks|Entities|Items)(?:Name|Objective)|author|Block|carried|Command|CustomName|(?:Death)?LootTable|DisplayTile|HurtBy|[iI]d|inTile|Item|LastOutput|Lock|LocName|metadata|mirror|mode|Motive|ownerName|(?:QueryResult|SuccessCount)(?:Name|Objective)|[nN]ame|Owner(?:UUID)?|Particle|Pattern|Potion|rotation|Signature|Team|Text[0-4]|Thrower|Type|Value|i'
+  compound_tags: 'recipeBook|Leash|pages|abilities|Attributes|Entity|RootVehicle|Passengers|Tags|CommandStats|SelectedItem|(?:Hand|Ender)?Items|(?:Decor)?Item|ArmorItems?|SaddleItem|Inventory|Offers|Recipes|buyB?|sell|tag|(?:CustomPotion|Active)Effects|Potion|SpawnPotentials|Properties|SpawnData|TileEntityData|Effects|[0-4]|Pose|BeamTarget|FireworksItem|Explosions?|Fireworks|Colors|FadeColors|Owner|Target|Patterns|ExitPortal|RecordItem|Textures|CanDestroy|CanPlaceOn|ench|StoredEnchantments|BlockEntityTag|AttributeModifiers|display|Lore|SkullOwner|textures|Value|SKIN|CAPE|EntityTag|Decorations|ShoulderEntity(?:Left|Right)'
+
+patterns:
+
 
 contexts:
   main:
   - include: comments
   - include: smelt
-  - include: json
-  - include: entity-selector
   - include: commands
-  - include: constants
   - include: err-char
 
   comments:
@@ -88,6 +88,15 @@ contexts:
       pop: true
     - include: err-char
 
+  nbt: 
+  - match: '\{'
+    set:
+    - meta_scope: source.mcc.nbt.curly-bracket
+    - include: nbt-attributes
+    - match: '\}'
+      pop: true
+    - include: err-char
+
   json-attributes:
   - match: '(\"(?:text|insertion|title|author|translate)\")\s*(:)'
     captures:
@@ -118,7 +127,7 @@ contexts:
     captures:
       '1': string.quoted.mcc
       '2': punctuation.definition.json.mcc
-    push: [comma, json, pre-json]
+    push: [comma, pre-json]
   - match: '(\"type\")\s*(:)\s*(\"({{entity}})\")'
     captures:
       '1': string.quoted.mcc
@@ -130,7 +139,7 @@ contexts:
     captures:
       '1': string.quoted.mcc
       '2': punctuation.definition.json.mcc
-    push: [comma, hover-event, pre-json]
+    push: [comma, hover-event]
   - match: '(\"clickEvent\")\s*(:)'
     captures:
       '1': string.quoted.mcc
@@ -140,23 +149,19 @@ contexts:
     captures:
       '1': string.quoted.mcc
       '2': punctuation.definition.json.mcc
-    push: [comma, score, pre-json]
+    push: [comma, score]
   - match: '(\"pages\")\s*:\s*'
     captures:
       '1': string.quoted.mcc
-    push: [comma, pages, pre-json]
+    push: [comma, pages]
   - match: '(Command)\s*:\s*(\")'
     captures:
       '1': string.unquoted.mcc
       '2': string.quoted.mcc
     push: json-string #ToDo add Command Recognition
-  - match: '(Text[1-4])\s*:\s*(\")'
-    captures:
-      '1': string.unquoted.mcc
-      '2': string.quoted.mcc
-    push: json-string #ToDo: Add JSON recognition shizzle
-  - include: nbt-attributes
-  - include: json-string
+  - match: '"'
+    scope: string.quoted
+    push: json-string
 
   nbt-attributes:  
   - match: '(Pos|Motion|direction|power|Body|(?:Left|Right)(?:Arm|Leg)|Head)\s*:\s*(\[)(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?\s*)(\])'
@@ -204,12 +209,6 @@ contexts:
       '1': string.unquoted.mcc
       '2': constant.numeric.mcc
     push: comma
-    #Integer
-  - match: '({{int_tags}})\s*:\s*(-?\d+)'
-    captures:
-      '1': string.unquoted.mcc
-      '2': constant.numeric.mcc
-    push: comma
     #Long
   - match: '({{long_tags}})\s*:\s*(-?\d+L?)'
     captures:
@@ -221,35 +220,44 @@ contexts:
     captures:
       '1': string.unquoted.mcc
     push: [comma, int-array, pre-json]
+    #Integer
+  - match: '({{int_tags}})\s*:\s*(-?\d+)'
+    captures:
+      '1': string.unquoted.mcc
+      '2': constant.numeric.mcc
+    push: comma
     #Compound Tags and Lists
   - match: '({{compound_tags}})\s*:\s*' #ToDo: add more specific highlighting where possible, EG successthing
     captures:
       '1': string.unquoted.mcc
-    push: [comma, json, pre-json]
+    push: [comma, nbt, pre-json]
   - match: '({{string_tags}})\s*:' #String
     captures:
       '1': string.unquoted.mcc
       '2': string.quoted.mcc
     push: [json-string, pre-string]
-  - match: '"'
-    scope: string.quoted
-    push: json-string
+  - match: '(Text[1-4])\s*:\s*(\")'
+    captures:
+      '1': string.unquoted.mcc
+      '2': string.quoted.mcc
+    push: json-string #ToDo: Add JSON recognition shizzle
 
   hover-event:
-  - match: '{'
+  - match: '\{'
     set:
     - meta_scope: source.mcc.json.hover-event.curly-bracket
     - include: hover-event-attributes
-    - match: '}'
+    - match: '\}'
       pop: true
     - include: err-char
   - match: '\['
     set:
-    - meta_scope: source.mcc.json.hover-event.curly-bracket
+    - meta_scope: source.mcc.json.hover-event.straight-bracket
     - include: hover-event-attributes
     - match: '\]'
       pop: true
     - include: err-char
+  - include: err-char
 
   hover-event-attributes:
   - match: '(\"action\")\s*:\s*(\"(show_(?:text|item|entity|achievement))\")'
@@ -278,6 +286,7 @@ contexts:
     - match: '\]'
       pop: true
     - include: err-char
+  - include: err-char
 
   click-event-attributes:
   - match: '(\"action\")\s*:\s*(\"((?:run|suggest)_command|open_url|change_page)\")'
@@ -306,6 +315,7 @@ contexts:
     - match: '\]'
       pop: true
     - include: err-char
+  - include: err-char
 
   score-attributes: #ToDo: Add json detection
   - match: '(\"name\")\s*:\s*'
@@ -333,6 +343,7 @@ contexts:
     - match: '\]'
       pop: true
     - include: err-char
+  - include: err-char
 
   pages-attributes:
   - match: '"'
@@ -353,6 +364,7 @@ contexts:
     - match: '\]'
       pop: true
     - include: err-char
+  - include: err-char
 
   entity-selector:
   - match: '(@[apers])(\[)(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?(-?\d+\s*)(\])'
@@ -378,6 +390,7 @@ contexts:
     captures:
       '1': entity.name.function.mcc
     pop: true
+  - include: err-char
 
   entity-selector-parameters:
   - meta_scope: source.mcc.entity-selector.paramaters
@@ -454,44 +467,50 @@ contexts:
   - meta_content_scope: source.mcc.pre-string
   - match: '"'
     pop: true
-  - match: '[^\s]'
-    scope: invalid.illegal
+  - include: line-end
+  - include: err-char
 
   pre-json:
   - meta_content_scope: source.mcc.pre-json
   - match: '(\s|\b|^|)(?=[\{\[])'
-    pop: true
-  - match: '[^\s]'
-    scope: invalid.illegal
+    set: json
+  - include: err-char
+
+  pre-json-optional:
+  - meta_content_scope: source.mcc.pre-json
+  - match: '(\s|\b|^|)(?=[\{\[])'
+    set: json
+  - include: line-end
+  - include: err-char
+
+  pre-nbt:
+  - meta_content_scope: source.mcc.pre-json
+  - match: '(\s|\b|^|)(?=[\{\[])'
+    set: nbt
+  - include: err-char
+
+  pre-nbt-optional:
+  - meta_content_scope: source.mcc.pre-json
+  - match: '(\s|\b|^|)(?=[\{\[])'
+    set: nbt
+  - include: line-end
+  - include: err-char
 
   err-char:
   - match: '[^\s]'
     scope: invalid.illegal
 
   commands:
-  - match: '(?:\s|^|\b)\/?(recipe) (give|take)\b'
-    captures:
-      '1': keyword.control.mcc
-      '2': support.type.mcc
-  - scope: keyword.control.mcc
-    match: '(?:\s|^|\b)\/?(xp|advancement|blockdata|clear|clone|defaultgamemode|difficulty|effect|enchant|entitydata|execute|fill|gamemode|gamerule|give|help|kill|list|locate|me|particle|playsound|replaceitem|say|scoreboard|searge|seed|setblock|setidletimeout|setworldspawn|spawnpoint|recipe|spreadplayers|stats|stopsound|summon|teleport|tellraw|tell|testforblocks|testforblock|testfor|time|title|toggledownfall|tp|trigger|weather|worldborder)\b'
-  - scope: support.type.mcc
-    match: '\b(while|unless|actionbar|add|adventure|AffectedBlocks|AffectedEntities|AffectedItems|announceAdvancements|belowName|block|clear|color|commandBlockOutput|creative|day|deathCount|destroy|disableElytraMovementCheck|doDaylightCycle|doEntityDrops|doFireTick|doLimitedCrafting|doMobLoot|doMobSpawning|doTileDrops|doWeatherCycle|dummy|easy|empty|enable|entity|everything|false|food|from|gameLoopFunction|grant|hard|health|hollow|if|join|keepInventory|keep|leave|list|logAdminCommands|maxCommandChainLength|maxEntityCramming|mobGriefing|naturalRegeneration|night|normal|objectives|off|only|on|operation|option|outline|peaceful|playerKillCount|players|QueryResult|rain|randomTickSpeed|reducedDebugInfo|reload|remove|replace|reset|revoke|sendCommandFeedback|setdisplay|set|showDeathMessages|sidebar|spawnRadius|spectatorsGenerateChunks|spectator|start|stop|subtitle|SuccessCount|survival|tag|teams|test|through|thunder|times|totalKillCount|trigger|true|until)\b'
-  - scope: constant.language.mcc
-    match: '\b((?:dark_)?(?:blue|green|aqua|red|purple|gray)|black|gold|light_purple|yellow|white|(?:chest|commandblock|furnace|hopper|spawner|tnt)_|(?:minecart)|llamas|evocation_fangs|lightning_bolt|llama_spit|parrot|(?:(?:skeleton|zombie)_|)(?:horse)|(?:illusion|evocation|vindication)_illager|(?:zombie)(?:_(?:pigman|villager)|)|area_effect_cloud|armor_stand|arrow|bat|blaze|boat|cave_spider|chicken|cow|creeper|donkey|dragon_fireball|egg|elder_guardian|ender_(?:pearl|crystal|dragon)|enderman|endermite|eye_of_ender_signal|falling_block|fireball|fireworks_rocket|ghast|giant|guardian|husk|item_frame|item|leash_knot|magma_cube|mooshroom|mule|ocelot|painting|pig|polar_bear|potion|rabbit|sheep|shulker_bullet|shulker|silverfish|skeleton_horse|skeleton|slime|small_fireball|snowball|snowman|spectral_arrow|spider|squid|stray|tnt|vex|villager_golem|villager|witch|wither_skeleton|wither|wolf|xp_(?:bottle|orb))\b'
-  - match: '(function) ([a-z_\-1-9]+:)([a-z_\-1-9]+(?:\/[a-z_\-1-9]+)*)(\/?)'
-    captures:
-      '1': keyword.control.mcc
-      '2': support.type.mcc
-      '3': string.unquoted.mcc
-      '4': invalid.illegal
-  - match: '(#\w+)'
-    captures:
-      '1': entity.name.function.mcc
-  - match: '(minecraft:)([A-Za-z_-]+)'
-    captures:
-      '1': support.type.mcc
-      '2': string.unquoted.mcc
+  - include: advancement
+  - include: blockdata
+  - include: clear
+  - include: clone
+  - include: defaultgamemode
+  - include: difficulty
+  - include: effect
+  - include: enchant
+  - include: entitydata
+  - include: execute
   - match: '\b(slot\.([A-Za-z]+)\.((?:[A-Za-z]+)|(?:\d+)))\b'
     captures:
       '1': string.unquoted.mcc
@@ -518,18 +537,283 @@ contexts:
       '1': string.unquoted.mcc
       '2': constant.language.mcc
 
-  constants:
-  - match: '(#\w+)'
-    scope: constant.string.mcc
-  - scope: keyword.operator.assignment.mcc
-    match: '[-+/*%^]?='
-  - match: '\b(~?-?\d*\.?\d+L?)\b'
-    scope: constant.numeric.mcc
-  - match: '"'
+  advancement: #Syntax: https://minecraft.gamepedia.com/Commands#advancement
+  - match: '^\s*(/?advancement)\b'
+    captures:
+      '1': keyword.control.mcc
+    push:
+    - match: '\b(grant|revoke)\b'
+      scope: support.type.mcc
+      set: [advancement-options-1, player]
+    - match: '\btest\b'
+      scope: support.type.mcc
+      set: [advancement-options-2, player]
+    - include: err-char
+
+  advancement-options-1:
+  - meta_content_scope: source.mcc.advancement-options-1
+  - match: '\beverything\b'
+    scope: support.type.mcc
+    pop: true
+  - match: '\b(only|until|from|through)\b'
+    scope: support.type.mcc
+    set: advancement-options-2
+  - include: err-char
+
+  advancement-options-2: 
+  - meta_content_scope: source.mcc.advancement-options-2
+  - match: '\b([a-z_\-1-9]+:)([a-z_\-1-9]+(?:\/[a-z_\-1-9]+)*)(\/?)\b'
+    captures:
+      '1': support.type.mcc
+      '2': string.unquoted.mcc
+      '3': invalid.illegal
     set:
-      - meta_scope: string.quoted.mcc
-      - match: '\\\.'
-        scope: constant.character.escape.mcc
-      - match: '"'
-        pop: true
+    - include: line-end
+    - match: '[^\s$].*$'
+      scope: string.unquoted.mcc
+      pop: true
+    - include: err-char
+  - include: err-char
+
+  blockdata: #blockdata <x> <y> <z> <dataTag>
+  - match: '^\s*(/?blockdata)\b'
+    captures:
+      '1': keyword.control.mcc
+    push: [pre-nbt, number, number, number]
+
+  clear: #clear [player] [item] [data] [maxCount] [dataTag]
+  - match: '^\s*(/?clear)\b'
+    captures:
+      '1': keyword.control.mcc
+    push: [pre-nbt-optional, integer-optional, item-id-optional, player-optional]
+
+  clone: #clone <x1> <y1> <z1> <x2> <y2> <z2> <x> <y> <z> [maskMode] [cloneMode] [TileName] [dataValue|state]
+  - match: '^\s*(/?clone)\b'
+    captures:
+      '1': keyword.control.mcc
+    push: [blockValue-state-optional, item-id-optional, clone-options-1, number, number, number, number, number, number, number, number, number]
+
+  clone-options-1:
+  - match: '\b(filtered|masked|replace)\b'
+    scope: support.type.mcc
+    set:
+    - match: '\b(force|move|normal)\b'
+      scope: support.type.mcc
+      pop: true
+    - include: line-end
+    - include: err-char
+  - include: line-end
+  -  include: err-char
+
+  defaultgamemode:
+  - match: '^\s*(/?defaultgamemode)\b'
+    captures:
+      '1': keyword.control.mcc
+    push:
+    - match: '\b(survival|creative|spectator|adventure|sp|[csa0-3])\b'
+      scope: support.type.mcc
+      pop: true
+    - include: err-char
+
+  difficulty:
+  - match: '^\s*(/?difficulty)\b'
+    captures:
+      '1': keyword.control.mcc
+    push:
+    - match: '\b(peaceful|easy|normal|hard|[penh0-3])\b'
+      scope: support.type.mcc
+      pop: true
+    - include: err-char
+
+  #effect <player> clear
+  #effect <player> <effect> [seconds] [amplifier] [hideParticles]
+  effect:
+  - match: '^\s*(/?effect)\b'
+    captures:
+      '1': keyword.control.mcc
+    push: [effect-options, player]
+
+  effect-options:
+  - match: '\bclear\b'
+    scope: support.type.mcc
+    pop: true
+  - match: '\b([1-9]|1[0-9]|2[0-7])\b'
+    scope: constant.numeric.mcc
+    set: [boolean-optional, integer-optional, integer-optional]
+  - match: '\b(minecraft:)(speed|slowness|haste|mining_fatigue|strength|instant_(?:health|damage)|jump_boost|nausea|regeneration|(?:fire_)?resistance|water_breathing|invisibility|blindness|night_vision|hunger|weakness|poison|wither|health_boost|absorption|saturation|glowing|levitation|(?:un)?luck)\b'
+    captures:
+      '1': support.type.mcc
+      '2': string.unquoted.mcc
+    set: [boolean-optional, integer-optional, integer-optional]
+  - include: err-char
+
+  #enchant <player> <enchantment ID> [level]
+  enchant:
+  - match: '^s*(/?enchant)\b'
+    captures:
+      '1': keyword.control.mcc
+    push: [enchant-options, player]
+
+  enchant-options:
+  - match: '\b(minecraft:)((?:fire_|blast_|projectile_)?protection|feather_falling|respiration|aqua_affinity|thorns|depth_strider|frost_walker|binding_curse|sharpness|smite|bane_of_arthropods|knockback|fire_aspect|looting|sweeping|efficiency|silk_touch|unbreaking|fortune|power|punch|flame|infinity|luck_of_the_sea|lure|mending|vanishing_curse)\b'
+    captures:
+      '1': support.type.mcc
+      '2': string.unquoted.mcc
+    set: integer-optional
+  - match: '\b(1[06-9]|2[0-2]|3[2-5]|4[89]|[57][01]|6[12]|[0-9])\b'
+    scope: constant.numeric.mcc
+    set: integer-optional
+  - include: err-char
+
+  entitydata: #entitydata <entity> <dataTag>
+  - match: '^\s*(/?entitydata)\b'
+    captures:
+      '1': keyword.control.mcc
+    push: [pre-nbt, just-entity]
+
+  #execute <entity> <x> <y> <z> <command …>
+  #execute <entity> <x> <y> <z> detect <x2> <y2> <z2> <block> <dataValue|state> <command …>
+  execute:
+  - match: '^\s*(/?execute)\b'
+    captures:
+      '1': support.type.mcc
+
+
+  entity:
+  - include: entity-selector
+  - match: '\b[\w-\.]+\b'
+
+  - include: err-char
+
+  just-entity: #modifies the generic @ selector to just work for entites, is used in several commands
+  - match: '\b[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}\b' #Matches UUIDs
+  - match: '(@e)(\[)(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?(-?\d+\s*)(\])'
+    captures:
+      '1': entity.name.function.mcc
+      '2': entity.name.function.mcc
+      '3': support.type.mcc
+      '4': support.type.mcc
+      '5': support.type.mcc
+      '6': support.type.mcc
+      '7': entity.name.function.mcc
+    pop: true
+  - match: '(\@e)(\[)(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?(?:(-?\d+),\s*)?'
+    captures:
+      '1': entity.name.function.mcc
+      '2': entity.name.function.mcc
+      '3': support.type.mcc
+      '4': support.type.mcc
+      '5': support.type.mcc
+    set: entity-selector-parameters
+    #Highlights your basic entity selector
+  - match: '(@e)(?!\[)'
+    captures:
+      '1': entity.name.function.mcc
+    pop: true
+  - include: err-char
+
+  player:
+  - include: entity-selector
+  - match: '\b[\w\.-]+\b'
+    scope: entity.name.function.mcc
+    pop: true
+  - include: err-char
+
+  player-optional:
+  - include: entity-selector
+  - match: '\b[\w\.-]+\b'
+    scope: entity.name.function.mcc
+    pop: true
+  - include: line-end
+  - include: err-char
+
+  item-id:
+  - match: '(minecraft:)([A-Za-z_-]+)'
+    captures:
+      '1': support.type.mcc
+      '2': string.unquoted.mcc
+    pop: true
+  - include: err-char
+
+  item-id-optional:
+  - match: '(minecraft:)([A-Za-z_-]+)'
+    captures:
+      '1': support.type.mcc
+      '2': string.unquoted.mcc
+    pop: true
+  - include: line-end
+  - include: err-char
+
+  number:
+  - match: '(?<=[^\B-~])(~?-?\d*\.?\d+)\b'
+    scope: constant.numeric.mcc
+    pop: true
+  - include: err-char
+
+  number-optiona;:
+  - match: '(?<=[^\B-~])(~?-?\d*\.?\d+)\b'
+    scope: constant.numeric.mcc
+    pop: true
+  - include: line-end
+  - include: err-char
+
+  boolean:
+  - match: '\b(true|false)\b'
+    scope: constant.language.mcc
+    pop: true
+  - include: err-char
+
+  boolean-optional:
+  - match: '\b(true|false)\b'
+    scope: constant.language.mcc
+    pop: true
+  - include: line-end
+  - include: err-char
+
+  blockValue-state:
+  - match: '\b(1?[0-5]|[6-9])\b'
+    scope: constant.numeric.mcc
+    pop: true
+  - match: '\b(\w+)(=)(\w+)\b' #ToDo: Make this more specific
+    captures:
+      '1': support.type.mcc
+      '2': keyword.operator.assignment.mcc
+      '3': constant.language.mcc
+  - include: err-char
+  
+  blockValue-state-optional:
+  - match: '\b(1?[0-5]|[6-9])\b'
+    scope: constant.numeric.mcc
+    pop: true
+  - match: '\b(\w+)(=)(\w+)\b' #ToDo: Make this more specific
+    captures:
+      '1': support.type.mcc
+      '2': keyword.operator.assignment.mcc
+      '3': constant.language.mcc
+  - include: line-end
+  - include: err-char
+
+  integer: 
+  - match: '(?<=[^\B-])(-?\d+)\b'
+    scope: constant.numeric.mcc
+    pop: true
+  - include: err-char
+
+  integer-optional: 
+  - match: '(?<=[^\B-])(-?\d+)\b'
+    scope: constant.numeric.mcc
+    pop: true
+  - include: line-end
+  - include: err-char
+
+  xp-level:
+  - match: '(?<=[^\B-])(-?\d+L?)\b'
+    scope: constant.numeric.mcc
+    pop: true
+  - include: line-end
+  - include: err-char
+
+  line-end: #Used in optional command parameters to pop them off the stack if they aren't present
+  - match: '(\s|\b|^|)(?=$)'
+    pop: true
 ...

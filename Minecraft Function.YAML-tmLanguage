@@ -622,7 +622,7 @@ repository:
 
   number:
     patterns:
-    - match: '\b(~?-?\d*\.?\d+L?)\b'
+    - match: '(?<=[^\B-~])(~?-?\d*\.?\d+L?)\b'
       name: constant.numeric.mcc
 
   json-err:
