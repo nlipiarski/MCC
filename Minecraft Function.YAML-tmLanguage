@@ -193,7 +193,7 @@ repository:
       endCaptures:
         '1': {name: punctuation.definition.mcc}
     - name: json.attribute.command.mcc
-      begin: '(((?:\\+)?\")value\2)[ \t]*:[ \t]*(\2)'
+      begin: '(((?:\\+)?\")value\2)[ \t]*:[ \t]*(\2)/?'
       beginCaptures:
         '1': {name: string.quoted.mcc}
         '2': {name: punctuation.definition.string.mcc}
@@ -588,7 +588,7 @@ repository:
           '1': {name: string.unquoted.mcc}
           '2': {name: keyword.operator.assignment.mcc}
           '3': {name: support.type.mcc}
-      - match: '(team)(=),?' #This is here because team= is valid
+      - match: '(team)(=!?),?' #This is here because team= is valid
         captures:
           '1': {name: string.unquoted.mcc}
           '2': {name: keyword.operator.assignment.mcc}

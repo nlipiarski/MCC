@@ -604,7 +604,7 @@ repository:
           '1': {name: string.unquoted.mcc}
           '2': {name: keyword.operator.assignment.mcc}
           '3': {name: support.type.mcc}
-      - match: '(team)(=),?' #This is here because team= is valid
+      - match: '(team)(=!?),?' #This is here because team= is valid
         captures:
           '1': {name: string.unquoted.mcc}
           '2': {name: keyword.operator.assignment.mcc}
