@@ -196,7 +196,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(((?:\\+)?\")value\2)[ \t]*:[ \t]*(\2)</string>
+					<string>(((?:\\+)?\")value\2)[ \t]*:[ \t]*(\2)/?</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -316,7 +316,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?:[ \t]|^|\b)(xp|advancement|blockdata|clear|clone|defaultgamemode|difficulty|effect|enchant|entitydata|execute|fill|gamemode|gamerule|give|help|kill|list|locate|me|particle|playsound|replaceitem|say|scoreboard|searge|seed|setblock|setidletimeout|setworldspawn|spawnpoint|recipe|spreadplayers|stats|stopsound|summon|teleport|tellraw|tell|testforblocks|testforblock|testfor|time|title|toggledownfall|tp|trigger|weather|worldborder)\b</string>
+					<string>\b(xp|advancement|blockdata|clear|clone|defaultgamemode|difficulty|effect|enchant|entitydata|execute|fill|gamemode|gamerule|give|help|kill|list|locate|me|particle|playsound|replaceitem|say|scoreboard|searge|seed|setblock|setidletimeout|setworldspawn|spawnpoint|recipe|spreadplayers|stats|stopsound|summon|teleport|tellraw|tell|testforblocks|testforblock|testfor|time|title|toggledownfall|tp|trigger|weather|worldborder)\b</string>
 					<key>name</key>
 					<string>keyword.control.mcc</string>
 				</dict>
@@ -357,7 +357,19 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(function) ([a-z_1-9]+:)([a-z_1-9]+(?:\/[a-z_1-9]+)*)(\/?)</string>
+					<string>(function) ([a-z_\-1-9]+:)([a-z_\-1-9]+(?:\/[a-z\-_1-9]+)*)(\/?)</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>entity.name.function.mcc</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(#\w+)</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -502,7 +514,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(^#.*)$</string>
+					<string>(^\s*#.*)$</string>
 				</dict>
 				<dict>
 					<key>begin</key>
@@ -550,7 +562,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(?:Pos|Motion|direction|power|Body|(?:Left|Right)(?:Arm|Leg)|Head)[ \t]*:[ \t]*(\[)(-?\d+(?:\.\d+)?),[ \t]*(-?\d+(?:\.\d+)?),[ \t]*(-?\d+(?:\.\d+)?[ \t]*)(\]),?</string>
+					<string>(?:Pos|Motion|direction|power|Body|(?:Left|Right)(?:Arm|Leg)|Head)\s*:\s*(\[)(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?),\s*(-?\d+(?:\.\d+)?\s*)(\]),?</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -602,7 +614,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(Rotation|RightArm|LeftArm|Body|Head|LeftLeg|RightLeg)[ \t]*:[ \t]*(\[)(?:(?:(\d+):)?(-?\d+(?:\.\d+)?[f|F]?),[ \t]*)(?:(?:(?:(\d+):)?(-?\d+(?:\.\d+)?[f|F]?),[ \t]*))?(?:(?:(\d+):)?(-?\d+(?:\.\d+)?[f|F]?[ \t]*))?(\]),?</string>
+					<string>(Rotation|RightArm|LeftArm|Body|Head|LeftLeg|RightLeg)\s*:\s*(\[)(?:(?:(\d+):)?(-?\d+(?:\.\d+)?F?),\s*)(?:(?:(?:(\d+):)?(-?\d+(?:\.\d+)?F?),\s*))?(?:(?:(\d+):)?(-?\d+(?:\.\d+)?F?\s*))?(\]),?</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -619,7 +631,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(Johnny|CanPickUpLoot|LeftHanded|OnGround|Invulnerable|CustomNameVisible|Silent|Glowing|BatFlags|IsChickenJockey|Powered|ignited|PlayerSpawned|Bred|ChestedHorse|EatingHaystack|HasReproduced|Tame|Saddle|SkeletonTrap|Elder|wasOnGround|IsBaby|CanBreakDoors|Sheared|Willing|rewardExp|PlayerCreated|Angry|player|inGround|Ambient|ShowParticles|CustomDisplayTile|Enabled|TrackOutput|DropItem|HurtEntities|Marker|Invisible|NoBasePlate|Gravity|ShowArms|Small|ShowBottom|Flicker|Trail|powered|auto|ExactTeleport|extending|Unbreakable|resolved|isPublic|map_is_scaling|NoGravity|Count|PersistenceRequired|NoAI)[ \t]*:[ \t]*([01]b?),?</string>
+					<string>((?:Absorption|FallHurt)Amount|DurationOnUse|FallDistance|Health|ItemDropChance|progress|Radius(?:OnUse|PerTick)?|[0-4])\s*:\s*(-?\d*(?:\.\d+)f?),?</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -636,7 +648,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(FallDistance|damage|Push[XZ]|FallHurtAmount|DurationOnUse|Radius(?:OnUse|PerTick)?|ItemDropChance|T[XYZ]D|progress|Amount|[xz]|rot)[ \t]*:[ \t]*(-?\d*(?:\.\d+)),?</string>
+					<string>(Amount|Base|damage|Push[XZ]|T[XYZ]D|rot|[xyz])\s*:\s*(-?\d*(?:\.\d+)d?),?</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -653,7 +665,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(CustomPotionColor|Amount|Fire|Air|Dimension|PortalCooldown|UUIDMost|UUIDLeast|EggLayTime|InLove|Age|ForcedAge|ExplosionRadius|Fuse|DragonPhase|carried(?:Data)?|Life[tT]ime|Temper|Type|Variant|SkeletonTrapTime|ExplosionPower|Size|CatType|ConversionTime|(?:Villager)?Profession|Anger|RabbitType|MoreCarrotTicks|Color|Peek|AttachFace|AP[XYZ]|SkeletonType|Riches|Career(?:Level)?|(?:max)?Uses|Invul|CollarColor|[xyz]Tile|in|shake|inData|pickup|life|[Ii]d|Amplifier|Duration|life|Age|Health|PickupDelay|Count|Damage|Value|Display(?:Data|Offset)|LootTableSeed|Fuel|Weight|Spawn(?:Count|Range)|Delay|(?:Min|Max)SpawnDelay|MaxNearbyEntities|RequiredPlayerRange|TNTFuse|TransferCooldown|TileID|Data|Time|FallHurtMax|ReapplicationDelay|WaitTime|DisabledSlots|(?:Tile)?[X-Z]|Type|Flight|Facing|ItemRotation|[Litp]|Steps|Base|Levels|Primary|Secondary|BrewTime|Fuel|OutputSignal|(?:Burn|Cook)Time|CookTimeTotal|note|block(?:Id|Data)|facing|Record|SkullType|Rot|Slot|lvl|RepairCost|Operation|color|HideFlags|generation|timestamp|type|SuccessCount|ZombieType|ParticleParam[1|2])[ \t]*:[ \t]*(-?\d+s?),?</string>
+					<string>(Ambient|Amplifier|Angry|AttachFace|auto|BatFlags|Bred|Can(?:BreakDoors|PickUpLoot)|ChestedHorse|(?:Collar)?Color|Count|conditionMet|crit|Custom(?:DisplayTile|NameVisible)|damage|(?:in)?Data|DropItem|EatingHaystack|Enabled|ExactTeleport|ExplosionRadius|extending|Facing|FallFlying|Flicker|Flight|Fuel|Glowing|Health|HurtEntities|Id|ignited|ignoreEntities|inGround|In(?:visible|vulnerable)|Is(?:Baby|ChickenJockey)|isMovable|ItemRotation|Johnny|Leashed|LeftHanded|LightPopulated|Marker|No(?:AI|BasePlate|Gravity)|note|(?:was)?OnGround|Peek|PersistenceRequired|pickup|player|Player(?:Created|Spawned)|powered|Pumpkin|rewardExp|Rot|Saddle|shake|Sheared|Show(?:Arms|Bottom|Particles)|Silent|Sitting|SkeletonTrap|(?:Skull)?Type|Slot|Small|source|SplashPotion|Tame|TerrainPopulated|TrackOutput|Trail|type|UpdateLastExecution|Willing|[VY])\s*:\s*(\d+b?),?</string>
 				</dict>
 				<dict>
 					<key>captures</key>
@@ -666,15 +678,49 @@
 						<key>2</key>
 						<dict>
 							<key>name</key>
-							<string>string.quoted.mcc</string>
+							<string>constant.numeric.mcc</string>
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(Team|Attributes|CustomName|(?:Affected(?:Blocks|Entities|Items)|QueryResult|SuccessCount)(?:Objective|Name)|OwnerName|OwnerUUID|HurtBy|inTile|Potion|Owner|Thrower|Type|DisplayTile|LootTable|EntityId|LastOutput|Block|Particle|Motive|id?|Pattern|Lock|ExtraType|Signature|Value|AttributeName|Name|Slot|SkullOwner|profileId|profileName|url)[ \t]*:[ \t]*([^,}]+),?</string>
+					<string>(Age|Air|Anger|CookTime(?:Total)?|((?:Max|Min)Spawn|Pickup)Delay|(?:Burn|Cook|Hurt)Time|carried(?:Data)?|Damage|Delay|DeathTime|Fire|Fuel|Fuse|Health|life|MaxNearbyEntities|PotionId|RequiredPlayerRange|Spawn(?:Count|Range)|Value)\s*:\s*(-?\d+s?),?</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>string.unquoted.mcc</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>constant.numeric.mcc</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>((?:AP|Bound|Tile|pos|size|Spawn)[XYZ]|(?:Forced)?Age|Base|block(?:Data|Id)|(?:Brew|Conversion)Time|Career(?:Level)?|(?:Cat|Rabbit)Type|color|(?:Custom|CustomPotion)?Color|DisplayData|Data(?:Version)?|Dimension|DisabledSlots|DisplayOffset|DragonPhase|Duration|(?:EggLay|SkeletonTrap|Wait)?Time|ExplosionPower|facing|FallHurtMax|food(?:level|TickTimer)|generation|HideFlags|HurtByTimestamp|In(?:Love|vul)|Levels|life|Life(?:Ticks|[Tt]ime)?|map_scale_direction|MapColor|MoreCarrotTicks|Operation|OutputSignal|ParticleParam[12]|playerGameType|(?:Portal|Transfer)?Cooldown|Primary|Profession|ReapplicationDelay|Record|RepairCost|Riches|Score|Secondary|SelectedItemSlot|Size|SpellTicks|Steps|Strength|SuccessCount|TNTFuse|Temper|TileID|Variant|Warmup|Weight|uses|maxUses|[xz]Pos|Xp(?:Level|Seed|Total)|[xyz](?:Tile)?|[LMptXYZ])\s*:\s*(-?\d+),?</string>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>string.unquoted.mcc</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>constant.numeric.mcc</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(Age|(?:ConversionPlayer|LoveCause|UUID)(?:Most|Least)|(?:Death)?LootTableSeed|InhabitedTime|Last(?:Execution|Update)|[LM])\s*:\s*(-?\d+L?),?</string>
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(Command)[ \t]*:[ \t]*((?:\\+)?\")</string>
+					<string>(Command)\s*:\s*((?:\\+)?\")</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -704,7 +750,7 @@
 					<array>
 						<dict>
 							<key>begin</key>
-							<string>([\{\[])[ \t]*</string>
+							<string>([\{\[])\s*</string>
 							<key>beginCaptures</key>
 							<dict>
 								<key>1</key>
@@ -785,7 +831,7 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(Text[1-4])[ \t]*:[ \t]*((?:\\+)?\")</string>
+					<string>(Text[1-4])\s*:\s*((?:\\+)?\")</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -815,7 +861,7 @@
 					<array>
 						<dict>
 							<key>begin</key>
-							<string>([\{\[])[ \t]*</string>
+							<string>([\{\[])\s*</string>
 							<key>beginCaptures</key>
 							<dict>
 								<key>1</key>
@@ -896,7 +942,56 @@
 				</dict>
 				<dict>
 					<key>begin</key>
-					<string>(Entity|RootVehicle|Passengers|Tags|CommandStats|SelectedItem|Items?|ArmorItems?|SaddleItem|Inventory|Offers|Recipes|buyB?|sell|tag|CustomPotionEffects|Potion|SpawnPotentials|Properties|SpawnData|TileEntityData|Effects|[0-4]|Equipment|HandItems|Pose|BeamTarget|FireworksItem|Explosions?|Fireworks|Colors|FadeColors|Owner|Target|Patterns|ExitPortal|RecordItem|Textures|CanDestroy|CanPlaceOn|ench|StoredEnchantments|BlockEntityTag|AttributeModifiers|display|Lore|SkullOwner|textures|Value|SKIN|CAPE|EntityTag|Decorations)[ \t]*:[ \t]*([\[\{])</string>
+					<string>((?:Fade)?Colors)\s*:\s*(\[)(I;)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>string.unquoted.mcc</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.mapping.mcc</string>
+						</dict>
+						<key>3</key>
+						<dict>
+							<key>name</key>
+							<string>constant.numeric.mcc</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(\]),?</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.mapping.mcc</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>json.arrays.mcc</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>captures</key>
+							<dict>
+								<key>1</key>
+								<dict>
+									<key>name</key>
+									<string>constant.numeric.mcc</string>
+								</dict>
+							</dict>
+							<key>match</key>
+							<string>(\d+),?</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(Attributes|Entity|RootVehicle|Passengers|Tags|CommandStats|SelectedItem|Items?|ArmorItems?|SaddleItem|Inventory|Offers|Recipes|buyB?|sell|tag|CustomPotionEffects|Potion|SpawnPotentials|Properties|SpawnData|TileEntityData|Effects|[0-4]|HandItems|Pose|BeamTarget|FireworksItem|Explosions?|Fireworks|Colors|FadeColors|Owner|Target|Patterns|ExitPortal|RecordItem|Textures|CanDestroy|CanPlaceOn|ench|StoredEnchantments|BlockEntityTag|AttributeModifiers|display|Lore|SkullOwner|textures|Value|SKIN|CAPE|EntityTag|Decorations)\s*:\s*([\[\{])</string>
 					<key>beginCaptures</key>
 					<dict>
 						<key>1</key>
@@ -965,6 +1060,23 @@
 							<string>#err-chars</string>
 						</dict>
 					</array>
+				</dict>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>string.unquoted.mcc</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>string.quoted.mcc</string>
+						</dict>
+					</dict>
+					<key>match</key>
+					<string>(Affected(?:Blocks|Entities|Items)(?:Name|Objective)|author|Block|carried|Command|CustomName|(?:Death)?LootTable|DisplayTile|HurtBy|[iI]d|inTile|Item|LastOutput|Lock|metadata|mirror|mode|Motive|ownerName|(?:QueryResult|SuccessCount)(?:Name|Objective)|[nN]ame|Owner(?:UUID)?|Particle|Pattern|Potion|rotation|Signature|Team|Text[0-4]|Thrower|Type|Value|i)\s*:\s*([^,}]+),?</string>
 				</dict>
 			</array>
 		</dict>
@@ -1082,7 +1194,7 @@
 								</dict>
 							</dict>
 							<key>match</key>
-							<string>(d?[xyz]|[rl]m?|c|score_([0-z]{1,16})(?:_min)?)(=)(-?\d+),?</string>
+							<string>(d?[xyz]|[rl]m?|c|score_([0-9a-zA-Z]{1,16})(?:_min)?)(=)(-?\d+),?</string>
 						</dict>
 						<dict>
 							<key>captures</key>
@@ -1187,7 +1299,7 @@
 								</dict>
 							</dict>
 							<key>match</key>
-							<string>(team)(=),?</string>
+							<string>(team)(=!?),?</string>
 						</dict>
 						<dict>
 							<key>captures</key>
@@ -1676,7 +1788,7 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>(((?:\\+)?\")(?:text|insertion|title|author|translates|selector|color|bold|italic|underlined?|strikethrough|obfuscated|with|extra|type|hoverEvent|action|value|clickEvent|score|name|objective|pages|Pos|Motion|direction|power|Body|(?:Left|Right)(?:Arm|Leg)|Head|Rotation|FallDistance|damage|Push[XZ]|FallHurtAmount|DurationOnUse|Radius(?:OnUse|PerTick)?|ItemDropChance|T[XYZ]D|progress|Amount|[xz]|rot|Fire|Air|Dimension|PortalCooldown|UUIDMost|UUIDLeast|EggLayTime|InLove|Age|ForcedAge|ExplosionRadius|Fuse|DragonPhase|carried(?:Data)?|Life[tT]ime|Temper|Type|Variant|SkeletonTrapTime|ExplosionPower|Size|CatType|ConversionTime|(?:Villager)?Profession|Anger|RabbitType|MoreCarrotTicks|Color|Peek|AttachFace|AP[XYZ]|SkeletonType|Riches|Career(?:Level)?|(?:max)?Uses|Invul|CollarColor|[xyz]Tile|in|shake|inData|pickup|life|[Ii]d|Amplifier|Duration|life|Age|Health|PickupDelay|Count|Damage|Value|Display(?:Data|Offset)|LootTableSeed|Fuel|Weight|Spawn(?:Count|Range)|Delay|(?:Min|Max)SpawnDelay|MaxNearbyEntities|RequiredPlayerRange|TNTFuse|TransferCooldown|TileID|Data|Time|FallHurtMax|ReapplicationDelay|WaitTime|DisabledSlots|(?:Tile)?[X-Z]|Type|Flight|Facing|ItemRotation|[Litp]|Steps|Base|Levels|Primary|Secondary|BrewTime|Fuel|OutputSignal|(?:Burn|Cook)Time|CookTimeTotal|note|block(?:Id|Data)|facing|Record|SkullType|Rot|Slot|lvl|RepairCost|Operation|color|HideFlags|generation|timestamp|type|OnGround|Invulnerable|CustomNameVisible|Silent|Glowing|BatFlags|IsChickenJockey|Powered|ignited|PlayerSpawned|Bred|ChestedHorse|EatingHaystack|HasReproduced|Tame|Saddle|SkeletonTrap|Elder|wasOnGround|IsBaby|CanBreakDoors|Sheared|Willing|rewardExp|PlayerCreated|Angry|player|inGround|Ambient|ShowParticles|CustomDisplayTile|Enabled|TrackOutput|DropItem|HurtEntities|Marker|Invisible|NoBasePlate|Gravity|ShowArms|Small|ShowBottom|Flicker|Trail|powered|auto|ExactTeleport|extending|Unbreakable|resolved|isPublic|map_is_scaling|CustomName|(?:Affected(?:Blocks|Entities|Items)|QueryResult|SuccessCount)(?:Objective|Name)|OwnerName|OwnerUUID|HurtBy|inTile|Potion|Owner|Thrower|Type|DisplayTile|LootTable|EntityId|Command|LastOutput|Block|Particle|Motive|id?|Pattern|Lock|Item|Text[1-4]|ExtraType|Signature|Value|AttributeName|Name|Slot|SkullOwner|profileId|profileName|url|Passengers|Tags|CommandStats|Items?|ArmorItems?|SaddleItem|Inventory|Offers|Recipes|buyB?|sell|tag|CustomPotionEffects|Potion|SpawnPotentials|Properties|SpawnData|TileEntityData|Effects|[0-4]|Equipment|HandItems|Pose|BeamTarget|FireworksItem|Explosions?|Fireworks|Colors|FadeColors|Owner|Target|Patterns|ExitPortal|RecordItem|Textures|CanDestroy|CanPlaceOn|ench|StoredEnchantments|AttributeModifiers|display|Lore|SkullOwner|textures|Value|SKIN|CAPE|EntityTag|Decorations)\2)[ \t]*:</string>
+					<string>(((?:\\+)?\")(?:text|insertion|title|author|translates|selector|color|bold|italic|underlined?|strikethrough|obfuscated|with|extra|type|hoverEvent|action|value|clickEvent|score|name|objective|pages|Pos|Motion|direction|power|Body|(?:Left|Right)(?:Arm|Leg)|Head|Rotation|FallDistance|damage|Push[XZ]|FallHurtAmount|DurationOnUse|Radius(?:OnUse|PerTick)?|ItemDropChance|T[XYZ]D|progress|Amount|[xz]|rot|Fire|Air|Dimension|PortalCooldown|UUIDMost|UUIDLeast|EggLayTime|InLove|Age|ForcedAge|ExplosionRadius|Fuse|DragonPhase|carried(?:Data)?|Life[tT]ime|Temper|Type|Variant|SkeletonTrapTime|ExplosionPower|Size|CatType|ConversionTime|(?:Villager)?Profession|Anger|RabbitType|MoreCarrotTicks|Color|Peek|AttachFace|AP[XYZ]|SkeletonType|Riches|Career(?:Level)?|(?:max)?Uses|Invul|CollarColor|[xyz]Tile|in|shake|inData|pickup|life|[Ii]d|Amplifier|Duration|life|Age|Health|PickupDelay|Count|Damage|Value|Display(?:Data|Offset)|LootTableSeed|Fuel|Weight|Spawn(?:Count|Range)|Delay|(?:Min|Max)SpawnDelay|MaxNearbyEntities|RequiredPlayerRange|TNTFuse|TransferCooldown|TileID|Data|Time|FallHurtMax|ReapplicationDelay|WaitTime|DisabledSlots|(?:Tile)?[X-Z]|Type|Flight|Facing|ItemRotation|[Litp]|Steps|Base|Levels|Primary|Secondary|BrewTime|Fuel|OutputSignal|(?:Burn|Cook)Time|CookTimeTotal|note|block(?:Id|Data)|facing|Record|SkullType|Rot|Slot|lvl|RepairCost|Operation|color|HideFlags|generation|timestamp|type|OnGround|Invulnerable|CustomNameVisible|Silent|Glowing|BatFlags|IsChickenJockey|Powered|ignited|PlayerSpawned|Bred|ChestedHorse|EatingHaystack|HasReproduced|Tame|Saddle|SkeletonTrap|Elder|wasOnGround|IsBaby|CanBreakDoors|Sheared|Willing|rewardExp|PlayerCreated|Angry|player|inGround|Ambient|ShowParticles|CustomDisplayTile|Enabled|TrackOutput|DropItem|HurtEntities|Marker|Invisible|NoBasePlate|Gravity|ShowArms|Small|ShowBottom|Flicker|Trail|powered|auto|ExactTeleport|extending|Unbreakable|resolved|isPublic|map_is_scaling|CustomName|(?:Affected(?:Blocks|Entities|Items)|QueryResult|SuccessCount)(?:Objective|Name)|OwnerName|OwnerUUID|HurtBy|inTile|Potion|Owner|Thrower|Type|DisplayTile|LootTable|Command|LastOutput|Block|Particle|Motive|id?|Pattern|Lock|Item|Text[1-4]|ExtraType|Signature|Value|AttributeName|Name|Slot|SkullOwner|profileId|profileName|url|Passengers|Tags|CommandStats|Items?|ArmorItems?|SaddleItem|Inventory|Offers|Recipes|buyB?|sell|tag|CustomPotionEffects|Potion|SpawnPotentials|Properties|SpawnData|TileEntityData|Effects|[0-4]|HandItems|Pose|BeamTarget|FireworksItem|Explosions?|Fireworks|Colors|FadeColors|Owner|Target|Patterns|ExitPortal|RecordItem|Textures|CanDestroy|CanPlaceOn|ench|StoredEnchantments|AttributeModifiers|display|Lore|SkullOwner|textures|Value|SKIN|CAPE|EntityTag|Decorations)\2)[ \t]*:</string>
 					<key>name</key>
 					<string>invalid.illegal</string>
 				</dict>
@@ -1786,7 +1898,7 @@
 			<array>
 				<dict>
 					<key>match</key>
-					<string>(?:\s|^)(~?-?\d*\.?\d+L?)(?:\s|$)'</string>
+					<string>(?&lt;=[^\B-~])(~?-?\d*\.?\d+L?)\b</string>
 					<key>name</key>
 					<string>constant.numeric.mcc</string>
 				</dict>
