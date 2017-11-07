@@ -1,6 +1,8 @@
-# Maarshal Command Code: A Syntax Highlighter
+# Marshal Command Code: A Syntax Highlighter
 
 *Created by [Nathan Liparski](http://twitter.com/NateLipiarski) with input and testing by [Moesh](http://twitter.com/leMoesh).*
+
+Tweet @leMoesh for any issues with this version of MCC, or log with tag VSCode!
 
 ## Using MCC Will Make Your Code Maintainable
 
@@ -18,6 +20,6 @@ __Well, what does it look like?__
 
 Support has come for VSCode! Simply search for "Marhsal Command Code" from the Extensions icon!
 
-Now any file with an .mcc extension will use the Minecraft Command Code syntax highlighting.
+Now any file with an .mcc extension will use the Marshal Command Code syntax highlighting.
 
 If you run into any issues, open an issue on the [github issue page](https://github.com/42iscool42/MCC/issues).
