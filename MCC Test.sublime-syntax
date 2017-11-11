@@ -559,6 +559,11 @@ contexts:
   - include: playsound
   - include: recipe
   - include: reload
+  - include: replace-item
+  - include: say
+  - include: scoreboard
+  - include: seed
+  - include: setblock
   - match: '\b(slot\.([A-Za-z]+)\.((?:[A-Za-z]+)|(?:\d+)))\b'
     captures:
       '1': string.unquoted.mcc
@@ -866,7 +871,7 @@ contexts:
     push:
     - match: '\b(give|take)\b'
       scope: support.type.mcc
-      set: [name-wildcard, player]
+      set: [item-id-wildcard, player]
 
   reload:
   - match: '\s*(/?reload)\b'
@@ -880,11 +885,17 @@ contexts:
     push:
     - match: '\bblock\b'
       scope: support.type.mcc
-      set: [pre-nbt-optional, integer-optional]
+      set: [pre-nbt-optional, integer-optional, integer-optional, item-id, block-slot, number, number, number]
+    - match: '\bentity\b'
+      scope: support.type.mcc
+      set: [pre-nbt-optional, integer-optional, integer-optional, item-id, entity-slot, entity-selector]
+    - include: err-char
 
   block-slot:
   - match: '\bslot\.container\.\d+\b'
     scope: string.unquoted.mcc
+    pop: true
+  - include: err-char
 
   entity-slot:
   - match: '\bslot\.armor\.(?:chest|feet|head|legs)\b'
@@ -896,12 +907,253 @@ contexts:
   - match: '\bslot\.(?:enderchest|inventory)\.(2[0-6]|1?[0-9])\b'
     scope: string.unquoted.mcc
     pop: true
-  - match: ''
+  - match: '\bslot.hotbar.[0-8]\b'
+    scope: string.unquoted.mcc
+    pop: true
+  - match: '\bslot\.horse\.(saddle|chest|armor|1[0-4]|[0-9])\b'
+    scope: string.unquoted.mcc
+    pop: true
+  - match: '\bslot\.villager\.[0-7]\b'
+    scope: string.unquoted.mcc
+    pop: true
+  - include: err-char
+
+  #say <Message..>
+  say:
+  - match: '\s*(/?say)\b'
+    scope: keyword.control.mcc
+    push: 
+    - match: '(\s|\b|^|)(?=@[aerp])'
+      push: entity-selector
+    - match: '.'
+      scope: string.unquoted.mcc
+    - include: line-end
+
+  #scoreboard <objectives|players|players tag|teams|teams option> <shit>
+  scoreboard:
+  - match: '\s*(/?scoreboard)\b'
+    scope: keyword.control.mcc
+    push: 
+    - match: '\bobjectives\b'
+      scope: support.type.mcc
+      set: scoreboard-objectives
+    - match: '\bplayers\s+tag'
+      scope: support.type.mcc
+      set: [scoreboard-players-tag, entity-wildcard-optional]
+    - match: '\bplayers\b'
+      scope: support.type.mcc
+      set: scoreboard-players
+    - match: '\bteams\s+option'
+      scope: support.type.mcc
+      set: [scoreboard-teams-option, objective-name]
+    - match: '\bteams\b'
+      scope: support.type.mcc
+      set: scoreboard-teams
+    - include: err-char
+
+  #scoreboard objectives list
+  #scoreboard objectives add <name> <criteria> [display name...]
+  #scoreboard objectives remove <name>
+  #scoreboard objectives setdisplay <slot> [objective]
+  scoreboard-objectives:
+  - match: '\blist\b'
+    scope: support.type.mcc
+    pop: true
+  - match: '\badd\b'
+    scope: support.type.mcc
+    set: [objective-display-name-optional, objective-criteria, objective-name]
+  - match: '\bremove\b'
+    scope: support.type.mcc
+    set: objective-display-name
+  - match: '\bsetdisplay\b'
+    scope: support.type.mcc
+    set: [objective-name-optional, objective-slot]
+  - include: err-char
+
+  #scoreboard players tag <entity> add <tagName> [dataTag]
+  #scoreboard players tag <entity> remove <tagName> [dataTag]
+  #scoreboard players tag <entity> list
+  scoreboard-players-tag:
+  - match: '\b(add|remove)\b'
+    scope: support.type.mcc
+    set: [pre-nbt-optional, scoreboard-tag]
+  - match: '\blist\b'
+    scope: support.type.mcc
+    pop: true
+  - include: err-char
+
+  #scoreboard players list [entity]
+  #scoreboard players set <entity> <objective> <score> [dataTag]
+  #scoreboard players add <entity> <objective> <count> [dataTag]
+  #scoreboard players remove <entity> <objective> <count> [dataTag]
+  #scoreboard players reset <entity> [objective]
+  #scoreboard players enable <entity> <trigger>
+  #scoreboard players test <entity> <objective> <min> [max]
+  #scoreboard players operation <targetName> <targetObjective> <operation> <selector> <objective>
+  scoreboard-players:
+  - match: '\blist\b'
+    scope: support.type.mcc
+    set: entity-wildcard-optional
+  - match: '\b(set|add|remove)\b'
+    scope: support.type.mcc
+    set: [pre-nbt-optional, integer, objective-name, entity-wildcard]
+  - match: '\breset\b'
+    scope: support.type.mcc
+    set: [objective-name, entity-wildcard]
+  - match: '\benable\b'
+    scope: support.type.mcc
+    set: [objective-name, entity-wildcard]
+  - match: '\btest\b'
+    scope: support.type.mcc
+    set: [integer-wildcard-optional, integer-wildcard, objective-name, entity-wildcard]
+  - match: '\boperation\b'
+    scope: support.type.mcc
+    set: [objective-name, entity-wildcard, scoreboard-operation, objective-name, entity-wildcard]
+  - include: err-char
+
+  #scoreboard teams list [teamname]
+  #scoreboard teams add <name> [display name...]
+  #scoreboard teams remove <name>
+  #scoreboard teams empty <name>
+  #scoreboard teams join <team> [entities...]
+  #scoreboard teams leave [entities...]
+  scoreboard-teams:
+  - match: '\blist\b'
+    scope: support.type.mcc
+    set: objective-name-optional
+  - match: '\badd\b'
+    scope: support.type.mcc
+    set: [objective-display-name-optional, objective-name]
+  - match: '\b(remove|empty)\b'
+    scope: support.type.mcc
+    set: objective-name
+  - match: '\bjoin\b'
+    scope: support.type.mcc
+    set: [entity-wildcard-optional, objective-name]
+  - match: '\bleave\b'
+    scope: support.type.mcc
+    set: entity-wildcard-optional
+  - include: err-char
+
+  #scoreboard teams option <team> color <value>
+  #scoreboard teams option <team> friendlyfire <true|false>
+  #scoreboard teams option <team> seeFriendlyInvisibles <true|false>
+  #scoreboard teams option <team> nametagVisibility <never|hideForOtherTeams|hideForOwnTeam|always>
+  #scoreboard teams option <team> deathMessageVisibility <never|hideForOtherTeams|hideForOwnTeam|always>
+  #scoreboard teams option <team> collisionRule <always|never|pushOwnTeam|pushOtherTeams>
+  scoreboard-teams-option:
+  - match: '\bcolor\b'
+    scope: support.type.mcc
+    set: 
+    - match: '\b{{color}}\b'
+      scope: constant.language.mcc
+      pop: true
+    - include: err-char
+  - match: '\b(friendlyfire|seeFriendlyInvisibles)\b'
+    scope: support.type.mcc
+    set: boolean
+  - match: '\b((nametag|deathMessage)Visibility)\b'
+    scope: support.type.mcc
+    set: 
+    - match: '\b(never|hideForOtherTeams|hideForOwnTeam|always)\b'
+      scope: constant.language.mcc
+      pop: true
+    - include: err-char
+  - match: '\bcollisionRule\b'
+    scope: support.type.mcc
+    set:
+    - match: '\b(always|never|pushOwnTeam|pushOtherTeams)\b'
+      scope: constant.language.mcc
+      pop: true
+    - include: err-char
+  - include: err-char
+
+  seed:
+  - match: '\s*(/?seed)\b'
+    scope: keyword.control.mcc
+
+  #setblock <x> <y> <z> <block> [dataValue|state] [oldBlockHandling] [dataTag]
+  setblock:
+  - match: '\s*(/?setblock)\b'
+    scope: keyword.control.mcc
+    set: [pre-nbt-optional, old-block-handling-setblock, blockValue-state-optional, item-id, number, number, number]
+
+  old-block-handling-setblock:
+  - match: '\b(destroy|keep|replace)\b'
+    scope: keyword.control.mcc
+    pop: true
+  - include: line-end
+  - include: err-char
+
+
+
+  scoreboard-operation:
+  - match: '(?<!\S)(\+=|-=|%=|/=|\*=|=|<|>|<>)(?!\S)'
+    scope: keyword.operator.mcc
+    pop: true
+  - include: err-char
+
+  item-id-wildcard:
+  - match: '\b(minecraft:)?(\w+)\b'
+    captures:
+      '1': support.type.mcc
+      '2': string.unquoted.mcc
+    pop: true
+  - match: '(?<!\S)(\*)(?!\S)'
+    scope: constant.language.mcc
+    pop: true
+  - include: err-char
+
 
   name-wildcard:
-  - match: '\*'
+  - match: '(?<!\S)(\*)(?!\S)'
     scope: constant.language.mcc
-  - include: item-id
+    pop: true
+  - match: '\b[\w-\.]+\b'
+    scope: entity.name.function.mcc
+    pop: true
+  - include: err-char
+
+  scoreboard-tag:
+  - match: '\b\w+\b'
+    scope: string.unquoted.mcc
+    pop: true
+  - include: err-char
+
+  objective-slot:
+  - match: '\b(list|sidebar|(\.team\.{{color}})|belowName)\b'
+    scope: support.type.mcc
+    pop: true
+  - include: err-char
+
+  objective-criteria:
+  - match: '\b(dummy|trigger|(death|playerKill|totalKill)count|health|xp|level|food|air|armor)\b'
+    scope: support.type.mcc
+    pop: true
+  - match: 'stat\.\w+\.\w+(\.\w+)?'
+    scope: string.unquoted.mcc
+    pop: true
+  - include: err-char
+
+  objective-name:
+  - match: '\b\w{1,16}\b'
+    scope: string.unquoted.mcc
+    pop: true
+  - include: err-char
+
+  objective-name-optional:
+  - include: objective-name
+  - include: line-end
+
+  objective-display-name:
+  - match: '\b\s+.{1,32}'
+    scope: string.unquoted.mcc
+    pop: true
+  - include: err-char
+
+  objective-display-name-optional:
+  - include: objective-display-name
+  - include: line-end
 
   entity:
   - meta_scope: entity
@@ -910,6 +1162,25 @@ contexts:
     scope: entity.name.function.mcc
     pop: true
   - include: err-char
+
+  entity-wildcard-optional:
+  - match: '(?<!\S)(\*)(?!\S)'
+    scope: constant.language.mcc
+    pop: true
+  - match: '\b[\w-\.]+\b'
+    scope: entity.name.function.mcc
+    pop: true
+  - include: entity-selector
+  - include: line-end
+
+  entity-wildcard:
+  - match: '(?<!\S)(\*)(?!\S)'
+    scope: constant.language.mcc
+    pop: true
+  - match: '\b[\w-\.]+\b'
+    scope: entity.name.function.mcc
+    pop: true
+  - include: entity-selector
 
   entity-optional:
   - include: entity
@@ -973,7 +1244,7 @@ contexts:
 
   number:
   - meta_scope: source.mcc.number
-  - match: '(?<=[^\B-~])(~?-?\d*\.?\d+)\b'
+  - match: '(?<![\B-~])(~?-?\d*\.?\d+)\b'
     scope: constant.numeric.mcc
     pop: true
   - include: err-char
@@ -1031,6 +1302,19 @@ contexts:
 
   integer-optional: 
   - include: integer
+  - include: line-end
+
+  integer-wildcard:
+  - match: '(?<!\S)(\*)(?!\S)'
+    scope: constant.language.mcc
+    pop: true
+  - match: '(?<=[^\B-])(-?\d+)(?!\.|\B)'
+    scope: constant.numeric.mcc
+    pop: true
+  - include: err-char
+
+  integer-wildcard-optional:
+  - include: integer-wildcard
   - include: line-end
 
   float: 

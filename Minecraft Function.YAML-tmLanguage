@@ -434,7 +434,7 @@ repository:
       end: '([\}\]]),?'
       endCaptures:
         '1': {name: punctuation.definition.mapping.mcc}
-    - match: '(Affected(?:Blocks|Entities|Items)(?:Name|Objective)|author|Block|carried|Command|CustomName|(?:Death)?LootTable|DisplayTile|HurtBy|[iI]d|inTile|Item|LastOutput|Lock|metadata|mirror|mode|Motive|ownerName|(?:QueryResult|SuccessCount)(?:Name|Objective)|[nN]ame|Owner(?:UUID)?|Particle|Pattern|Potion|rotation|Signature|Team|Text[0-4]|Thrower|Type|Value|i)\s*:\s*([^,}]+),?' #String
+    - match: '(Affected(?:Blocks|Entities|Items)(?:Name|Objective)|author|Block|carried|Command|CustomName|(?:Death)?LootTable|DisplayTile|HurtBy|[iI]d|inTile|Item|LastOutput|Lock|metadata|mirror|mode|Motive|ownerName|(?:QueryResult|SuccessCount)(?:Name|Objective)|[nN]ame|Owner(?:UUID)?|Particle|Pattern|Potion|rotation|Signature|Team|Text[0-4]|Thrower|Type|Value|i)\s*:\s*((\\*)"(?:\\\3.|[^"\\])*\3"),?' #String
       captures:
         '1': {name: string.unquoted.mcc}
         '2': {name: string.quoted.mcc}

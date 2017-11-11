@@ -1200,7 +1200,7 @@
 						</dict>
 					</dict>
 					<key>match</key>
-					<string>(Affected(?:Blocks|Entities|Items)(?:Name|Objective)|author|Block|carried|Command|CustomName|(?:Death)?LootTable|DisplayTile|HurtBy|[iI]d|inTile|Item|LastOutput|Lock|LocName|metadata|mirror|mode|Motive|ownerName|(?:QueryResult|SuccessCount)(?:Name|Objective)|[nN]ame|Owner(?:UUID)?|Particle|Pattern|Potion|rotation|Signature|Team|Text[0-4]|Thrower|Type|Value|i)\s*:\s*([^,}]+),?</string>
+					<string>(Affected(?:Blocks|Entities|Items)(?:Name|Objective)|author|Block|carried|Command|CustomName|(?:Death)?LootTable|DisplayTile|HurtBy|[iI]d|inTile|Item|LastOutput|Lock|LocName|metadata|mirror|mode|Motive|ownerName|(?:QueryResult|SuccessCount)(?:Name|Objective)|[nN]ame|Owner(?:UUID)?|Particle|Pattern|Potion|rotation|Signature|Team|Text[0-4]|Thrower|Type|Value|i)\s*:\s*((\\*)"(?:\\\3.|[^"\\])*\3"),?</string>
 				</dict>
 			</array>
 		</dict>
