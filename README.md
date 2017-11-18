@@ -1,4 +1,4 @@
-# Maarshal Command Code: A Syntax Highlighter
+# Marshal Command Code: A Syntax Highlighter
 
 *Created by [Nathan Liparski](http://twitter.com/NateLipiarski) with input and testing by [Moesh](http://moesh.ca/about).*
 
@@ -39,6 +39,6 @@ Sublime is an extremely powerful, but kind of complicated, text editor. Learning
 4. Type "install package" into the Command Palette and select "Package Control: Install Package"
 5. Type "MinecraftCommandCode" to filter the packages and select "Minecraft Command Code Syntax Highlighter"
 
-Now any file with an .mcc extension will use the Minecraft Command Code syntax highlighting.
+Now any file with an .mcc or .mcfunction extension will use the Minecraft Command Code syntax highlighting.
 
 If you run into any issues, feel free to send an email to [Moesh](mailto:moesh@moesh.ca) with the details or open an issue on the [github issue page](https://github.com/42iscool42/MCC/issues).
