@@ -1194,7 +1194,7 @@
 								</dict>
 							</dict>
 							<key>match</key>
-							<string>(d?[xyz]|[rl]m?|c|score_([0-9a-zA-Z]{1,16})(?:_min)?)(=)(-?\d+),?</string>
+							<string>(d?[xyz]|[rl]m?|c|score_([\w\.\:]{1,16})(?:_min)?)(=)(-?\d+),?</string>
 						</dict>
 						<dict>
 							<key>captures</key>

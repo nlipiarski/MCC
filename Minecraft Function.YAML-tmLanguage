@@ -562,7 +562,7 @@ repository:
         '4': {name: support.type.mcc}
         '5': {name: support.type.mcc}
       patterns:
-      - match: '(d?[xyz]|[rl]m?|c|score_([0-9a-zA-Z]{1,16})(?:_min)?)(=)(-?\d+),?'
+      - match: '(d?[xyz]|[rl]m?|c|score_([\w\.\:]{1,16})(?:_min)?)(=)(-?\d+),?'
         captures:
           '1': {name: string.unquoted.mcc}
           '2': {name: support.type.mcc}
