@@ -97,8 +97,6 @@ wasOnGround
 Willing
 Y
 
-regex: Ambient|Amplifier|Angry|AttachFace|auto|BatFlags|Bred|Can(?:BreakDoors|PickUpLoot)|ChestedHorse|(?:Collar)?Color|Count|conditionMet|crit|Custom(?:DisplayTile|NameVisible)|damage|(?:in)?Data|DropItem|EatingHaystack|Enabled|ExactTeleport|ExplosionRadius|extending|Facing|FallFlying|Flicker|Flight|Fuel|Glowing|Health|HurtEntities|Id|ignited|ignoreEntities|inGround|instabuild|In(?:visible|vulnerable)|invulnerable|Is(?:Baby|ChickenJockey)|isMovable|ItemRotation|Johnny|Leashed|LeftHanded|LightPopulated|map_tracking_position|Marker|may(?:Build|fly)|No(?:AI|BasePlate|Gravity)|note|(?:was)?OnGround|Peek|PersistenceRequired|pickup|player|Player(?:Created|Spawned)|powered|Pumpkin|rewardExp|Rot|Saddle|seenCredits|shake|Sheared|Show(?:Arms|Bottom|Particles)|Silent|Sitting|SkeletonTrap|(?:Skull)?Type|Sleeping|Slot|Small|source|SpawnForced|SplashPotion|Tame|TerrainPopulated|TrackOutput|Trail|type|UpdateLastExecution|Willing|[VY]
-
 Short:
 Age
 Air
@@ -127,8 +125,6 @@ SleepTimer
 SpawnCount
 SpawnRange
 Value
-
-Regex: Age|Air|Anger|CookTime(?:Total)?|(?:(?:Max|Min)Spawn|Pickup)Delay|(?:Burn|Cook|Hurt)Time|carried(?:Data)?|Damage|Delay|DeathTime|Fire|Fuel|Fuse|Health|life|MaxNearbyEntities|PotionId|RequiredPlayerRange|SleepTimer|Spawn(?:Count|Range)|Value
 
 Integer:
 Age
@@ -243,8 +239,6 @@ z
 zPos
 zTile
 
-Integer Regex: (?:AP|Bound|Tile|pos|size|Spawn)[XYZ]|(?:Forced)?Age|Base|block(?:Data|Id)|(?:Brew|Conversion)Time|Career(?:Level)?|(?:Cat|Rabbit)Type|color|(?:Custom|CustomPotion)?Color|DisplayData|Data(?:Version)?|Dimension|DisabledSlots|DisplayOffset|DragonPhase|Duration|(?:EggLay|SkeletonTrap|Wait)?Time|ExplosionPower|facing|FallHurtMax|food(?:Level|TickTimer)|generation|HideFlags|HurtByTimestamp|inLove|Invul|Levels|life|Life(?:Ticks|[Tt]ime)?|map_scale_direction|MapColor|MoreCarrotTicks|Operation|OutputSignal|ParticleParam[12]|playerGameType|(?:Portal|Transfer)?Cooldown|Primary|Profession|ReapplicationDelay|Record|RepairCost|Riches|Score|Secondary|SelectedItemSlot|Size|SpellTicks|Steps|Strength|SuccessCount|TNTFuse|Temper|TileID|Variant|Warmup|Weight|uses|maxUses|[xz]Pos|Xp(?:Level|Seed|Total)|[xyz](?:Tile)?|[LMptXYZ]
-
 Long:
 Age
 AttachLeast
@@ -265,8 +259,6 @@ OwnerUUIDMost
 UUIDLeast
 UUIDMost
 XYZ
-
-Regex: Age|Attach(?:Least|Most)|OwnerUUID(?:Most|Least)|(?:ConversionPlayer|LoveCause|UUID)(?:Most|Least)|(?:Death)?LootTableSeed|InhabitedTime|Last(?:Execution|Update)|[LMXYZ]
 
 Float:
 0
@@ -290,8 +282,6 @@ RadiusPerTick
 walkSpeed
 XpP
 
-Regex: (?:Absorption|FallHurt)Amount|DurationOnUse|FallDistance|food(?:Exhaustion|Saturation)Level|flySpeed|Health|ItemDropChance|progress|Radius(?:OnUse|PerTick)?|walkSpeed|XpP|[0-4]
-
 Double:
 Amount
 Base
@@ -305,8 +295,6 @@ TZD
 x
 y
 z
-
-Regex: Amount|Base|damage|Push[XZ]|rot|T[XYZ]D|[xyz]
 
 String:
 AffectedBlocksName
@@ -359,4 +347,93 @@ Thrower
 Type
 Value
 
-Regex: Affected(?:Blocks|Entities|Items)(?:Name|Objective)|author|Block|carried|Command|CustomName|(?:Death)?LootTable|DisplayTile|HurtBy|[iI]d|inTile|Item|LastOutput|Lock|LocName|metadata|mirror|mode|Motive|ownerName|(?:QueryResult|SuccessCount)(?:Name|Objective)|[nN]ame|Owner(?:UUID)?|Particle|Pattern|Potion|rotation|Signature|Team|Text[0-4]|Thrower|Type|Value|i
+Float List:
+Pos
+Motion
+direction
+power
+Body
+LeftArm
+RightArm
+LeftLeg
+RightLeg
+Head
+Rotation
+
+Integer List:
+Colors
+FadeColors
+
+String List:
+Lore
+
+Compound:
+recipeBook
+Leash
+pages
+abilities
+Attributes
+Entity
+RootVehicle
+Passengers
+Tags
+CommandStats
+SelectedItem
+HandItems
+EnderItems
+Items
+DecorItem
+Item
+ArmorItem
+ArmorItems
+SaddleItem
+Inventory
+Offers
+Recipes
+buy
+buyB
+sell
+tag
+CustomPotionEffects
+ActiveEffects
+Potion
+SpawnPotentials
+Properties
+SpawnData
+TileEntityData
+Effects
+0
+1
+2
+3
+4
+Pose
+BeamTarget
+FireworksItem
+Explosion
+Explosions
+Fireworks
+Colors
+FadeColors
+Owner
+Target
+Patterns
+ExitPortal
+RecordItem
+Textures
+CanDestroy
+CanPlaceOn
+ench
+StoredEnchantments
+BlockEntityTag
+AttributeModifiers
+display
+SkullOwner
+textures
+Value
+SKIN
+CAPE
+EntityTag
+Decorations
+ShoulderEntityLeft
+ShoulderEntityRight
