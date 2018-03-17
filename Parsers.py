@@ -9,14 +9,22 @@ regex = {
 	"float" : re.compile("(-?\d+\.\d+)"),
 	"integer" : re.compile("(-?\d+)"),
 	"namespace" : re.compile("([a-z_\-1-9]+:)([a-z_\-1-9]+(?:\/[a-z_\-1-9]+)*)(\/?)"),
-	"string" : re.compile("\"(?:[^\\\"]|(\\.))*\""),
+	"string" : re.compile("\w+|\"(?:[^\\\"]|(\\.))*\""),
 	"username" : re.compile("\w{3,16}"),
 	"axes" : re.compile("([xyz]+)"),
 	"integer_range" : re.compile("(?:(\d+)(\.\.))?(\d+)"), #used in entity selectors for the 55..66 type deal (integer only though)
 	"float_range" : re.compile("(?:(\d+(?:\.\d+)?)(\.\.))?(\d+(?:\.\d+)?)"), # used in entity selectors for float ranges, similar to previous comment
 	"entity_tag" : re.compile("\w+"),
 	"entity_tag_key" : re.compile("([a-z]+)\s*(=)"),
-	"entity_tag_advancement_key" : re.compile("([a-z_\-1-9]+:)?([a-z]+)\s*(=)") 
+	"entity_tag_advancement_key" : re.compile("([a-z_\-1-9]+:)?([a-z]+)\s*(=)"),
+	"nbt_key" : re.compile("(\w+)\s*:"),
+	"nbt_boolean" : re.compile("[01]"),
+	"color" : re.compile("none|black|dark_blue|dark_green|dark_aqua|dark_red|dark_purple|gold|gray|dark_gray|blue|green|aqua|red|light_purple|yellow|white"),
+	"scoreboard_slot" : re.compile("belowName|list|sidebar(?:.team.(?:black|dark_blue|dark_green|dark_aqua|dark_red|dark_purple|gold|gray|dark_gray|blue|green|aqua|red|light_purple|yellow|white))?"),
+	"item_slot" : re.compile("slot\.(?:container\.\d+|weapon\.(?:main|off)hand|\.(?:enderchest|inventory)\.(?:2[0-6]|1?[0-9])|hotbar.[0-8]|horse\.(?:saddle|chest|armor|1[0-4]|[0-9])|villager\.[0-7])"),
+	"gamemode" : re.compile("survival|creative|adventure|spectator"),
+	"sort" : re.compile("nearest|furthest|random|arbitrary"),
+	"entity" : re.compile("item|xp_orb|area_effect_cloud|leash_knot|painting|item_frame|armor_stand|evocation_fangs|ender_crystal|egg|arrow|snowball|fireball|small_fireball|ender_pearl|eye_of_ender_signal|potion|xp_bottle|wither_skull|fireworks_rocket|spectral_arrow|shulker_bullet|dragon_fireball|llama_spit|tnt|falling_block|commandblock_minecart|boat|minecart|chest_minecart|furnace_minecart|tnt_minecart|hopper_minecart|spawner_minecart|elder_guardian|wither_skeleton|stray|husk|zombie_villager|evocation_illager|vex|vindication_illager|illusion_illager|creeper|skeleton|spider|giant|zombie|slime|ghast|zombie_pigman|enderman|cave_spider|silverfish|blaze|magma_cube|ender_dragon|wither|witch|endermite|guardian|shulker|skeleton_horse|zombie_horse|donkey|mule|bat|pig|sheep|cow|chicken|squid|wolf|mooshroom|snowman|ocelot|villager_golem|horse|rabbit|polar_bear|llama|parrot|villager|player|lightning_bolt")
 }
 # start is inclusive while end is exclusive, like string slices
 def add_region(view, region, start, end, scope, token_id):
@@ -32,6 +40,7 @@ def skip_whitespace(view, region, string, current, token_id, err_start):
 	while string[current] in " \n\t":
 		current += 1
 		if current >= len(string):
+			print("Adding error region: " + string[err_start:current])
 			return add_region(view, region, err_start, current, "invalid.illegal", token_id)
 	return (token_id, current)
 
@@ -102,7 +111,8 @@ def entity_parser(view, region, string, current, token_id, properties={}):
 				token_id, _ = add_region(view, region, int_range_match.start(2), int_range_match.end(2), "mcccommand", token_id)
 				token_id, current = add_region(view, region, int_range_match.start(3), int_range_match.end(3), "mccconstant", token_id)
 
-			elif key in ["x", "y", "z", "x_rotation", "y_rotation", "distance"]:
+
+			elif key in ["x", "y", "z", "x_rotation", "y_rotation", "distance", "dx", "dy", "dz"]:
 				float_range_match = regex["float_range"].match(string, current)
 				if not float_range_match:
 					return add_region(view, region, start_of_key, current, "invalid.illegal", token_id)
@@ -123,6 +133,47 @@ def entity_parser(view, region, string, current, token_id, properties={}):
 					return add_region(view, region, start_of_key, current, "invalid.illegal", token_id)
 				token_id, current = add_region(view, region, tag_value_match.start(), tag_value_match.end(), "mccstring", token_id)
 
+			elif key == "gamemode":
+				if string[current] == "!":
+					token_id, current = add_region(view, region, current, current+1, "mcccommand", token_id) #Similar deal to the '=' earlier
+					token_id, current = skip_whitespace(view, region, string, current, token_id, start_of_key)
+					if current == len(string):
+						return (token_id, current)
+
+				gamemode_match = regex["gamemode"].match(string, current)
+				if not gamemode_match:
+					return add_region(view, region, start_of_key, current, "invalid.illegal", token_id)
+				token_id, current = add_region(view, region, gamemode_match.start(), gamemode_match.end(), "mccliteral", token_id)
+
+			elif key == "sort":
+				sort_match = regex["sort"].match(string, current)
+				if not sort_match:
+					return add_region(view, region, start_of_key, current, "invalid.illegal", token_id)
+				token_id, current = add_region(view, region, sort_match.start(), entity_match.end())
+
+			elif key == "type":
+				if string[current] == "!":
+					token_id, current = add_region(view, region, current, current+1, "mcccommand", token_id) #Similar deal to the '=' earlier
+					token_id, current = skip_whitespace(view, region, string, current, token_id, start_of_key)
+					if current == len(string):
+						return (token_id, current)
+
+				entity_match = regex["entity"].match(string, current)
+				if not entity_match:
+					return add_region(view, region, start_of_key, current, "invalid.illegal", token_id)
+				token_id, current = add_region(view, region, entity_match.start(), entity_match.end(), "mccliteral", token_id)
+
+			elif key == "team":
+				if string[current] == "!":
+					token_id, current = add_region(view, region, current, current+1, "mcccommand", token_id) #Similar deal to the '=' earlier
+					token_id, current = skip_whitespace(view, region, string, current, token_id, start_of_key)
+					if current == len(string):
+						return (token_id, current)
+
+				team_match = regex["username"].match(string, current)
+				if team_match:
+					token_id, current = add_region(view, region, team_match.start(), team_match.end(), "mccstring", token_id)
+
 			elif key == "name":
 				if string[current] == "!":
 					token_id, current = add_region(view, region, current, current+1, "mcccommand", token_id) #Similar deal to the '=' earlier
@@ -130,13 +181,7 @@ def entity_parser(view, region, string, current, token_id, properties={}):
 					if current == len(string):
 						return (token_id, current)
 
-				tag_value_match = None
-				if string[current] == "\"":
-					#print("using string name thing")
-					tag_value_match = regex["string"].match(string, current)
-				else:
-					#print("using tag name thing")
-					tag_value_match = regex["entity_tag"].match(string, current) #it's the same deal as tags bruh
+				tag_value_match = regex["string"].match(string, current)
 
 				if not tag_value_match:
 					return add_region(view, region, start_of_key, current, "invalid.illegal", token_id)
@@ -154,7 +199,11 @@ def entity_parser(view, region, string, current, token_id, properties={}):
 				current += 1
 				while string[current] != "}":
 
+					token_id, current = skip_whitespace(view, region, string, current, token_id, score_bracket_start)
+					if current == len(string):
+						return (token_id, current)
 					start_of_score = current
+
 					score_match = regex["entity_tag_key"].match(string, current)
 					if not score_match:
 						return (token_id, current)
@@ -199,7 +248,7 @@ def entity_parser(view, region, string, current, token_id, properties={}):
 
 			token_id, current = skip_whitespace(view, region, string, current, token_id, start_of_key)
 			if current == len(string):
-				return token_id, current
+				return (token_id, current)
 
 			if string[current] == ",":
 				current += 1
@@ -218,13 +267,13 @@ def advancement_tag_parser(view, region, string, current, token_id, do_nested=Tr
 	if string[current] != "{":
 		return add_region(view, region, start_of_key, current, "invalid.illegal", token_id)
 	bracket_start = current
-	
-	token_id, current = skip_whitespace(view, region, string, current, token_id, bracket_start)
-	if current == len(string):
-		return (token_id, current)
 
 	current += 1
 	while string[current] != "}":
+		token_id, current = skip_whitespace(view, region, string, current, token_id, bracket_start)
+		if current == len(string):
+			return (token_id, current)
+
 		start_of_advancement = current
 
 		advancement_match = regex["entity_tag_advancement_key"].match(string, current)
@@ -270,11 +319,12 @@ def advancement_tag_parser(view, region, string, current, token_id, do_nested=Tr
 	current += 1
 	return (token_id, current)
 
+# Word means "up to the next space", phrase is "an unquoted word or quoted string", and greedy is "everything from this point to the end of input".
 def string_parser(view, region, string, current, token_id, properties={}):
 	if string[current] != "\"":
 		return (token_id, current)
 	string_match = regex["string"].match(string, current);
-	if string_match:
+	if not string_match:
 		return add_region(view, region, current, string_match.end(), "mccstring", token_id)
 	return (token_id, current)
 
@@ -285,7 +335,11 @@ def username_parser(view, region, string, current, token_id, properties={}):
 	return (token_id, current)
 
 def message_parser(view, region, string, current, token_id, properties={}):
-	return add_region(view, region, current, len(string), "mccstring", token_id)
+	newline_index = string.find("\n", current)
+	if newline_index < 0:
+		return add_region(view, region, current, len(string), "mccstring", token_id)
+	else:
+		return add_region(view, region, current, newline_index, "mccstring", token_id)
 
 def position_parser(view, region, string, current, token_id, properties={}):
 	if (string[current:current+8] == "position"):
@@ -296,61 +350,154 @@ def nbt_parser(view, region, string, current, token_id, properties={}):
 	if (string[current] != "{"):
 		return (token_id, current)
 	braces_start = current
-
-	current, token_id = skip_whitespace(view, region, string, current, token_id, braces_start)
-	if current == len(string):
-		return (current, token_id)
-
 	current += 1
+
 	while string[current] != "}":
+		token_id, current = skip_whitespace(view, region, string, current, token_id, braces_start)
+		if current == len(string):
+			return (token_id, current)
+
 		start_of_key = current
 
-		key_match = regex["entity_tag_key"].match(string, current)
+		key_match = regex["nbt_key"].match(string, current)
 		if not key_match:
 			return add_region(view, region, braces_start, current, "invalid.illegal", token_id)
 
 		key = key_match.group(1)
+		print("Key: " + key)
 		token_id, _ = add_region(view, region, key_match.start(1), key_match.end(1), "mccstring", token_id)
-		token_id, current = add_region(view, region, key_match.start(2), key_match.end(2), "mcccommand", token_id)
-		current, token_id = skip_whitespace(view, region, string, key_match.end(), token_id, start_of_key)
+		token_id, current = skip_whitespace(view, region, string, key_match.end(), token_id, start_of_key)
 		if current == len(string):
-			return (current, token_id)
+			return (token_id, current)
 
 
 		if key in STRING_LIST_TAGS:
-			current, token_id = nbt_string_list_parser(view, region, string, current, token_id)
+			token_id, current = nbt_list_parser(regex["string"], "mccstring", "", view, region, string, current, token_id)
 			if (string[current - 1] != ']'):
-				return (current, token_id)
+				return (token_id, current)
 
 		elif key in INTEGER_LIST_TAGS:
-			current, token_id = nbt_integer_list_parser(view, region, string, current, token_id)
+			token_id, current = nbt_list_parser(regex["integer"], "mccconstant", "", view, region, string, current, token_id)
 			if (string[current - 1] != "]"):
-				return (current, token_id)
+				return (token_id, current)
 
 		elif key in DOUBLE_TAGS:
+			new_token_id, new_current = nbt_value_parser(regex["float"], "mccconstant", "d", view, region, string, current, token_id)
+			if new_token_id == token_id:
+				return add_region(view, region, start_of_key, new_current, "invalid.illegal", token_id)
+			current= new_current
+			token_id = new_token_id
 
 		elif key in FLOAT_LIST_TAGS:
-			current, token_id = nbt_float_list_parser(view, region, string, current, token_id)
+			token_id, current = nbt_list_parser(regex["float"], "mccconstant", "f", view, region, string, current, token_id)
+			if (string[current-1] != "]"):
+				return (token_id, current)
 
 		elif key in FLOAT_TAGS:
+			new_token_id, new_current = nbt_value_parser(regex["float"], "mccconstant", "f", view, region, string, current, token_id)
+			if new_token_id == token_id:
+				return add_region(view, region, start_of_key, new_current, "invalid.illegal", token_id)
+			current= new_current
+			token_id = new_token_id
 
 		elif key in LONG_TAGS:
+			new_token_id, new_current = nbt_value_parser(regex["integer"], "mccconstant", "L", view, region, string, current, token_id)
+			if new_token_id == token_id:
+				return add_region(view, region, start_of_key, new_current, "invalid.illegal", token_id)
+			current= new_current
+			token_id = new_token_id
 
 		elif key in SHORT_TAGS:
+			new_token_id, new_current = nbt_value_parser(regex["integer"], "mccconstant", "s", view, region, string, current, token_id)
+			if new_token_id == token_id:
+				return add_region(view, region, start_of_key, new_current, "invalid.illegal", token_id)
+			current= new_current
+			token_id = new_token_id
 
 		elif key in STRING_TAGS:
+			new_token_id, new_current = nbt_value_parser(regex["string"], "mccstring", "", view, region, string, current, token_id)
+			if new_token_id == token_id:
+				return add_region(view, region, start_of_key, new_current, "invalid.illegal", token_id)
+			current= new_current
+			token_id = new_token_id
 
 		elif key in COMPOUND_TAGS:
-			current, token_id = nbt_parser(view, region, string, current, token_id)
+			token_id, current= nbt_parser(view, region, string, current, token_id)
 			if string[current-1] != "}":
-				return (current, token_id)
+				return (token_id, current)
 
 		elif key in BYTE_TAGS:
+			new_token_id, new_current = nbt_value_parser(regex["nbt_boolean"], "mccconstant", "b", view, region, string, current, token_id)
+			if new_token_id == token_id:
+				return add_region(view, region, start_of_key, new_current, "invalid.illegal", token_id)
+			current= new_current
+			token_id = new_token_id
 
 		elif key in INTEGER_TAGS:
+			new_token_id, new_current = nbt_value_parser(regex["integer"], "mccconstant", "", view, region, string, current, token_id)
+			if new_token_id == token_id:
+				return add_region(view, region, start_of_key, new_current, "invalid.illegal", token_id)
+			current= new_current
+			token_id = new_token_id
+		else:
+			return add_region(view, region, start_of_key, current, "invalid.illegal", token_id)
 
+		token_id, current = skip_whitespace(view, region, string, current, token_id, start_of_key)
+		if current == len(string):
+			return (token_id, current)
+
+		if string[current] == ",":
+			current += 1
+		elif string[current] != "}":
+			return add_region(view, region, string, current, current + 1, "invalid.illegal", token_id)
+	current += 1
+	return (token_id, current)
 		
 
+	return (token_id, current)
+
+def nbt_list_parser(item_regex, item_scope, item_suffix, view, region, string, current, token_id):
+	if string[current] != "[":
+		return (token_id, current)
+	start_of_list = current
+	current += 1
+
+	while string[current] != "]":
+
+		token_id, current = skip_whitespace(view, region, string, current, token_id, start_of_list)
+		if current == len(string):
+			return (token_id, current)
+		
+		start_of_value = current
+
+		new_token_id, new_current = nbt_value_parser(item_regex, item_scope, item_suffix, view, region, string, current, token_id)
+		if new_token_id == token_id:
+			return add_region(view, region, start_of_list, current, "invalid.illegal", token_id)
+		token_id = new_token_id
+		current = new_current
+
+		token_id, current = skip_whitespace(view, region, string, current, token_id, start_of_value)
+		if current == len(string):
+			return (token_id, current)
+
+		if string[current] == ",":
+			current += 1
+		elif string[current] != "]":
+			return add_region(vew, region, current, current+1, "invalid.illegal", token_id)
+
+	current += 1
+	return (token_id, current)	
+
+
+def nbt_value_parser(value_regex, scope, suffix, view, region, string, current, token_id):
+	value_match = value_regex.match(string, current)
+	if value_match:
+		end = value_match.end()
+		if end + len(suffix) <= len(string) and string[end:end+len(suffix)] == suffix:
+			end += len(suffix)
+		elif end < len(string) and not string[end:end+1] in " \t,]}":
+			return (token_id, string)
+		return add_region(view, region, value_match.start(), end, scope, token_id)
 	return (token_id, current)
 
 def item_parser(view, region, string, current, token_id, properties={}):
@@ -404,11 +551,7 @@ def scoreHolder_parser(view, region, string, current, token_id, properties={}):
 	return entity_parser(view, region, string, current, token_id, properties)
 
 def objective_parser(view, region, string, current, token_id, properties={}):
-	objective_match = regex["username"].match(string, current) #Objectives and usernames have the same restrictions on them
-	if (objective_match):
-		return add_region(view, region, current, objective_match.end(), "mccstring", token_id)
-	return (token_id, current)
-
+	return username_parser(view, region, string, current, token_id, properties)
 def vector_3d_parser(view, region, string, current, token_id, properties={}):
 	vec3d_match = regex["vec3d"].match(string, current)
 	if vec3d_match:
@@ -420,8 +563,8 @@ def vector_3d_parser(view, region, string, current, token_id, properties={}):
 def vector_2d_parser(view, region, string, current, token_id, properties={}):
 	vec2d_match = regex["vec2d"].match(string, current)
 	if vec2d_match:
-		add_region(view, region, vec2d_match.start(2), vec2d_match.end(2), "mccconstant", token_id)
-		return add_region(view, region, vec2d_match.start(3), vec32d_match.end(3), "mccconstant", token_id + 1)
+		add_region(view, region, vec2d_match.start(1), vec2d_match.end(1), "mccconstant", token_id)
+		return add_region(view, region, vec2d_match.start(2), vec2d_match.end(2), "mccconstant", token_id + 1)
 	return (token_id, current)
 
 def particle_parser(view, region, string, current, token_id, properties={}):
@@ -431,23 +574,24 @@ def particle_parser(view, region, string, current, token_id, properties={}):
 	return (token_id, current)
 
 def item_slot_parser(view, region, string, current, token_id, properties={}):
-	if (string[current:current+8] == "itemslot"):
-		return add_region(view, region, current, current+8, "mccstring", token_id)
+	item_slot_match = regex["item_slot"].match(string, current)
+	if item_slot_match:
+		return add_region(view, region, item_slot_match.start(), item_slot_match.end(), "mccstring", token_id)
 	return (token_id, current)
 
 def scoreboard_slot_parser(view, region, string, current, token_id, properties={}):
-	if (string[current:current+14] == "scoreboardslot"):
-		return add_region(view, region, current, current+14, "mccstring", token_id)
+	slot_match = regex["scoreboard_slot"]
+	if slot_match:
+		return add_region(view, region, slot_match.start(), slot_match.end(), "mccstring", token_id)
 	return (token_id, current)
 
 def team_parser(view, region, string, current, token_id, properties={}):
-	if (string[current:current+4] == "team"):
-		return add_region(view, region, current, current+4, "mccstring", token_id)
-	return (token_id, current)
+	return username_parser(view, region, string, current, token_id)
 
 def color_parser(view, region, string, current, token_id, properties={}):
-	if (string[current:current+5] == "color"):
-		return add_region(view, region, current, current+5, "mccconstant", token_id)
+	color_match = regex["color"].match(string, current)
+	if color_match:
+		return add_region(view, region, color_match.start(), color_match.end(), "mccconstant", token_id)
 	return (token_id, current)
 
 def rotation_parser(view, region, string, current, token_id, properties={}):
@@ -456,6 +600,7 @@ def rotation_parser(view, region, string, current, token_id, properties={}):
 	return (token_id, current)
 
 def json_parser(view, region, string, current, token_id, properties={}):
+
 	if (string[current:current+4] == "json"):
 		return add_region(view, region, current, current+4, "mccstring", token_id)
 	return (token_id, current)
