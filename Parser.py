@@ -28,7 +28,9 @@ class Parser:
 		"sort" : re.compile("nearest|furthest|random|arbitrary"),
 		"entity" : re.compile("item|xp_orb|area_effect_cloud|leash_knot|painting|item_frame|armor_stand|evocation_fangs|ender_crystal|egg|arrow|snowball|fireball|small_fireball|ender_pearl|eye_of_ender_signal|potion|xp_bottle|wither_skull|fireworks_rocket|spectral_arrow|shulker_bullet|dragon_fireball|llama_spit|tnt|falling_block|commandblock_minecart|boat|minecart|chest_minecart|furnace_minecart|tnt_minecart|hopper_minecart|spawner_minecart|elder_guardian|wither_skeleton|stray|husk|zombie_villager|evocation_illager|vex|vindication_illager|illusion_illager|creeper|skeleton|spider|giant|zombie|slime|ghast|zombie_pigman|enderman|cave_spider|silverfish|blaze|magma_cube|ender_dragon|wither|witch|endermite|guardian|shulker|skeleton_horse|zombie_horse|donkey|mule|bat|pig|sheep|cow|chicken|squid|wolf|mooshroom|snowman|ocelot|villager_golem|horse|rabbit|polar_bear|llama|parrot|villager|player|lightning_bolt"),
 		"comment" :  re.compile('^\s*#.*$'),
-		"command" : re.compile('\s*(/?)([a-z]+)')
+		"command" : re.compile('\s*(/?)([a-z]+)'),
+		"hover_event_action" : re.compile("show_(?:text|item|entity|achievement)"),
+		"click_event_action": re.compile("(?:run|suggest)_command|open_url|change_page")
 	}
 
 	def __init__(self, view):
@@ -69,7 +71,7 @@ class Parser:
 			if not command_match:
 				return self.token_id
 			command = command_match.group(2)
-			#print("command: " + command)
+			print("command: " + command)
 			if command in command_tree["children"]:
 				self.add_region(command_match.start(1), command_match.end(1), "invalid.illegal")
 				self.current = self.add_region(command_match.start(2), command_match.end(2), "mcccommand")
@@ -107,7 +109,7 @@ class Parser:
 						return self.highlight(properties, line_region, self.current)
 
 			print("Went thrugh all options ")
-			#self.add_region(0,  line_region.size(), "invalid.illegal")
+			self.add_region(self.current,  line_region.size(), "invalid.illegal")
 			return self.token_id
 
 	# Returns True if the end of the string is reached, else False and will advacne self.current to the next non-whitespace character
@@ -393,10 +395,8 @@ class Parser:
 	# Word means "up to the next space", phrase is "an unquoted word or quoted string", and greedy is "everything from this point to the end of input".
 	# strict means only a regular quote enclosed string will work
 	def string_parser(self, properties={}):
-		if string[self.current] != "\"":
-			return self.current
 		string_match = self.regex["string"].match(self.string, self.current);
-		if not string_match:
+		if string_match:
 			return self.add_region(self.current, string_match.end(), "mccstring")
 		return self.current
 
@@ -448,63 +448,63 @@ class Parser:
 
 
 			if key in NBT_STRING_LIST_TAGS:
-				self.current = self.nbt_list_parser(self.regex["string"], "mccstring", "")
+				self.current = self.nbt_list_parser(self.regex["string"], "mccstring", "", properties)
 				if (self.string[self.current - 1] != ']'):
 					return self.current
 
 			elif key in NBT_INTEGER_LIST_TAGS:
-				self.current = self.nbt_list_parser(self.regex["integer"], "mccconstant", "")
+				self.current = self.nbt_list_parser(self.regex["integer"], "mccconstant", "", properties)
 				if (self.string[self.current - 1] != "]"):
 					return self.current
 
 			elif key in NBT_DOUBLE_TAGS:
-				new_current = self.nbt_value_parser(self.regex["float"], "mccconstant", "d")
+				new_current = self.nbt_value_parser(self.regex["float"], "mccconstant", "d", properties)
 				if new_current == self.current:
 					return self.add_region(start_of_key, new_current, "invalid.illegal")
 				self.current= new_current
 
 			elif key in NBT_FLOAT_LIST_TAGS:
-				self.current = self.nbt_list_parser(self.regex["float"], "mccconstant", "f")
+				self.current = self.nbt_list_parser(self.regex["float"], "mccconstant", "f", properties)
 				if (self.string[self.current-1] != "]"):
 					return self.current
 
 			elif key in NBT_FLOAT_TAGS:
-				new_current = self.nbt_value_parser(self.regex["float"], "mccconstant", "f")
+				new_current = self.nbt_value_parser(self.regex["float"], "mccconstant", "f", properties)
 				if new_current == self.current:
 					return self.add_region(start_of_key, new_current, "invalid.illegal")
 				self.current = new_current
 
 			elif key in NBT_LONG_TAGS:
-				new_current = self.nbt_value_parser(self.regex["integer"], "mccconstant", "L")
+				new_current = self.nbt_value_parser(self.regex["integer"], "mccconstant", "L", properties)
 				if new_current == self.current:
 					return self.add_region(start_of_key, new_current, "invalid.illegal")
 				self.current = new_current
 
 			elif key in NBT_SHORT_TAGS:
-				new_current = self.nbt_value_parser(self.regex["integer"], "mccconstant", "s")
+				new_current = self.nbt_value_parser(self.regex["integer"], "mccconstant", "s", properties)
 				if new_current == self.current:
 					return self.add_region(start_of_key, new_current, "invalid.illegal")
 				self.current = new_current
 
 			elif key in NBT_STRING_TAGS:
-				new_current = self.nbt_value_parser(self.regex["string"], "mccstring", "")
+				new_current = self.nbt_value_parser(self.regex["string"], "mccstring", "", properties)
 				if new_current == self.current:
 					return self.add_region(start_of_key, new_current, "invalid.illegal")
 				self.current = new_current
 
 			elif key in NBT_COMPOUND_TAGS:
-				self.current= self.nbt_parser(self.string)
+				self.current= self.nbt_parser(properties)
 				if self.string[self.current-1] != "}":
 					return self.current
 
 			elif key in NBT_BYTE_TAGS:
-				new_current = self.nbt_value_parser(self.regex["nbt_boolean"], "mccconstant", "b")
+				new_current = self.nbt_value_parser(self.regex["nbt_boolean"], "mccconstant", "b", properties)
 				if new_current == self.current:
 					return self.add_region(start_of_key, new_current, "invalid.illegal")
 				self.current = new_current
 
 			elif key in NBT_INTEGER_TAGS:
-				new_current = self.nbt_value_parser(self.regex["integer"], "mccconstant", "")
+				new_current = self.nbt_value_parser(self.regex["integer"], "mccconstant", "", properties)
 				if new_current == self.current:
 					return self.add_region(start_of_key, new_current, "invalid.illegal")
 				self.current = new_current
@@ -523,7 +523,7 @@ class Parser:
 		self.current += 1
 		return self.current
 
-	def nbt_list_parser(self, item_regex, item_scope, item_suffix):
+	def nbt_list_parser(self, item_regex, item_scope, item_suffix, properties={}):
 		if self.string[self.current] != "[":
 			return self.current
 		start_of_list = self.current
@@ -555,7 +555,7 @@ class Parser:
 		return self.current
 
 
-	def nbt_value_parser(self, value_regex, scope, suffix):
+	def nbt_value_parser(self, value_regex, scope, suffix, properties={}):
 		value_match = value_regex.match(self.string, self.current)
 		if value_match:
 			end = value_match.end()
@@ -674,7 +674,7 @@ class Parser:
 	# https://www.json.org/
 	def json_parser(self, properties={}):
 		if not "escape_depth" in properties:
-			properties[escape_depth] = 0
+			properties["escape_depth"] = 0
 
 		if self.string[self.current] == "[":
 			return self.json_array_parser(properties)
@@ -686,13 +686,12 @@ class Parser:
 	def json_object_parser(self, properties={}):# The '{}' one
 		if self.string[self.current] != "{":
 			return self.current
-		quote = generate_quote(properties["escape_depth"])
+		quote = self.generate_quote(properties["escape_depth"])
 		start_of_object = self.current
 		self.current += 1
 
-
 		while self.string[self.current] != "}":
-			reached_end = self.skip_whitespace(start_of_object)
+			reached_end = self.skip_whitespace(self.current)
 			if reached_end:
 				return self.current
 
@@ -703,9 +702,10 @@ class Parser:
 
 			# " \" \\\" \\\\\\\" ...
 			# 1 2  4    8        ...
-			key = string[start_of_key + len(quote) : self.current - len(quote)]
+			key = self.string[start_of_key + len(quote) : self.current - len(quote)]
+			#print("Json key: " + key)
 
-			reached_end = self.skip_whitespace(start_of_json)
+			reached_end = self.skip_whitespace(start_of_key)
 			if reached_end:
 				return self.current
 
@@ -721,13 +721,13 @@ class Parser:
 				if key in JSON_STRING_KEYS:
 					start_of_value = self.current
 					self.current = self.string_parser(properties={"type":"strict","escape_depth":properties["escape_depth"]})
-					if start_of_key == self.current:
-						return self.add_region(start_of_value, self.current, "invalid.illegal")
+					if start_of_value == self.current:
+						return self.add_region(start_of_key, self.current, "invalid.illegal")
 
 				elif key in JSON_ENTITY_KEYS:
 					start_of_string = self.current
-					if not self.current + len(quote) < len(self.string) or not self.string[self.current : self.current + len(quote)] == quote:
-						return self.current
+					if self.current + len(quote) > len(self.string) or self.string[self.current : self.current + len(quote)] != quote:
+						return self.add_regeion(start_of_key, self.current, "invalid.illegal")
 					self.current = self.add_region(self.current, self.current + len(quote), "mccstring")
 				
 					new_current = self.entity_parser(properties)
@@ -765,13 +765,13 @@ class Parser:
 						return self.add_region(start_of_string, self.current, "invalid.illegal")
 					self.current = self.add_region(self.current, self.current + len(quote), "mccstring")
 
-				elif key == "hoverEvent":
-					self.current = self.json_hover_event_parser(properties)
+				elif key == "clickEvent":
+					self.current = self.json_event_parser(regex["click_event_action"], properties)
 					if not self.string[self.current - 1] in "}":
 						return self.current
 
-				elif key == "clickEvent":
-					self.current = self.json_click_event_parser(properties)
+				elif key == "hoverEvent":
+					self.current = self.json_event_parser(regex["hover_event_action"], properties)
 					if not self.string[self.current - 1] in "}":
 						return self.current
 
@@ -796,60 +796,135 @@ class Parser:
 		return self.current
 
 	def json_array_parser(self, properties={}): # The '[]' one
+		if self.string[self.current] != "[":
+			return self.current
+		print("Parsing array")
 		start_of_list = self.current
 		self.current += 1
 
 		while self.string[self.current] != "]":
-			reached_end = self.skip_whitespace(start_of_array)
+			reached_end = self.skip_whitespace(self.current)
 			if reached_end:
 				return self.current
 
 			start_of_value = self.current
 
 			match_made = False
-			new_current = self.string_parser(properties={"type":"strict", "escape_depth":properties["escape_depth"]})
-			if new_current != self.current:
+			old_current = self.current
+			self.current = self.string_parser(properties={"type":"strict", "escape_depth":properties["escape_depth"]})
+			if old_current != self.current:
 				match_made = True
-				self.current = new_current
 
-			new_current = self.float_parser(properties)
-			if not match_made and new_current != self.current:
+			old_current = self.current
+			self.current = self.float_parser(properties)
+			if not match_made and old_current != self.current:
 				match_made = True
-				self.current = new_current
 
-			new_current = self.json_parser(properties)
-			if not match_made and new_current != self.current:
+			old_current = self.current
+			self.current = self.json_parser(properties)
+			if not match_made and old_current != self.current:
 				match_made = True
-				self.current = new_current
 
-			new_current = self.boolean_parser(properties)
-			if not match_made and new_current != self.current:
+			old_current = self.current
+			self.current = self.boolean_parser(properties)
+			if not match_made and old_current != self.current:
 				match_made = True
-				self.current = new_current
 
 			if self.current + 4 < len(self.string) and self.string[self.current : self.current + 4] == "null":
 				match_made = True
 				self.current = self.add_region(self.current, self.current + 4, "mccconstant")
 
 			if not match_made:
+				print("No match for " + self.string[self.current:])
 				return self.current
 
 			reached_end = self.skip_whitespace(start_of_value)
 			if reached_end:
 				return self.current
+
 			if self.string[self.current] == ",":
+				print("comma in array")
 				self.current += 1
 			elif self.string[self.current] != "]":
+				print("Error in array")
 				return self.add_region(self.current, self.current + 1, "invalid.illegal")
 
 		self.current += 1
 		return self.current
 
-	def json_hover_event_parser(self, properties={}):
+	def json_event_parser(self, action_regex, properties={}):
+		if self.string[self.current] != "{": #Can't be [] since it's an object
+			return self.current
+		current += 1
+		quote = self.generate_quote(properties["escape_depth"])
+
+		start_of_object = self.current
+		while self.string[self.current] != "}":
+			reached_end = self.skip_whitespace(self.current)
+			if reached_end:
+				return self.current
+
+			start_of_key = self.current
+			self.current = self.string_parser(properties={"type":"strict","escape_depth":properties["escape_depth"]})
+			if start_of_key == self.current:
+				return self.add_region(self.current, self.current+1, "invalid.illegal")
+
+			key = self.string[start_of_key + len(quote) : self.current - len(quote)]
+
+			reached_end = self.skip_whitespace(start_of_object)
+			if reached_end:
+				return self.current
+
+			if self.string[self.current] != ":":
+				return self.add_region(self.current, self.current + 1, "invalid.illegal")
+			self.current += 1
+
+			reached_end = self.skip_whitespace(start_of_key)
+			if reached_end:
+				return self.current
+
+			if key == "action":
+				start_of_string= self.current
+				if self.current + len(quote) > len(self.string) or self.string[self.current : self.current + len(quote)]  != quote:
+					return self.add_region(start_of_key, self.current, "invalid.illegal")
+				self.current += len(quote)
+
+				action_match = action_regex.match(self.string, self.current)
+				if not action_match:
+					return self.add_region(start_of_key, self.current, "invalid.illegal")
+				self.current = action_match.end()
+
+				if self.current + len(quote) > len(self.string) or self.string[self.current : self.current + len(quote)] != quote:
+					return self.add_region(start_of_string, self.current, "invalid.illegal")
+
+				self.current = self.add_region(start_of_string, self.current + len(quote), "mccstring")
+
+			elif key == "value":
+				start_of_value = self.current
+				self.current = self.string_parser(properties={"type":"strict","escape_depth":properties["escape_depth"]})
+				if start_of_value == self.current:
+					return self.add_region(start_of_key, self.current, "invalid.illegal")
+
+			else:
+				return self.add_region(start_of_key, self.current, "invalid.illegal")
+
+			reached_end = self.skip_whitespace(self.current)
+			if reached_end:
+				return self.current
+
+			if self.string[self.current] == ",":
+				self.current += 1
+			elif self.string[self.current] != "}":
+				return self.add_region(self.current, self.current + 1, "invalid.illegal")
+
+		self.current += 1
+		return self.current
+
+	def json_score_parser(self, properties={}):
 		if self.string[self.current] != "{": #Can't be [] since its an object
 			return self.current
 		current += 1
-		quote = generate_quote(properties["escape_depth"])
+		quote = self.generate_quote(properties["escape_depth"])
 
 		start_of_object = self.current
 		while self.string[self.current] != "}":
@@ -862,7 +937,7 @@ class Parser:
 			if start_of_key == self.current:
 				return self.add_region(start_of_object, self.current, "invalid.illegal")
 
-			key = string[start_of_key + len(quote) : self.current - len(quote)]
+			key = self.string[start_of_key + len(quote) : self.current - len(quote)]
 
 			reached_end = self.skip_whitespace(start_of_object)
 			if reached_end:
@@ -876,31 +951,41 @@ class Parser:
 			if reached_end:
 				return self.current
 
-			if key == "action":
+			if key == "name" or key == "objective":
+				start_of_value = self.current
+				self.current = self.string_parser(properties={"type":"strict","escape_depth":properties["escape_depth"]})
+				if start_of_value == self.current:
+					return self.add_region(start_of_key, self.current, "invalid.illegal")
 
 			elif key == "value":
+				start_of_value = self.current
+				self.current = self.integer_parser(properties)
+				if start_of_value == self.current:
+					return self.add_region(start_of_key, self.current, "invalid.illegal")
 
 			else:
 				return self.add_region(start_of_key, self.current, "invalid.illegal")
 
+			reached_end = self.skip_whitespace(self.current)
+			if reached_end:
+				return self.current
 
+			if self.string[self.current] == ",":
+				self.current += 1
+			elif self.string[self.current] != "}":
+				return self.add_region(self.current, self.current + 1, "invalid.illegal")
+			
+		self.current += 1
 		return self.current
 
-	def json_click_event_parser(self, properties={}):
-		return self.current
-
-	def json_score_parser(self, properties={}):
-		return self.current
-
-	@staticmethod
-	def generate_quote(escape_depth):
-		if escape_depth == 0:
-			return "\""
-		else:
-			quote = "\""
+	def generate_quote(self, escape_depth):
+		quotes = ["\"", "\\\"", "\\\\\\\"", "\\\\\\\\\\\\\\\"", "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\""]
+		if escape_depth <= 4:
+			return quotes[escape_depth]
+		
 		for i in range(0, escape_depth):
 			quote += "\\"
-		return quote + generate_quote(escape_depth - 1)
+		return quote + self.generate_quote(escape_depth - 1)
 
 	parsers = { #need to include the properties tag
 		"minecraft:resource_location": namespace_parser,
