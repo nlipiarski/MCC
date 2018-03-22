@@ -11,15 +11,15 @@ class Parser:
 		"float" : re.compile("(-?\d+\.\d+)"),
 		"integer" : re.compile("(-?\d+)"),
 		"namespace" : re.compile("([a-z_\-1-9]+:)([a-z_\-1-9]+(?:\/[a-z_\-1-9]+)*)(\/?)"),
-		"string" : re.compile("\w+|\"(?:[^\\\"]|(\\.))*\""),
+		"string" : re.compile("\w+|\"(?:[^\\\\\"]|(\\\\.))*\""),
 		"username" : re.compile("\w{3,16}"),
 		"axes" : re.compile("([xyz]+)"),
 		"integer_range" : re.compile("(?:(\d+)(\.\.))?(\d+)"), #used in entity selectors for the 55..66 type deal (integer only though)
 		"float_range" : re.compile("(?:(\d+(?:\.\d+)?)(\.\.))?(\d+(?:\.\d+)?)"), # used in entity selectors for float ranges, similar to previous comment
 		"entity_tag" : re.compile("\w+"),
-		"entity_tag_key" : re.compile("([a-z]+)\s*(=)"),
-		"entity_tag_advancement_key" : re.compile("([a-z_\-1-9]+:)?([a-z]+)\s*(=)"),
-		"nbt_key" : re.compile("(\w+)\s*:"),
+		"entity_tag_key" : re.compile("([a-z]+)[\t ]*(=)"),
+		"entity_tag_advancement_key" : re.compile("([a-z_\-1-9]+:)?([a-z]+)[\t ]*(=)"),
+		"nbt_key" : re.compile("(\w+)[\t ]*:"),
 		"nbt_boolean" : re.compile("[01]"),
 		"color" : re.compile("none|black|dark_blue|dark_green|dark_aqua|dark_red|dark_purple|gold|gray|dark_gray|blue|green|aqua|red|light_purple|yellow|white"),
 		"scoreboard_slot" : re.compile("belowName|list|sidebar(?:.team.(?:black|dark_blue|dark_green|dark_aqua|dark_red|dark_purple|gold|gray|dark_gray|blue|green|aqua|red|light_purple|yellow|white))?"),
@@ -27,10 +27,12 @@ class Parser:
 		"gamemode" : re.compile("survival|creative|adventure|spectator"),
 		"sort" : re.compile("nearest|furthest|random|arbitrary"),
 		"entity" : re.compile("item|xp_orb|area_effect_cloud|leash_knot|painting|item_frame|armor_stand|evocation_fangs|ender_crystal|egg|arrow|snowball|fireball|small_fireball|ender_pearl|eye_of_ender_signal|potion|xp_bottle|wither_skull|fireworks_rocket|spectral_arrow|shulker_bullet|dragon_fireball|llama_spit|tnt|falling_block|commandblock_minecart|boat|minecart|chest_minecart|furnace_minecart|tnt_minecart|hopper_minecart|spawner_minecart|elder_guardian|wither_skeleton|stray|husk|zombie_villager|evocation_illager|vex|vindication_illager|illusion_illager|creeper|skeleton|spider|giant|zombie|slime|ghast|zombie_pigman|enderman|cave_spider|silverfish|blaze|magma_cube|ender_dragon|wither|witch|endermite|guardian|shulker|skeleton_horse|zombie_horse|donkey|mule|bat|pig|sheep|cow|chicken|squid|wolf|mooshroom|snowman|ocelot|villager_golem|horse|rabbit|polar_bear|llama|parrot|villager|player|lightning_bolt"),
-		"comment" :  re.compile('^\s*#.*$'),
-		"command" : re.compile('\s*(/?)([a-z]+)'),
+		"comment" :  re.compile('^[\t ]*#.*$'),
+		"command" : re.compile('[\t ]*(/?)([a-z]+)'),
 		"hover_event_action" : re.compile("show_(?:text|item|entity|achievement)"),
-		"click_event_action": re.compile("(?:run|suggest)_command|open_url|change_page")
+		"click_event_action": re.compile("(?:run|suggest)_command|open_url|change_page"),
+		"item_block_id" : re.compile("([a-z_]+:)?([a-z_]+)"),
+		"position" : re.compile("(~?-?\d*\.?\d+|~)[\t ]+(~?-?\d*\.?\d+|~)[\t ]+(~?-?\d*\.?\d+|~)")
 	}
 
 	def __init__(self, view):
@@ -59,6 +61,12 @@ class Parser:
 		elif not "children" in command_tree or self.current >= line_region.size():
 			if not "executable" in command_tree or not command_tree["executable"]:
 				self.current = self.add_region(0,  line_region.size(), "invalid.illegal")
+			else:
+				newline_index = self.string.find("\n")
+				if newline_index < 0:
+					self.current = self.add_region(self.current, line_region.size(), "invalid.illegal")
+				else:
+					self.current = self.add_region(self.current, newline_index, "invalid.illegal")
 			return self.token_id
 
 		self.string = self.view.substr(line_region)
@@ -77,7 +85,7 @@ class Parser:
 				self.current = self.add_region(command_match.start(2), command_match.end(2), "mcccommand")
 				return self.highlight(command_tree["children"][command], line_region, command_match.end())
 			else:
-				self.add_region(0,  line_region.size(), "invalid.illegal")
+				self.add_region(self.current,  line_region.size(), "invalid.illegal")
 				return self.token_id
 		else:
 			while (self.current < len(self.string) and self.string[self.current] in " \t\n"):
@@ -415,12 +423,15 @@ class Parser:
 			return self.add_region(self.current, newline_index, "mccstring")
 
 	def position_parser(self, properties={}):
-		if (self.string[self.current:self.current+8] == "position"):
-			return self.add_region(self.current, self.current + 8, "mccliteral")
+		position_match = self.regex["position"].match(self.string, self.current)
+		if position_match:
+			self.add_region(position_match.start(1), position_match.end(1), "mccconstant")
+			self.add_region(position_match.start(2), position_match.end(2), "mccconstant")
+			return self.add_region(position_match.start(3), position_match.end(3), "mccconstant")
 		return self.current
 
 	def nbt_parser(self, properties={}):
-		if (self.string[self.current] != "{"):
+		if self.current >= len(self.string) or self.string[self.current] != "{":
 			return self.current
 		elif not "escape_depth" in properties:
 			properties["escape_depth"] = 0
@@ -567,8 +578,11 @@ class Parser:
 		return self.current
 
 	def item_parser(self, properties={}):
-		if (self.string[self.current:self.current+4] == "item"):
-			return self.add_region(self.current, self.current+4, "mccstring")
+		item_match = self.regex["item_block_id"].match(self.string, self.current)
+		if item_match:
+			self.add_region(item_match.start(1), item_match.end(1), "mccliteral")
+			self.current = self.add_region(item_match.start(2), item_match.end(2), "mccstring")
+			return self.nbt_parser(properties)
 		return self.current
 
 	def integer_parser(self, properties={}):
@@ -581,8 +595,69 @@ class Parser:
 		return self.current
 
 	def block_parser(self, properties={}):
-		if (self.string[self.current:self.current+5] == "block"):
-			return self.add_region(self.current, self.current + 5, "mccstring")
+		block_match = self.regex["item_block_id"].match(self.string, self.current)
+		if block_match:
+			self.add_region(block_match.start(1), block_match.end(1), "mccliteral")
+			self.current = self.add_region(block_match.start(2), block_match.end(2), "mccstring")
+
+			if block_match.start(1) == block_match.end(1):
+				block_name = "minecraft:" + block_match.group(2)
+			else:
+				block_name = block_match.group(0)
+
+			if block_name in BLOCKS:
+				states = BLOCKS[block_name]
+			else:
+				self.current = self.add_region(block_match.start(), block_match.end(), "invalid.illegal")
+				states = {}
+
+			if self.current >= len(self.string) or self.string[self.current] != "[":
+				return self.nbt_parser(properties)
+			start_of_bracket = self.current
+			self.current += 1
+			
+			while self.string[self.current] != "]":
+				reached_end = self.skip_whitespace(self.current)
+				if reached_end:
+					return self.current
+
+				start_of_key = self.current
+				key_match = self.regex["entity_tag_key"].match(self.string, self.current)
+				if not key_match:
+					return self.add_region(self.current, self.current + 1, "invalid.illegal")
+
+				key = key_match.group(1)
+				if key in states:
+					self.add_region(key_match.start(1), key_match.end(1), "mccstring")
+				else:
+					self.add_region(key_match.start(1), key_match.end(1), "invalid.illegal")
+				self.current = self.add_region(key_match.start(2), key_match.end(2), "mcccommand")
+
+				reached_end = self.skip_whitespace(start_of_key)
+				if reached_end:
+					return self.current
+
+				value_match = self.regex["entity_tag"].match(self.string, self.current)
+				if not value_match:
+					return self.add_region(self.current, self.current + 1, "invalid.illegal")
+
+				if key in states and value_match.group(0) in states[key]:
+					self.add_region(value_match.start(), value_match.end(), "mccstring")
+				else: 
+					self.add_region(value_match.start(), value_match.end(), "invalid.illegal")
+
+				reached_end = self.skip_whitespace(start_of_key)
+				if reached_end:
+					return self.current
+
+				if self.string[self.current] == ",":
+					self.current += 1
+				elif self.string[self.current] != "]":
+					return self.add_region(self.current, self.current + 1, "invalid.illegal")
+
+			self.current += 1
+			return self.nbt_parser(properties)
+
 		return self.current
 
 	def nbt_path_parser(self, properties={}):
@@ -615,7 +690,7 @@ class Parser:
 			return self.add_region(self.current, axes_match.end(1), "mccconstant")
 		return self.current
 
-	def scoreHolder_parser(self, properties={}):
+	def score_holder_parser(self, properties={}):
 		new_current = self.username_parser(properties)
 		if new_current != self.current:
 			return new_current
@@ -798,7 +873,6 @@ class Parser:
 	def json_array_parser(self, properties={}): # The '[]' one
 		if self.string[self.current] != "[":
 			return self.current
-		print("Parsing array")
 		start_of_list = self.current
 		self.current += 1
 
@@ -835,7 +909,6 @@ class Parser:
 				self.current = self.add_region(self.current, self.current + 4, "mccconstant")
 
 			if not match_made:
-				print("No match for " + self.string[self.current:])
 				return self.current
 
 			reached_end = self.skip_whitespace(start_of_value)
@@ -843,10 +916,8 @@ class Parser:
 				return self.current
 
 			if self.string[self.current] == ",":
-				print("comma in array")
 				self.current += 1
 			elif self.string[self.current] != "]":
-				print("Error in array")
 				return self.add_region(self.current, self.current + 1, "invalid.illegal")
 
 		self.current += 1
@@ -951,7 +1022,22 @@ class Parser:
 			if reached_end:
 				return self.current
 
-			if key == "name" or key == "objective":
+			if key == "name":
+					start_of_string = self.current
+					if self.current + len(quote) > len(self.string) or self.string[self.current : self.current + len(quote)] != quote:
+						return self.add_regeion(start_of_key, self.current, "invalid.illegal")
+					self.current = self.add_region(self.current, self.current + len(quote), "mccstring")
+				
+					new_current = self.score_holder_parser(properties)
+					if new_current == self.current:
+						return self.add_region(start_of_string, self.current, "invalid.illegal")
+					self.current = new_current
+
+					if not self.current + len(quote) < len(self.string) or not self.string[self.current : self.current + len(quote)] == quote:
+						return self.add_region(start_of_string, self.current, "invalid.illegal")
+					self.current = self.add_region(self.current, self.current + len(quote), "mccstring")
+
+			elif key == "objective":
 				start_of_value = self.current
 				self.current = self.string_parser(properties={"type":"strict","escape_depth":properties["escape_depth"]})
 				if start_of_value == self.current:
@@ -995,14 +1081,16 @@ class Parser:
 		"minecraft:message"          : message_parser,
 		"minecraft:block_pos"        : position_parser,
 		"minecraft:nbt"              : nbt_parser,
-		"minecraft:item"             : item_parser,
+		"minecraft:item_stack"       : item_parser,
+		"minecraft:item_predicate"   : item_parser,
 		"brigadier:integer"          : integer_parser, #Properties has min and max
-		"minecraft:block"            : block_parser,
+		"minecraft:block_state"      : block_parser,
 		"minecraft:nbt_path"         : nbt_path_parser,
 		"brigadier:float"            : float_parser, #Properties has min and max
+		"brigadier:double"           : float_parser, #Properties has min and max
 		"brigadier:bool"             : boolean_parser,
 		"minecraft:swizzle"          : axes_parser, # any cobination of x, y, and z e.g. x, xy, xz. AKA swizzle
-		"minecraft:score_holder"     : scoreHolder_parser, #Has options to include wildcard or not
+		"minecraft:score_holder"     : score_holder_parser, #Has options to include wildcard or not
 		"minecraft:objective"        : objective_parser,
 		"minecraft:vec3"             : vector_3d_parser, #Assuming this doesn't include relative coords?
 		"minecraft:vec2"             : vector_2d_parser, #Pretty sure these don't
