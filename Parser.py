@@ -8,14 +8,12 @@ class Parser:
 	regex = {
 		"vec3d" : re.compile("(\d+(?:\.\d+)?)[ \t\n]+(\d+(?:\.\d+)?)[ \t\n]+(\d+(?:\.\d+)?)"),
 		"vec2d" : re.compile("(\d+(?:\.\d+)?)[ \t\n]+(\d+(?:\.\d+)?)"),
-		"float" : re.compile("(-?\d+\.\d+)"),
+		"float" : re.compile("(-?\d+(?:\.\d+)?)"),
 		"integer" : re.compile("(-?\d+)"),
 		"namespace" : re.compile("([a-z_\-1-9]+:)([a-z_\-1-9]+(?:\/[a-z_\-1-9]+)*)(\/?)"),
-		"string" : re.compile("\w+|\"(?:[^\\\\\"]|(\\\\.))*\""),
+		"word_string" : re.compile("\w+|\"(?:[^\\\\\"]|(\\\\.))*\""),
 		"username" : re.compile("\w{3,16}"),
 		"axes" : re.compile("([xyz]+)"),
-		"integer_range" : re.compile("(?:(\d+)(\.\.))?(\d+)"), #used in entity selectors for the 55..66 type deal (integer only though)
-		"float_range" : re.compile("(?:(\d+(?:\.\d+)?)(\.\.))?(\d+(?:\.\d+)?)"), # used in entity selectors for float ranges, similar to previous comment
 		"entity_tag" : re.compile("\w+"),
 		"entity_tag_key" : re.compile("([a-z]+)[\t ]*(=)"),
 		"entity_tag_advancement_key" : re.compile("([a-z_\-1-9]+:)?([a-z]+)[\t ]*(=)"),
@@ -32,7 +30,9 @@ class Parser:
 		"hover_event_action" : re.compile("show_(?:text|item|entity|achievement)"),
 		"click_event_action": re.compile("(?:run|suggest)_command|open_url|change_page"),
 		"item_block_id" : re.compile("([a-z_]+:)?([a-z_]+)"),
-		"position" : re.compile("(~?-?\d*\.?\d+|~)[\t ]+(~?-?\d*\.?\d+|~)[\t ]+(~?-?\d*\.?\d+|~)")
+		"position" : re.compile("(~?-?\d*\.?\d+|~)[\t ]+(~?-?\d*\.?\d+|~)[\t ]+(~?-?\d*\.?\d+|~)"),
+		"strict_string" : re.compile("\"(?:[^\\\\\"]|(\\\\.))*\""),
+		"greedy_string" : re.compile("[^\n]*")
 	}
 
 	def __init__(self, view):
@@ -56,10 +56,11 @@ class Parser:
 				new_command_tree = COMMAND_TREE
 			else:
 				new_command_tree = COMMAND_TREE["children"][redirect_command]
-			print("Redirecting to: " + redirect_command + ", " + str(self.current))
+			#print("Redirecting to: " + redirect_command + ", " + str(self.current))
 			return self.highlight(new_command_tree, line_region, self.current)
 		elif not "children" in command_tree or self.current >= line_region.size():
 			if not "executable" in command_tree or not command_tree["executable"]:
+				#print("command not exectuable")
 				self.current = self.add_region(0,  line_region.size(), "invalid.illegal")
 			else:
 				newline_index = self.string.find("\n")
@@ -79,7 +80,7 @@ class Parser:
 			if not command_match:
 				return self.token_id
 			command = command_match.group(2)
-			print("command: " + command)
+			#print("command: " + command)
 			if command in command_tree["children"]:
 				self.add_region(command_match.start(1), command_match.end(1), "invalid.illegal")
 				self.current = self.add_region(command_match.start(2), command_match.end(2), "mcccommand")
@@ -116,7 +117,7 @@ class Parser:
 					if old_current != self.current:
 						return self.highlight(properties, line_region, self.current)
 
-			print("Went thrugh all options ")
+			#print("Went thrugh all options ")
 			self.add_region(self.current,  line_region.size(), "invalid.illegal")
 			return self.token_id
 
@@ -175,7 +176,7 @@ class Parser:
 			self.current = self.add_region(self.current, self.current + 1, "mccentity")
 			bracket_start = self.current
 
-			while (self.string[self.current] != "]"):
+			while self.current < len(self.string) and self.string[self.current] != "]":
 				reached_end = self.skip_whitespace(bracket_start)
 				if reached_end:
 					return self.current
@@ -193,20 +194,16 @@ class Parser:
 					return self.current
 
 				if key == "level":
-					int_range_match = self.regex["integer_range"].match(self.string, self.current)
-					if not int_range_match:
-						return self.add_region(start_of_key, self.current, "invalid.illegal")
-					self.add_region(int_range_match.start(1), int_range_match.end(1), "mccconstant")
-					self.add_region(int_range_match.start(2), int_range_match.end(2), "mcccommand")
-					self.current = self.add_region(int_range_match.start(3), int_range_match.end(3), "mccconstant")
+					self.current = self.range_parser(self.integer_parser, start_of_key)
+
+				elif key == "limit":
+					old_current = self.current
+					self.current = self.integer_parser(properties={"min":0})
+					if old_current == self.current:
+						return self.current
 
 				elif key in ["x", "y", "z", "x_rotation", "y_rotation", "distance", "dx", "dy", "dz"]:
-					float_range_match = self.regex["float_range"].match(self.string, self.current)
-					if not float_range_match:
-						return self.add_region(start_of_key, self.current, "invalid.illegal")
-					self.add_region(float_range_match.start(1), float_range_match.end(1), "mccconstant")
-					self.add_region(float_range_match.start(2), float_range_match.end(2), "mcccommand")
-					self.current = self.add_region(float_range_match.start(3), float_range_match.end(3), "mccconstant")
+					self.current = self.range_parser(self.float_parser, start_of_key)
 
 				elif key == "tag":
 					if self.string[self.current] == "!":
@@ -269,7 +266,7 @@ class Parser:
 						if reached_end:
 							return self.current
 
-					tag_value_match = self.regex["string"].match(self.string, self.current)
+					tag_value_match = self.regex["word_string"].match(self.string, self.current)
 
 					if not tag_value_match:
 						return self.add_region(start_of_key, self.current, "invalid.illegal")
@@ -299,12 +296,7 @@ class Parser:
 						if reached_end:
 							return self.current
 
-						int_range_match = self.regex["integer_range"].match(self.string, self.current)
-						if not int_range_match:
-							return self.add_region(start_of_score, self.current, "invalid.illegal")
-						self.add_region(int_range_match.start(1), int_range_match.end(1), "mccconstant")
-						self.add_region(int_range_match.start(2), int_range_match.end(2), "mcccommand")
-						self.current = self.add_region(int_range_match.start(3), int_range_match.end(3), "mccconstant")
+						self.current = self.range_parser(self.integer_parser, start_of_score)
 
 						reached_end = self.skip_whitespace(start_of_key)
 						if reached_end:
@@ -344,6 +336,25 @@ class Parser:
 
 			return self.add_region(self.current, self.current + 1, "mccentity")
 
+		return self.current
+
+	def range_parser(self, parse_function, key_start, properties={}):
+		matched = False
+		old_current = self.current
+		self.current = parse_function(properties)
+		if old_current != self.current:
+			matched = True
+
+		if self.current + 2 <= len(self.string) and self.string[self.current:self.current + 2] == "..":
+			self.current = self.add_region(self.current, self.current + 2, "mcccommand")
+
+		old_current = self.current
+		self.current = parse_function(properties)
+		if old_current != self.current:
+			matched = True
+
+		if not matched:
+			return self.add_region(key_start, self.current, "invalid.illegal")
 		return self.current
 
 	def advancement_tag_parser(self, do_nested=True):
@@ -403,7 +414,13 @@ class Parser:
 	# Word means "up to the next space", phrase is "an unquoted word or quoted string", and greedy is "everything from this point to the end of input".
 	# strict means only a regular quote enclosed string will work
 	def string_parser(self, properties={}):
-		string_match = self.regex["string"].match(self.string, self.current);
+		if properties["type"] == "word":
+			string_match = self.regex["word_string"].match(self.string, self.current)
+		elif properties["type"] == "greedy":
+			string_match = self.regex["greedy_string"].match(self.string, self.current)
+		elif properties["type"] == "strict":
+			string_match = self.regex["strict_string"].match(self.string, self.current)
+
 		if string_match:
 			return self.add_region(self.current, string_match.end(), "mccstring")
 		return self.current
@@ -459,7 +476,7 @@ class Parser:
 
 
 			if key in NBT_STRING_LIST_TAGS:
-				self.current = self.nbt_list_parser(self.regex["string"], "mccstring", "", properties)
+				self.current = self.nbt_list_parser(self.regex["strict_string"], "mccstring", "", properties)
 				if (self.string[self.current - 1] != ']'):
 					return self.current
 
@@ -498,7 +515,7 @@ class Parser:
 				self.current = new_current
 
 			elif key in NBT_STRING_TAGS:
-				new_current = self.nbt_value_parser(self.regex["string"], "mccstring", "", properties)
+				new_current = self.nbt_value_parser(self.regex["word_string"], "mccstring", "", properties)
 				if new_current == self.current:
 					return self.add_region(start_of_key, new_current, "invalid.illegal")
 				self.current = new_current
@@ -661,9 +678,31 @@ class Parser:
 		return self.current
 
 	def nbt_path_parser(self, properties={}):
-		if (self.string[self.current:self.current+7] == "nbtpath"):
-			return self.add_region(self.current, self.current + 7, "mccstring")
-		return self.current
+		start = self.current
+
+		while self.current < len(self.string):
+			start_of_segment = self.current
+			old_current = self.current
+			self.current = self.string_parser({"type":"word"})
+			if self.current < len(self.string) and self.string[self.current] == "[":
+				self.current += 1
+				old_current = self.current
+				self.current = self.integer_parser({"min":0})
+				if old_current == self.current or (self.current < len(self.string) and self.string[self.current] != "]"):
+					return start
+				else:
+					self.current += 1
+			
+			if self.current < len(self.string) and self.string[self.current] == "." and start_of_segment != self.current:
+				self.current += 1
+			else:
+				self.current = self.add_region(start, self.current, "mccstring")
+				if start_of_segment == self.current and self.string[self.current - 1] == ".":
+					return self.add_region(self.current - 1, self.current, "invalid.illeal")
+				else:
+					return self.current
+
+		return start
 
 	def float_parser(self, properties={}):
 		float_match = self.regex["float"].match(self.string, self.current)
