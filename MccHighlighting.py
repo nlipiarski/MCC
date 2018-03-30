@@ -21,6 +21,7 @@ max_token_ids = {}
 class MccHighlightCommand(sublime_plugin.EventListener):
 
 	def on_load(self, view):
+		return
 		self.run(view)
 
 	def on_modified(self, view):
@@ -40,7 +41,7 @@ class MccHighlightCommand(sublime_plugin.EventListener):
 		parser = Parser(view)
 
 		for line in file_lines:
-			token_id = parser.highlight(COMMAND_TREE, line, 0)
+			token_id, _ = parser.highlight(COMMAND_TREE, line, 0)
 
 		viewId = view.id() # If token_ids aren't overwritten already, remove them from the equation
 		if viewId in max_token_ids and max_token_ids[viewId] > token_id:
@@ -86,6 +87,8 @@ class MccHighlightCommand(sublime_plugin.EventListener):
 								"foreground": item["settings"]["foreground"],
 								"background": new_background_rgb
 							}})
+			if not os.path.exists(sublime.packages_path() + "/MCC/ModifiedColorSchemes/"):
+				os.makedirs(sublime.packages_path() + "/MCC/ModifiedColorSchemes/")
 
 			new_file_name = "/MCC/ModifiedColorSchemes/" + scheme_data["name"] + ".tmTheme"
 			scheme_data["name"] = scheme_data["name"] + " (MCC)"
