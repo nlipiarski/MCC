@@ -6,8 +6,7 @@ from .CommandTree import COMMAND_TREE
 class Parser:
 	add_regions_flags = sublime.DRAW_NO_OUTLINE
 	regex = {
-		"vec3d" : re.compile("(\d+(?:\.\d+)?)[ \t\n]+(\d+(?:\.\d+)?)[ \t\n]+(\d+(?:\.\d+)?)"),
-		"vec2d" : re.compile("(\d+(?:\.\d+)?)[ \t\n]+(\d+(?:\.\d+)?)"),
+		"position-2" : re.compile("(~?-?\d*\.?\d+|~)[\t ]+(~?-?\d*\.?\d+|~)"),
 		"float" : re.compile("(-?\d+(?:\.\d+)?)"),
 		"integer" : re.compile("(-?\d+)"),
 		"namespace" : re.compile("([a-z_\-1-9]+:)([a-z_\-1-9]+(?:\/[a-z_\-1-9]+)*)(\/?)"),
@@ -15,7 +14,7 @@ class Parser:
 		"username" : re.compile("\w{3,16}"),
 		"axes" : re.compile("([xyz]+)"),
 		"entity_tag" : re.compile("\w+"),
-		"entity_tag_key" : re.compile("([a-z]+)[\t ]*(=)"),
+		"entity_tag_key" : re.compile("(\w+)[\t ]*(=)"),
 		"entity_tag_advancement_key" : re.compile("([a-z_\-1-9]+:)?([a-z]+)[\t ]*(=)"),
 		"nbt_key" : re.compile("(\w+)[\t ]*:"),
 		"nbt_boolean" : re.compile("[01]"),
@@ -24,15 +23,16 @@ class Parser:
 		"item_slot" : re.compile("slot\.(?:container\.\d+|weapon\.(?:main|off)hand|\.(?:enderchest|inventory)\.(?:2[0-6]|1?[0-9])|hotbar.[0-8]|horse\.(?:saddle|chest|armor|1[0-4]|[0-9])|villager\.[0-7])"),
 		"gamemode" : re.compile("survival|creative|adventure|spectator"),
 		"sort" : re.compile("nearest|furthest|random|arbitrary"),
-		"entity" : re.compile("item|xp_orb|area_effect_cloud|leash_knot|painting|item_frame|armor_stand|evocation_fangs|ender_crystal|egg|arrow|snowball|fireball|small_fireball|ender_pearl|eye_of_ender_signal|potion|xp_bottle|wither_skull|fireworks_rocket|spectral_arrow|shulker_bullet|dragon_fireball|llama_spit|tnt|falling_block|commandblock_minecart|boat|minecart|chest_minecart|furnace_minecart|tnt_minecart|hopper_minecart|spawner_minecart|elder_guardian|wither_skeleton|stray|husk|zombie_villager|evocation_illager|vex|vindication_illager|illusion_illager|creeper|skeleton|spider|giant|zombie|slime|ghast|zombie_pigman|enderman|cave_spider|silverfish|blaze|magma_cube|ender_dragon|wither|witch|endermite|guardian|shulker|skeleton_horse|zombie_horse|donkey|mule|bat|pig|sheep|cow|chicken|squid|wolf|mooshroom|snowman|ocelot|villager_golem|horse|rabbit|polar_bear|llama|parrot|villager|player|lightning_bolt"),
+		"entity" : re.compile("(minecraft:)?(item|xp_orb|area_effect_cloud|leash_knot|painting|item_frame|armor_stand|evocation_fangs|ender_crystal|egg|arrow|snowball|fireball|small_fireball|ender_pearl|eye_of_ender_signal|potion|xp_bottle|wither_skull|fireworks_rocket|spectral_arrow|shulker_bullet|dragon_fireball|llama_spit|tnt|falling_block|commandblock_minecart|boat|minecart|chest_minecart|furnace_minecart|tnt_minecart|hopper_minecart|spawner_minecart|elder_guardian|wither_skeleton|stray|husk|zombie_villager|evocation_illager|vex|vindication_illager|illusion_illager|creeper|skeleton|spider|giant|zombie|slime|ghast|zombie_pigman|enderman|cave_spider|silverfish|blaze|magma_cube|ender_dragon|wither|witch|endermite|guardian|shulker|skeleton_horse|zombie_horse|donkey|mule|bat|pig|sheep|cow|chicken|squid|wolf|mooshroom|snowman|ocelot|villager_golem|horse|rabbit|polar_bear|llama|parrot|villager|player|lightning_bolt)"),
 		"comment" :  re.compile('^[\t ]*#.*$'),
 		"command" : re.compile('[\t ]*(/?)([a-z]+)'),
 		"hover_event_action" : re.compile("show_(?:text|item|entity|achievement)"),
 		"click_event_action": re.compile("(?:run|suggest)_command|open_url|change_page"),
 		"item_block_id" : re.compile("([a-z_]+:)?([a-z_]+)"),
-		"position" : re.compile("(~?-?\d*\.?\d+|~)[\t ]+(~?-?\d*\.?\d+|~)[\t ]+(~?-?\d*\.?\d+|~)"),
+		"position-3" : re.compile("([~\^]?-?\d*\.?\d+|[~\^])[\t ]+([~\^]?-?\d*\.?\d+|[~\^])[\t ]+([~\^]?-?\d*\.?\d+|[~\^])"),
 		"strict_string" : re.compile("\"(?:[^\\\\\"]|(\\\\.))*\""),
-		"greedy_string" : re.compile("[^\n]*")
+		"greedy_string" : re.compile("[^\n]*"),
+		"operation" : re.compile("[+\-\*\%\/]?=|>?<|>")
 	}
 
 	def __init__(self, view):
@@ -62,48 +62,61 @@ class Parser:
 			if not "executable" in command_tree or not command_tree["executable"]:
 				#print("command not exectuable")
 				self.current = self.add_region(0,  line_region.size(), "invalid.illegal")
+				return (self.token_id, False)
 			else:
-				newline_index = self.string.find("\n")
-				if newline_index < 0:
-					self.current = self.add_region(self.current, line_region.size(), "invalid.illegal")
-				else:
+				while (self.current < len(self.string) and self.string[self.current] in " \t"):
+					self.current += 1
+				newline_index = self.string.find("\n", self.current)
+				if newline_index > self.current:
 					self.current = self.add_region(self.current, newline_index, "invalid.illegal")
-			return self.token_id
+					return (self.token_id, False)
+				elif self.current < len(self.string):
+					self.current = self.add_region(self.current, line_region.size(), "invalid.illegal")
+					return (self.token_id, False)
+				return (self.token_id, True)
 
 		self.string = self.view.substr(line_region)
 		self.region = line_region
 		if self.regex["comment"].match(self.string):
 			self.add_region(0,  line_region.size(), "mcccomment")
-			return self.token_id
+			return (self.token_id, True)
 		elif command_tree["type"] == "root":
 			command_match = self.regex["command"].search(self.string, self.current)
 			if not command_match:
-				return self.token_id
+				return (self.token_id, False)
 			command = command_match.group(2)
 			#print("command: " + command)
 			if command in command_tree["children"]:
 				self.add_region(command_match.start(1), command_match.end(1), "invalid.illegal")
 				self.current = self.add_region(command_match.start(2), command_match.end(2), "mcccommand")
 				return self.highlight(command_tree["children"][command], line_region, command_match.end())
-			else:
+			else:				
 				self.add_region(self.current,  line_region.size(), "invalid.illegal")
-				return self.token_id
+				return (self.token_id, False)
 		else:
 			while (self.current < len(self.string) and self.string[self.current] in " \t\n"):
 				self.current += 1
 
-			if (self.current >= len(self.string)):
-				self.add_region(0,  line_region.size(), "invalid.illegal")
-				return self.token_id
+			if self.current >= len(self.string):
+				if not "executable" in command_tree or not command_tree["executable"]:
+					return (self.token_id, False)
+				else:
+					return (self.token_id, True)				
 
-			command_tree = command_tree["children"]
 			#print(command_tree)
-			for key, properties in command_tree.items():
+			start = self.current
+			old_token_id = self.token_id
+			for key, properties in command_tree["children"].items():
 				#print("Key: " + key)
 				if properties["type"] == "literal" and self.current + len(key) <= len(self.string) and self.string[self.current:self.current + len(key)] == key:
 					#print("String segment: " + self.string[self.current:self.current + len(key)])
 					self.current = self.add_region(self.current, self.current + len(key), "mccliteral")
-					return self.highlight(properties, line_region, self.current)
+					self.token_id, success = self.highlight(properties, line_region, self.current)
+					if success:
+						return (self.token_id, True)
+					else:
+						self.current = start
+						self.token_id = old_token_id
 				elif properties["type"] == "argument":
 					parser_name = properties["parser"]
 					parse_function = self.parsers[parser_name]
@@ -115,12 +128,16 @@ class Parser:
 						self.current = parse_function(self)
 
 					if old_current != self.current:
-						return self.highlight(properties, line_region, self.current)
+						self.token_id, success = self.highlight(properties, line_region, self.current)
+						if success:
+							return (self.token_id, True)
+						else:
+							self.current = start
+							self.token_id = old_token_id
 
-			#print("Went thrugh all options ")
 			self.add_region(self.current,  line_region.size(), "invalid.illegal")
-			return self.token_id
-
+			return (self.token_id, False)
+			
 	# Returns True if the end of the string is reached, else False and will advacne self.current to the next non-whitespace character
 	# this will error highlight the section from err_start until the end of the string
 	def skip_whitespace(self, err_start):
@@ -130,18 +147,17 @@ class Parser:
 		while self.string[self.current] in " \n\t":
 			self.current += 1
 			if self.current >= len(self.string):
-				print("Adding error region: " + self.string[err_start:self.current])
 				self.current = self.add_region(err_start, self.current, "invalid.illegal")
 				return True
 		return False
 
 	def namespace_parser(self, properties={}): #all parsers return (token_id, newStart)
-		namespace_match = self.regex["namespace"].match(self.string, current)
+		namespace_match = self.regex["namespace"].match(self.string, self.current)
 		if namespace_match:
 			self.add_region(namespace_match.start(1), namespace_match.end(1), "mccstring")
-			self.current = add_region(namespace_match.start(2), namespace_match.end(2), "mccliteral")
+			self.current = self.add_region(namespace_match.start(2), namespace_match.end(2), "mccliteral")
 			if namespace_match.start(3) > -1:
-				return self.add_region(namespace_match.start(3), namespace_match.end(3), "invalid.illegal",token_id)
+				return self.add_region(namespace_match.start(3), namespace_match.end(3), "invalid.illegal")
 		return self.current
 
 	# Entity tags
@@ -165,6 +181,8 @@ class Parser:
 	#	combound list of boolean tags whose key is an advancement.  Can have keys with colons in them
 	#	advancements={foo=true,bar=false,custom:something={criterion=true}} (taken from minecraft wiki)
 	def entity_parser(self, properties={}):
+		if self.current > len(self.string):
+			return self.current
 		if self.string[self.current] == "*" and "has_wildcard" in properties and properties["has_wildcard"]:
 			return self.add_region(self.current, self.current+1, "mccentity")
 
@@ -234,7 +252,7 @@ class Parser:
 					sort_match = self.regex["sort"].match(self.string, self.current)
 					if not sort_match:
 						return self.add_region(start_of_key, self.current, "invalid.illegal")
-					self.current = self.add_region(sort_match.start(), entity_match.end(), "mccliteral")
+					self.current = self.add_region(sort_match.start(), sort_match.end(), "mccliteral")
 
 				elif key == "type":
 					if self.string[self.current] == "!":
@@ -440,7 +458,7 @@ class Parser:
 			return self.add_region(self.current, newline_index, "mccstring")
 
 	def position_parser(self, properties={}):
-		position_match = self.regex["position"].match(self.string, self.current)
+		position_match = self.regex["position-3"].match(self.string, self.current)
 		if position_match:
 			self.add_region(position_match.start(1), position_match.end(1), "mccconstant")
 			self.add_region(position_match.start(2), position_match.end(2), "mccconstant")
@@ -739,15 +757,10 @@ class Parser:
 		return self.username_parser(properties)
 
 	def vector_3d_parser(self, properties={}):
-		vec3d_match = self.regex["vec3d"].match(self.string, self.current)
-		if vec3d_match:
-			self.add_region(vec3d_match.start(1), vec3d_match.end(1), "mccconstant")
-			self.add_region(vec3d_match.start(2), vec3d_match.end(2), "mccconstant")
-			return self.add_region(vec3d_match.start(3), vec3d_match.end(3), "mccconstant")
-		return self.current
+		return self.position_parser(properties)
 
 	def vector_2d_parser(self, properties={}):
-		vec2d_match = self.regex["vec2d"].match(self.string, self.current)
+		vec2d_match = self.regex["position-2"].match(self.string, self.current)
 		if vec2d_match:
 			self.add_region(vec2d_match.start(1), vec2d_match.end(1), "mccconstant")
 			return self.add_region(vec2d_match.start(2), vec2d_match.end(2), "mccconstant")
@@ -755,8 +768,13 @@ class Parser:
 
 	def particle_parser(self, properties={}):
 		particle_match = self.regex["entity_tag"].match(self.string, self.current)
-		if particle_match and particle.group() in PARTICLES:
-			return self.add_region(self.current, particle_match.end(), "mccliteral")
+		if particle_match and particle_match.group(0) in PARTICLES:
+			old_current = self.current
+			self.current = self.add_region(self.current, particle_match.end(), "mccliteral")
+			if self.string[old_current:self.current] == "block":
+				self.skip_whitespace(self.current)
+				return self.block_parser(self.current)
+
 		return self.current
 
 	def item_slot_parser(self, properties={}):
@@ -781,9 +799,7 @@ class Parser:
 		return self.current
 
 	def rotation_parser(self, properties={}):
-		if (self.string[self.current:self.current+8] == "rotation"):
-			return self.add_region(self.current, self.current + 8, "mccconstant")
-		return self.current
+		return self.vector_2d_parser(properties)
 
 	# https://www.json.org/
 	def json_parser(self, properties={}):
@@ -1103,6 +1119,19 @@ class Parser:
 		self.current += 1
 		return self.current
 
+	def operation_parser(self, properties={}):
+		operation_match = self.regex["operation"].match(self.string, self.current)
+		if operation_match:
+			return self.add_region(operation_match.start(), operation_match.end(), "mcccommand")
+		return self.current
+
+	def resource_location_parser(self, properties={}):
+		entity_match = self.regex["entity"].match(self.string, self.current)
+		if entity_match:
+			self.add_region(entity_match.start(1), entity_match.end(1), "mccliteral")
+			return self.add_region(entity_match.start(2), entity_match.end(2), "mccstring")
+		return self.current
+
 	def generate_quote(self, escape_depth):
 		quotes = ["\"", "\\\"", "\\\\\\\"", "\\\\\\\\\\\\\\\"", "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\""]
 		if escape_depth <= 4:
@@ -1113,7 +1142,8 @@ class Parser:
 		return quote + self.generate_quote(escape_depth - 1)
 
 	parsers = { #need to include the properties tag
-		"minecraft:resource_location": namespace_parser,
+		"minecraft:resource_location": resource_location_parser,
+		"minecraft:function"         : namespace_parser,
 		"minecraft:entity"           : entity_parser,
 		"brigadier:string"           : string_parser, #type  = word and type= greedy
 		"minecraft:game_profile"     : username_parser,
@@ -1139,5 +1169,6 @@ class Parser:
 		"minecraft:team"             : team_parser,
 		"minecraft:color"            : color_parser,
 		"minecraft:rotation"         : rotation_parser, # [yaw, pitch], includes relative changes
-		"minecraft:component"        : json_parser #Almost sure this is just JSON
+		"minecraft:component"        : json_parser,
+		"minecraft:operation"        : operation_parser # +=, = , <>, etc
 	}
