@@ -32,7 +32,8 @@ class Parser:
 		"position-3" : re.compile("([~\^]?-?\d*\.?\d+|[~\^])[\t ]+([~\^]?-?\d*\.?\d+|[~\^])[\t ]+([~\^]?-?\d*\.?\d+|[~\^])"),
 		"strict_string" : re.compile("\"(?:[^\\\\\"]|(\\\\.))*\""),
 		"greedy_string" : re.compile("[^\n]*"),
-		"operation" : re.compile("[+\-\*\%\/]?=|>?<|>")
+		"operation" : re.compile("[+\-\*\%\/]?=|>?<|>"),
+		"entity_anchor" : re.compile("feet|eyes")
 	}
 
 	def __init__(self, view):
@@ -183,7 +184,7 @@ class Parser:
 	def entity_parser(self, properties={}):
 		if self.current > len(self.string):
 			return self.current
-		if self.string[self.current] == "*" and "has_wildcard" in properties and properties["has_wildcard"]:
+		if self.string[self.current] == "*" and "amount" in properties and properties["amount"] == "multiple":
 			return self.add_region(self.current, self.current+1, "mccentity")
 
 		if self.string[self.current] != "@" or (self.current + 1 < len(self.string) and not self.string[self.current+1] in "pears"): #Checks to see if it's a valid entity selector
@@ -225,7 +226,7 @@ class Parser:
 
 				elif key == "tag":
 					if self.string[self.current] == "!":
-						self.add_region(self.current, self.current + 1, "mcccommand") #Similar deal to the '=' earlier
+						self.current = self.add_region(self.current, self.current + 1, "mcccommand") #Similar deal to the '=' earlier
 						reached_end = self.skip_whitespace(start_of_key)
 						if reached_end:
 							return self.current
@@ -355,6 +356,12 @@ class Parser:
 			return self.add_region(self.current, self.current + 1, "mccentity")
 
 		return self.current
+
+	def brigadier_range_parser(self, properties={}):
+		if properties["decimals"]:
+			return self.range_parser(self.float_parser, self.current, properties)
+		else:
+			return self.range_parser(self.integer_parser, self.current, properties)
 
 	def range_parser(self, parse_function, key_start, properties={}):
 		matched = False
@@ -494,7 +501,7 @@ class Parser:
 
 
 			if key in NBT_STRING_LIST_TAGS:
-				self.current = self.nbt_list_parser(self.regex["strict_string"], "mccstring", "", properties)
+				self.current = self.nbt_list_parser(self.regex["word_string"], "mccstring", "", properties)
 				if (self.string[self.current - 1] != ']'):
 					return self.current
 
@@ -544,7 +551,7 @@ class Parser:
 					return self.current
 
 			elif key in NBT_BYTE_TAGS:
-				new_current = self.nbt_value_parser(self.regex["nbt_boolean"], "mccconstant", "b", properties)
+				new_current = self.nbt_value_parser(self.regex["integer"], "mccconstant", "b", properties)
 				if new_current == self.current:
 					return self.add_region(start_of_key, new_current, "invalid.illegal")
 				self.current = new_current
@@ -1132,6 +1139,15 @@ class Parser:
 			return self.add_region(entity_match.start(2), entity_match.end(2), "mccstring")
 		return self.current
 
+	def entity_acnhor_parser(self, properties={}):
+		anchor_match = self.regex["entity_anchor"].match(self.string, self.current)
+		if anchor_match:
+			return self.add_region(anchor_match.start(), anchor_match.end(), "mccstring")
+		return self.current
+
+	def objective_criteria_parser(self, properties={}):
+		return self.string_parser({"type":"word"})
+
 	def generate_quote(self, escape_depth):
 		quotes = ["\"", "\\\"", "\\\\\\\"", "\\\\\\\\\\\\\\\"", "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\""]
 		if escape_depth <= 4:
@@ -1154,6 +1170,7 @@ class Parser:
 		"minecraft:item_predicate"   : item_parser,
 		"brigadier:integer"          : integer_parser, #Properties has min and max
 		"minecraft:block_state"      : block_parser,
+		"minecraft:block_predicate"  : block_parser,
 		"minecraft:nbt_path"         : nbt_path_parser,
 		"brigadier:float"            : float_parser, #Properties has min and max
 		"brigadier:double"           : float_parser, #Properties has min and max
@@ -1170,5 +1187,8 @@ class Parser:
 		"minecraft:color"            : color_parser,
 		"minecraft:rotation"         : rotation_parser, # [yaw, pitch], includes relative changes
 		"minecraft:component"        : json_parser,
-		"minecraft:operation"        : operation_parser # +=, = , <>, etc
+		"minecraft:entity_anchor"    : entity_acnhor_parser,
+		"minecraft:operation"        : operation_parser, # +=, = , <>, etc
+		"minecraft:range"            : brigadier_range_parser,
+		"minecraft:objective_criteria":objective_criteria_parser
 	}
