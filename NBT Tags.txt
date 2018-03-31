@@ -1,4 +1,5 @@
-Byte: (boolean)
+NBT_BYTE_TAGS
+IsVillager
 Ambient
 Amplifier
 Angry
@@ -65,7 +66,7 @@ player
 PlayerCreated
 PlayerSpawned
 powered
-Pumpkin 
+Pumpkin
 rewardExp
 Rot
 Saddle
@@ -97,7 +98,7 @@ wasOnGround
 Willing
 Y
 
-Short:
+NBT_SHORT_TAGS
 Age
 Air
 Anger
@@ -126,7 +127,7 @@ SpawnCount
 SpawnRange
 Value
 
-Integer:
+NBT_INTEGER_TAGS
 Age
 APX
 APY
@@ -239,7 +240,7 @@ z
 zPos
 zTile
 
-Long:
+NBT_LONG_TAGS
 Age
 AttachLeast
 AttachMost
@@ -260,7 +261,7 @@ UUIDLeast
 UUIDMost
 XYZ
 
-Float:
+NBT_FLOAT_TAGS
 0
 1
 2
@@ -282,7 +283,7 @@ RadiusPerTick
 walkSpeed
 XpP
 
-Double:
+NBT_DOUBLE_TAGS
 Amount
 Base
 damage
@@ -296,7 +297,7 @@ x
 y
 z
 
-String:
+NBT_STRING_TAGS
 AffectedBlocksName
 AffectedBlocksObjective
 AffectedEntitiesName
@@ -347,55 +348,28 @@ Thrower
 Type
 Value
 
-Float List:
-Pos
-Motion
-direction
-power
-Body
-LeftArm
-RightArm
-LeftLeg
-RightLeg
-Head
-Rotation
-
-Integer List:
-Colors
-FadeColors
-
-String List:
-Lore
-
-Compound:
+NBT_COMPOUND_TAGS 
 recipeBook
 Leash
 pages
 abilities
-Attributes
 Entity
 RootVehicle
 Passengers
 Tags
 CommandStats
 SelectedItem
-HandItems
 EnderItems
-Items
 DecorItem
 Item
 ArmorItem
-ArmorItems
 SaddleItem
-Inventory
 Offers
 Recipes
 buy
 buyB
 sell
 tag
-CustomPotionEffects
-ActiveEffects
 Potion
 SpawnPotentials
 Properties
@@ -424,9 +398,7 @@ Textures
 CanDestroy
 CanPlaceOn
 ench
-StoredEnchantments
 BlockEntityTag
-AttributeModifiers
 display
 SkullOwner
 textures
@@ -437,3 +409,37 @@ EntityTag
 Decorations
 ShoulderEntityLeft
 ShoulderEntityRight
+
+NBT_STRING_LIST_TAGS
+Lore
+Tags
+
+NBT_INTEGER_LIST_TAGS
+Colors
+FadeColors
+
+NBT_FLOAT_LIST_TAGS
+Pos
+Motion
+direction
+power
+Body
+LeftArm
+RightArm
+LeftLeg
+RightLeg
+Head
+Rotation
+
+NBT_COMPOUNT_LIST_TAGS
+Attributes
+ActiveEffects
+HandItems
+ArmorItems
+Inventory
+Items
+CustomPotionEffects
+AttributeModifiers
+StoredEnchantments
+textures
+Passengers
