@@ -8,20 +8,18 @@ from .CommandTree import COMMAND_TREE
 from .Parser import Parser
 
 color_scheme_colors ={ 
-	"comment"          : "mcccomment" ,
-	"keyword"          : "mcccommand",
-	"entity.name"      : "mccentity",
-	"support.type"     : "mccliteral", #Italic too
-	"support.constant" : "mccliteral",
-	"string"           : "mccstring",
-	"constant.numeric" : "mccconstant"
+	"mcccomment"       : ["comment"],
+	"mcccommand"       : ["keyword"],
+	"mccentity"        : ["entity.name"],
+	"mccliteral"       : ["support.type", "support.constant"],
+	"mccstring"        : ["string"],
+	"mccconstant"      : ["constant.numeric"]
 }
 max_token_ids = {}
 
 class MccHighlightCommand(sublime_plugin.EventListener):
 
 	def on_load(self, view):
-		return
 		self.run(view)
 
 	def on_modified(self, view):
@@ -69,24 +67,33 @@ class MccHighlightCommand(sublime_plugin.EventListener):
 				background_rgb = max(1, int(original_bg[1:], 16))
 				new_background_rgb = "#{0:0>6x}".format(background_rgb - 1)
 			
-			for item in scheme_data["settings"]:
-				if "scope" in item:
-					comma_index = item["scope"].find(",")
-					space_index = item["scope"].find(" ")
-					if comma_index < 0 and space_index < 0:
-						scope = item["scope"]
-					else: 
-						if comma_index < 0 or space_index < 0:
-							scope = item["scope"][:max(comma_index, space_index)]
-						else:
-							scope = item["scope"][:min(comma_index, space_index)]
-					if scope in color_scheme_colors:
-						scheme_data["settings"].append({
-							"scope": color_scheme_colors[scope],
-							"settings": {
-								"foreground": item["settings"]["foreground"],
-								"background": new_background_rgb
-							}})
+			for mcc_scope, copy_scopes in color_scheme_colors.items():
+				for copy_scope in copy_scopes:
+					found = False
+					for item in scheme_data["settings"]:
+						if "scope" in item:
+							comma_index = item["scope"].find(",")
+							space_index = item["scope"].find(" ")
+							if comma_index < 0 and space_index < 0:
+								scope_from_scheme = item["scope"]
+							else: 
+								if comma_index < 0 or space_index < 0:
+									scope_from_scheme = item["scope"][:max(comma_index, space_index)]
+								else:
+									scope_from_scheme = item["scope"][:min(comma_index, space_index)]
+							if copy_scope == scope_from_scheme:
+								scheme_data["settings"].append({
+									"scope": mcc_scope,
+									"settings": {
+										"foreground": item["settings"]["foreground"],
+										"background": new_background_rgb
+									}})
+								found = True
+								break
+					if found:
+						break
+				else:
+					sublime.error_message("MCC couldn't find a matching scope for " + copy_scope)
 			if not os.path.exists(sublime.packages_path() + "/MCC/ModifiedColorSchemes/"):
 				os.makedirs(sublime.packages_path() + "/MCC/ModifiedColorSchemes/")
 
@@ -97,7 +104,7 @@ class MccHighlightCommand(sublime_plugin.EventListener):
 			sublime.load_settings("Preferences.sublime-settings").set("color_scheme", "Packages" + new_file_name)
 			sublime.save_settings("Preferences.sublime-settings")
 		except Exception as e:
-			sublime.error_message("MCC couldn't convert your current color scheme")
+			# sublime.error_message("MCC couldn't convert your current color scheme")
 			print(e)
 			sublime.active_window().run_command("show_panel", {"panel": "console", "toggle": True})
 
