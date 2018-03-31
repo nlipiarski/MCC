@@ -11,7 +11,7 @@ class Parser:
 		"integer" : re.compile("(-?\d+)"),
 		"namespace" : re.compile("([a-z_\-1-9]+:)([a-z_\-1-9]+(?:\/[a-z_\-1-9]+)*)(\/?)"),
 		"word_string" : re.compile("\w+|\"(?:[^\\\\\"]|(\\\\.))*\""),
-		"username" : re.compile("\w{3,16}"),
+		"username" : re.compile("[\w-]{,16}"),
 		"axes" : re.compile("([xyz]+)"),
 		"entity_tag" : re.compile("\w+"),
 		"entity_tag_key" : re.compile("(\w+)[\t ]*(=)"),
@@ -33,7 +33,9 @@ class Parser:
 		"strict_string" : re.compile("\"(?:[^\\\\\"]|(\\\\.))*\""),
 		"greedy_string" : re.compile("[^\n]*"),
 		"operation" : re.compile("[+\-\*\%\/]?=|>?<|>"),
-		"entity_anchor" : re.compile("feet|eyes")
+		"entity_anchor" : re.compile("feet|eyes"),
+		"resource_location" : re.compile("(\w+:)?(\w+)"),
+		"potions" : re.compile("(minecraft:)?(water|mundane|thick|awkward|night_vision|long_night_vision|invisibility|long_invisibility|leaping|strong_leaping|long_leaping|fire_resistance|long_fire_resistance|swiftness|strong_swiftness|long_swiftness|slowness|long_slowness|water_breathing|long_water_breathing|healing|strong_healing|strong_harming|poison|strong_poison|long_poison|regeneration|strong_regeneration|long_regeneration|strength|strong_strength|long_strength|weakness|long_weakness|luck|turtle_master|strong_turtle_master|long_turtle_master)")
 	}
 
 	def __init__(self, view):
@@ -153,13 +155,7 @@ class Parser:
 		return False
 
 	def namespace_parser(self, properties={}): #all parsers return (token_id, newStart)
-		namespace_match = self.regex["namespace"].match(self.string, self.current)
-		if namespace_match:
-			self.add_region(namespace_match.start(1), namespace_match.end(1), "mccstring")
-			self.current = self.add_region(namespace_match.start(2), namespace_match.end(2), "mccliteral")
-			if namespace_match.start(3) > -1:
-				return self.add_region(namespace_match.start(3), namespace_match.end(3), "invalid.illegal")
-		return self.current
+		return self.regex_parser(self.regex["namespace"], ["mccstring", "mccliteral", "invalid.illegal"])
 
 	# Entity tags
 	#
@@ -182,12 +178,12 @@ class Parser:
 	#	combound list of boolean tags whose key is an advancement.  Can have keys with colons in them
 	#	advancements={foo=true,bar=false,custom:something={criterion=true}} (taken from minecraft wiki)
 	def entity_parser(self, properties={}):
-		if self.current > len(self.string):
+		if self.current >= len(self.string):
 			return self.current
 		if self.string[self.current] == "*" and "amount" in properties and properties["amount"] == "multiple":
 			return self.add_region(self.current, self.current+1, "mccentity")
 
-		if self.string[self.current] != "@" or (self.current + 1 < len(self.string) and not self.string[self.current+1] in "pears"): #Checks to see if it's a valid entity selector
+		if self.string[self.current] != "@" or self.current + 1 > len(self.string) or not self.string[self.current+1] in "pears": #Checks to see if it's a valid entity selector
 			return self.current
 
 		self.current = self.add_region(self.current, self.current + 2, "mccentity")
@@ -244,16 +240,16 @@ class Parser:
 						if reached_end:
 							return self.current
 
-					gamemode_match = self.regex["gamemode"].match(self.string, self.current)
-					if not gamemode_match:
+					old_current = self.current
+					self.current = self.regex_parser(self.regex["gamemode"], ["mccliteral"])
+					if old_current == self.current:
 						return self.add_region(start_of_key, self.current, "invalid.illegal")
-					self.current = self.add_region(gamemode_match.start(), gamemode_match.end(), "mccliteral")
 
 				elif key == "sort":
-					sort_match = self.regex["sort"].match(self.string, self.current)
-					if not sort_match:
+					old_current = self.current
+					self.current = self.regex_parser(self.regex["sort"], ["mccliteral"])
+					if old_current == self.current:
 						return self.add_region(start_of_key, self.current, "invalid.illegal")
-					self.current = self.add_region(sort_match.start(), sort_match.end(), "mccliteral")
 
 				elif key == "type":
 					if self.string[self.current] == "!":
@@ -262,10 +258,10 @@ class Parser:
 						if reached_end:
 							return self.current
 
-					entity_match = self.regex["entity"].match(self.string, self.current)
-					if not entity_match:
+					old_current = self.current
+					self.current = self.regex_parser(self.regex["entity"], ["mccliteral"])
+					if old_current == self.current:
 						return self.add_region(start_of_key, self.current, "invalid.illegal")
-					self.current = self.add_region(entity_match.start(), entity_match.end(), "mccliteral")
 
 				elif key == "team":
 					if self.string[self.current] == "!":
@@ -274,9 +270,7 @@ class Parser:
 						if reached_end:
 							return self.current
 
-					team_match = self.regex["username"].match(self.string, self.current)
-					if team_match:
-						self.current = self.add_region(team_match.start(), team_match.end(), "mccstring")
+					self.current = self.regex_parser(self.regex["username"], ["mccstring"])
 
 				elif key == "name":
 					if self.string[self.current] == "!":
@@ -285,11 +279,12 @@ class Parser:
 						if reached_end:
 							return self.current
 
-					tag_value_match = self.regex["word_string"].match(self.string, self.current)
-
-					if not tag_value_match:
+					if not "escape_depth" in properties:
+						properties["escape_depth"] = 0
+					old_current = self.current
+					self.current = self.string_parser(properties={"type":"word","escape_depth":properties["escape_depth"]})
+					if old_current == self.current:
 						return self.add_region(start_of_key, self.current, "invalid.illegal")
-					self.current = self.add_region(tag_value_match.start(), tag_value_match.end(), "mccstring")
 
 				elif key == "scores":
 					if self.string[self.current] != "{":
@@ -303,13 +298,9 @@ class Parser:
 							return self.current
 						start_of_score = self.current
 
-						score_match = self.regex["entity_tag_key"].match(self.string, self.current)
-						if not score_match:
+						self.current = self.regex_parser(self.regex["entity_tag_key"], ["mccstring", "mcccommand"])
+						if start_of_score == self.current:
 							return self.current
-
-						self.add_region(score_match.start(2), score_match.end(2), "mcccommand")
-						self.add_region(score_match.start(1), score_match.end(1), "mccstring")
-						self.current = score_match.end()
 
 						reached_end = self.skip_whitespace(start_of_key)
 						if reached_end:
@@ -336,7 +327,11 @@ class Parser:
 					self.current = self.advancement_tag_parser(self.string)
 					if self.string[self.current - 1] != "}": #Make sure the parse was good
 						return self.current
-
+				elif key == "nbt":
+					old_current = self.current
+					self.current = self.nbt_parser(properties)
+					if old_current == self.current:
+						return self.add_region(start_of_key, self.current, "invalid.illegal")
 				else:
 					return self.add_region(start_of_key, self.current, "invalid.illegal")
 
@@ -451,10 +446,7 @@ class Parser:
 		return self.current
 
 	def username_parser(self, properties={}):
-		username_match = self.regex["username"].match(self.string, self.current)
-		if username_match:
-			return self.add_region(self.current, username_match.end(), "mccstring")
-		return self.current
+		return self.regex_parser(self.regex["username"], ["mccstring"])
 
 	# Todo: add entity highlighting
 	def message_parser(self, properties={}):
@@ -499,70 +491,84 @@ class Parser:
 			if reached_end:
 				return self.current
 
+			matched = False
+			if not matched and key in NBT_STRING_LIST_TAGS:
+				properties["type"] = "word"
+				old_current = self.current
+				self.current = self.nbt_list_parser(self.string_parser, "mccstring", "", properties)
+				if old_current != self.current:
+					matched = True
 
-			if key in NBT_STRING_LIST_TAGS:
-				self.current = self.nbt_list_parser(self.regex["word_string"], "mccstring", "", properties)
-				if (self.string[self.current - 1] != ']'):
-					return self.current
+			if not matched and key in NBT_INTEGER_LIST_TAGS:
+				old_current = self.current
+				self.current = self.nbt_list_parser(self.integer_parser, "mccconstant", "", properties)
+				if old_current != self.current:
+					matched = True
 
-			elif key in NBT_INTEGER_LIST_TAGS:
-				self.current = self.nbt_list_parser(self.regex["integer"], "mccconstant", "", properties)
-				if (self.string[self.current - 1] != "]"):
-					return self.current
+			if not matched and key in NBT_DOUBLE_TAGS:
+				old_current = self.current
+				self.current = self.nbt_value_parser(self.float_parser, "mccconstant", "d", properties)
+				if old_current != self.current:
+					matched = True
 
-			elif key in NBT_DOUBLE_TAGS:
-				new_current = self.nbt_value_parser(self.regex["float"], "mccconstant", "d", properties)
-				if new_current == self.current:
-					return self.add_region(start_of_key, new_current, "invalid.illegal")
-				self.current= new_current
+			if not matched and key in NBT_FLOAT_LIST_TAGS:
+				old_current = self.current
+				self.current = self.nbt_list_parser(self.float_parser, "mccconstant", "f", properties)
+				if old_current != self.current:
+					matched = True
 
-			elif key in NBT_FLOAT_LIST_TAGS:
-				self.current = self.nbt_list_parser(self.regex["float"], "mccconstant", "f", properties)
-				if (self.string[self.current-1] != "]"):
-					return self.current
+			if not matched and key in NBT_FLOAT_TAGS:
+				old_current = self.current
+				self.current = self.nbt_value_parser(self.float_parser, "mccconstant", "f", properties)
+				if old_current != self.current:
+					matched= True
 
-			elif key in NBT_FLOAT_TAGS:
-				new_current = self.nbt_value_parser(self.regex["float"], "mccconstant", "f", properties)
-				if new_current == self.current:
-					return self.add_region(start_of_key, new_current, "invalid.illegal")
-				self.current = new_current
+			if not matched and key in NBT_LONG_TAGS:
+				old_current = self.current
+				self.current = self.nbt_value_parser(self.integer_parser, "mccconstant", "L", properties)
+				if old_current != self.current:
+					macthed = True
 
-			elif key in NBT_LONG_TAGS:
-				new_current = self.nbt_value_parser(self.regex["integer"], "mccconstant", "L", properties)
-				if new_current == self.current:
-					return self.add_region(start_of_key, new_current, "invalid.illegal")
-				self.current = new_current
+			if not matched and key in NBT_SHORT_TAGS:
+				old_current = self.current
+				self.current = self.nbt_value_parser(self.integer_parser, "mccconstant", "s", properties)
+				if old_current != self.current:
+					matched = True
 
-			elif key in NBT_SHORT_TAGS:
-				new_current = self.nbt_value_parser(self.regex["integer"], "mccconstant", "s", properties)
-				if new_current == self.current:
-					return self.add_region(start_of_key, new_current, "invalid.illegal")
-				self.current = new_current
+			if not matched and key in NBT_STRING_TAGS:
+				old_current = self.current
+				properties["type"] = "word"
+				self.current = self.nbt_value_parser(self.string_parser, "mccstring", "", properties)
+				if old_current != self.current:
+					matched = True
 
-			elif key in NBT_STRING_TAGS:
-				new_current = self.nbt_value_parser(self.regex["word_string"], "mccstring", "", properties)
-				if new_current == self.current:
-					return self.add_region(start_of_key, new_current, "invalid.illegal")
-				self.current = new_current
-
-			elif key in NBT_COMPOUND_TAGS:
+			if not matched and key in NBT_COMPOUND_TAGS:
+				old_current = self.current
 				self.current= self.nbt_parser(properties)
 				if self.string[self.current-1] != "}":
-					return self.current
+					self.current = old_current
+				else:
+					matched = True
 
-			elif key in NBT_BYTE_TAGS:
-				new_current = self.nbt_value_parser(self.regex["integer"], "mccconstant", "b", properties)
-				if new_current == self.current:
-					return self.add_region(start_of_key, new_current, "invalid.illegal")
-				self.current = new_current
+			if not matched and key in NBT_BYTE_TAGS:
+				old_current = self.current
+				self.current = self.nbt_value_parser(self.nbt_byte_parser, "", "", properties)
+				if old_current != self.current:
+					matched = True
 
-			elif key in NBT_INTEGER_TAGS:
-				new_current = self.nbt_value_parser(self.regex["integer"], "mccconstant", "", properties)
-				if new_current == self.current:
-					return self.add_region(start_of_key, new_current, "invalid.illegal")
-				self.current = new_current
+			if not matched and key in NBT_INTEGER_TAGS:
+				old_current = self.current
+				self.current = self.nbt_value_parser(self.integer_parser, "mccconstant", "", properties)
+				if old_current != self.current:
+					matched = True
 
-			else:
+			if not matched and key in NBT_COMPOUNT_LIST_TAGS:
+				old_current = self.current
+				self.current = self.nbt_list_parser(self.nbt_parser, "", "", properties)
+				if self.string[self.current-1] =="]": #special because nbt is hard
+					matched = True
+
+			if not matched:
 				return self.add_region(start_of_key, self.current, "invalid.illegal")
 
 			reached_end = self.skip_whitespace(start_of_key)
@@ -576,7 +582,7 @@ class Parser:
 		self.current += 1
 		return self.current
 
-	def nbt_list_parser(self, item_regex, item_scope, item_suffix, properties={}):
+	def nbt_list_parser(self, item_parser, suffix_scope, item_suffix, properties={}):
 		if self.string[self.current] != "[":
 			return self.current
 		start_of_list = self.current
@@ -586,38 +592,46 @@ class Parser:
 
 			reached_end = self.skip_whitespace(start_of_list)
 			if reached_end:
-				return self.current
+				return start_of_list
 			
 			start_of_value = self.current
+			self.current = self.nbt_value_parser(item_parser, suffix_scope, item_suffix, properties)
 
-			new_current = self.nbt_value_parser(item_regex, item_scope, item_suffix)
-			if new_current == self.current:
-				return self.add_region(start_of_list, self.current, "invalid.illegal")
-			self.current = new_current
+			if start_of_value == self.current:
+				return start_of_list
 
 			reached_end = self.skip_whitespace(start_of_value)
 			if reached_end:
-				return self.current
+				return start_of_list
 
 			if self.string[self.current] == ",":
 				self.current += 1
 			elif self.string[self.current] != "]":
-				return self.add_region(self.current, self.current + 1, "invalid.illegal")
+				return start_of_list
 
 		self.current += 1
 		return self.current
 
 
-	def nbt_value_parser(self, value_regex, scope, suffix, properties={}):
-		value_match = value_regex.match(self.string, self.current)
-		if value_match:
-			end = value_match.end()
-			if end + len(suffix) <= len(self.string) and self.string[end : end + len(suffix)] == suffix:
-				end += len(suffix)
-			elif end < len(self.string) and not self.string[end:end+1] in " \t,]}":
-				return self.current
-			return self.add_region(value_match.start(), end, scope)
-		return self.current
+	def nbt_value_parser(self, parser, suffix_scope, suffix, properties={}):
+		start = self.current
+		self.current = parser(properties)
+		if start != self.current:
+			if self.current + len(suffix) <= len(self.string) and self.string[self.current : self.current + len(suffix)] == suffix:
+				return self.add_region(self.current, self.current + len(suffix), suffix_scope)
+			else:
+				return start
+		return start
+
+	def nbt_byte_parser(self, properties={}):
+		old_current = self.current
+		self.current = self.integer_parser(properties)
+		if old_current != self.current:
+			if self.current < len(self.string) and self.string[self.current] == "b":
+				return self.add_region(self.current, self.current + 1, "mccconstant")
+			else: 
+				return old_current
+		return self.boolean_parser(properties)
 
 	def item_parser(self, properties={}):
 		item_match = self.regex["item_block_id"].match(self.string, self.current)
@@ -637,9 +651,13 @@ class Parser:
 		return self.current
 
 	def block_parser(self, properties={}):
+		start = self.current
+		if self.current < len(self.string) and self.string[self.current] ==  "#":
+			self.current += 1
+
 		block_match = self.regex["item_block_id"].match(self.string, self.current)
 		if block_match:
-			self.add_region(block_match.start(1), block_match.end(1), "mccliteral")
+			self.add_region(start, block_match.end(1), "mccliteral")
 			self.current = self.add_region(block_match.start(2), block_match.end(2), "mccstring")
 
 			if block_match.start(1) == block_match.end(1):
@@ -650,7 +668,6 @@ class Parser:
 			if block_name in BLOCKS:
 				states = BLOCKS[block_name]
 			else:
-				self.current = self.add_region(block_match.start(), block_match.end(), "invalid.illegal")
 				states = {}
 
 			if self.current >= len(self.string) or self.string[self.current] != "[":
@@ -700,7 +717,7 @@ class Parser:
 			self.current += 1
 			return self.nbt_parser(properties)
 
-		return self.current
+		return start
 
 	def nbt_path_parser(self, properties={}):
 		start = self.current
@@ -739,10 +756,10 @@ class Parser:
 		return self.current
 
 	def boolean_parser(self, properties={}):
-		if (self.current + 4 < len(self.string) and self.string[self.current:self.current+4] == "true"):
+		if (self.current + 4 <= len(self.string) and self.string[self.current:self.current+4] == "true"):
 			return self.add_region(self.current, self.current + 4, "mccconstant")
 
-		elif (self.current + 5 < len(self.string) and self.string[self.current:self.current + 5] == "false"):
+		elif (self.current + 5 <= len(self.string) and self.string[self.current:self.current + 5] == "false"):
 			return self.add_region(self.current, self.current + 5, "mccconstant")
 
 		return self.current
@@ -774,11 +791,11 @@ class Parser:
 		return self.current
 
 	def particle_parser(self, properties={}):
-		particle_match = self.regex["entity_tag"].match(self.string, self.current)
-		if particle_match and particle_match.group(0) in PARTICLES:
-			old_current = self.current
-			self.current = self.add_region(self.current, particle_match.end(), "mccliteral")
-			if self.string[old_current:self.current] == "block":
+		particle_match = self.regex["item_block_id"].match(self.string, self.current)
+		if particle_match and particle_match.group(2) in PARTICLES and particle_match.group(1) in [None, "minecraft:"]:
+			self.add_region(particle_match.start(1), particle_match.end(1), "mccliteral")
+			self.current = self.add_region(particle_match.start(2), particle_match.end(2), "mccstring")
+			if particle_match.group(2) == "block":
 				self.skip_whitespace(self.current)
 				return self.block_parser(self.current)
 
@@ -1127,26 +1144,46 @@ class Parser:
 		return self.current
 
 	def operation_parser(self, properties={}):
-		operation_match = self.regex["operation"].match(self.string, self.current)
-		if operation_match:
-			return self.add_region(operation_match.start(), operation_match.end(), "mcccommand")
-		return self.current
+		return self.regex_parser(self.regex["operation"], ["mcccommand"])
 
 	def resource_location_parser(self, properties={}):
-		entity_match = self.regex["entity"].match(self.string, self.current)
-		if entity_match:
-			self.add_region(entity_match.start(1), entity_match.end(1), "mccliteral")
-			return self.add_region(entity_match.start(2), entity_match.end(2), "mccstring")
-		return self.current
+		return self.regex_parser(self.regex["resource_location"], ["mccliteral","mccstring"])
 
-	def entity_acnhor_parser(self, properties={}):
-		anchor_match = self.regex["entity_anchor"].match(self.string, self.current)
-		if anchor_match:
-			return self.add_region(anchor_match.start(), anchor_match.end(), "mccstring")
-		return self.current
+	def entity_anchor_parser(self, properties={}):
+		return self.regex_parser(self.regex["entity_anchor"], ["mccstring"])
 
 	def objective_criteria_parser(self, properties={}):
 		return self.string_parser({"type":"word"})
+
+	def mob_effect_parser(self, properties={}):
+		return self.regex_parser(self.regex["potions"], ["mccliteral", "mccstring"])
+
+	def regex_parser(self, pattern, scopes):
+		pattern_match = pattern.match(self.string, self.current)
+		if pattern_match:
+			if len(scopes) == 1:
+				self.current = self.add_region(pattern_match.start(), pattern_match.end(), scopes[0])
+			else:
+				for i in range(len(scopes)):
+					self.current = self.add_region(pattern_match.start(i + 1), pattern_match.end(i + 1), scopes[i])
+		return self.current
+
+	def quoted_regex_parser(self, pattern, scopes, escape_depth):
+		start = self.current
+		quote = self.generate_quote(escape_depth)
+		if self.current + len(quote) > len(self.string) or self.string[self.current:self.current + len(quote)] != quote:
+			return self.current
+
+		self.current = self.add_region(self.current, self.current + len(quote), "mccstring")
+		old_current = self.current
+		self.current = self.regex_parser(pattern, scopes)
+		if old_current == self.current:
+			return self.add_region(start, self.current)
+
+		if self.current + len(quote) > len(self.string) or self.string[self.current:self.current + len(quote)] != quote:
+			return self.add_region(start, self.current, "invalid.illegal")
+		return self.add_region(self.current, self.current + len(quote), "mccstring")
+
 
 	def generate_quote(self, escape_depth):
 		quotes = ["\"", "\\\"", "\\\\\\\"", "\\\\\\\\\\\\\\\"", "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\""]
@@ -1187,8 +1224,9 @@ class Parser:
 		"minecraft:color"            : color_parser,
 		"minecraft:rotation"         : rotation_parser, # [yaw, pitch], includes relative changes
 		"minecraft:component"        : json_parser,
-		"minecraft:entity_anchor"    : entity_acnhor_parser,
+		"minecraft:entity_anchor"    : entity_anchor_parser,
 		"minecraft:operation"        : operation_parser, # +=, = , <>, etc
 		"minecraft:range"            : brigadier_range_parser,
-		"minecraft:objective_criteria":objective_criteria_parser
+		"minecraft:objective_criteria":objective_criteria_parser,
+		"minecraft:mob_effect"       : mob_effect_parser
 	}
