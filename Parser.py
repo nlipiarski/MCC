@@ -34,7 +34,7 @@ class Parser:
 		"greedy_string" : re.compile("[^\n]*"),
 		"operation" : re.compile("[+\-\*\%\/]?=|>?<|>"),
 		"entity_anchor" : re.compile("feet|eyes"),
-		"resource_location" : re.compile("(\w+:)?(\w+)"),
+		"resource_location" : re.compile("([\w]+:)?([\w\.]+)"),
 		"potions" : re.compile("(minecraft:)?(water|mundane|thick|awkward|night_vision|long_night_vision|invisibility|long_invisibility|leaping|strong_leaping|long_leaping|fire_resistance|long_fire_resistance|swiftness|strong_swiftness|long_swiftness|slowness|long_slowness|water_breathing|long_water_breathing|healing|strong_healing|strong_harming|poison|strong_poison|long_poison|regeneration|strong_regeneration|long_regeneration|strength|strong_strength|long_strength|weakness|long_weakness|luck|turtle_master|strong_turtle_master|long_turtle_master)")
 	}
 
