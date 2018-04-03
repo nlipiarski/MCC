@@ -15,7 +15,6 @@ color_scheme_colors ={
 	"mccstring"        : ["string"],
 	"mccconstant"      : ["constant.numeric"]
 }
-max_token_ids = {}
 
 class MccHighlightCommand(sublime_plugin.EventListener):
 
@@ -35,17 +34,13 @@ class MccHighlightCommand(sublime_plugin.EventListener):
 		self.edit_color_scheme()
 		full_region = sublime.Region(0, view.size())
 		file_lines = view.lines(full_region)
-		token_id = 0
 		parser = Parser(view)
 
 		for line in file_lines:
-			token_id, _ = parser.highlight(COMMAND_TREE, line, 0)
+			if not line.empty():
+				parser.highlight(COMMAND_TREE, line, 0)
 
-		viewId = view.id() # If token_ids aren't overwritten already, remove them from the equation
-		if viewId in max_token_ids and max_token_ids[viewId] > token_id:
-			for i in range(token_id, max_token_ids[viewId]):
-				view.add_regions("token" + str(i), [])
-		max_token_ids[viewId] = token_id
+		parser.add_regions()
 
 	@staticmethod
 	def edit_color_scheme():
