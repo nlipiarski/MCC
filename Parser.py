@@ -15,7 +15,7 @@ class Parser:
 		"axes" : re.compile("[xyz]+"),
 		"entity_tag" : re.compile("\w+"),
 		"entity_tag_key" : re.compile("(\w+)[\t ]*(=)"),
-		"entity_tag_advancement_key" : re.compile("([a-z_\-1-9]+:)?([a-z]+)[\t ]*(=)"),
+		"entity_tag_advancement_key" : re.compile("([a-z_\-1-9]+:)?([a-z_]+)[\t ]*(=)"),
 		"nbt_key" : re.compile("(\w+)[\t ]*:"),
 		"nbt_boolean" : re.compile("[01]"),
 		"color" : re.compile("none|black|dark_blue|dark_green|dark_aqua|dark_red|dark_purple|gold|gray|dark_gray|blue|green|aqua|red|light_purple|yellow|white"),
@@ -111,7 +111,6 @@ class Parser:
 				self.current = command_match.end(2)
 				return self.highlight(command_tree["children"][command], line_region, command_match.end())
 			else:
-				print("Invalid command")
 				self.invalid.append(sublime.Region(self.region_begin, line_region.end()))
 				return (self.token_id, False)
 		else:
@@ -138,7 +137,7 @@ class Parser:
 						return (self.token_id, True)
 					else:
 						self.current = start
-						self.token_id = old_token_id
+						self.mccliteral.pop()
 				elif properties["type"] == "argument":
 					parser_name = properties["parser"]
 					parse_function = self.parsers[parser_name]
@@ -212,13 +211,14 @@ class Parser:
 
 		self.mccentity.append(sublime.Region(self.region_begin + self.current, self.region_begin + self.current + 2))
 		self.current += 2
+
 		if (self.current < len(self.string) and self.string[self.current] == "["):
 			self.mccentity.append(sublime.Region(self.region_begin + self.current, self.region_begin + self.current + 1))
 			self.current += 1
-			bracket_start = self.current
+			continue_parsing = True
 
-			while self.current < len(self.string) and self.string[self.current] != "]":
-				reached_end = self.skip_whitespace(bracket_start)
+			while continue_parsing:
+				reached_end = self.skip_whitespace(self.current)
 				if reached_end:
 					return self.current
 				
@@ -324,53 +324,20 @@ class Parser:
 						if reached_end:
 							return start_of_key
 
-					if not "escape_depth" in properties:
-						properties["escape_depth"] = 0
 					old_current = self.current
 					self.current = self.string_parser(properties={"type":"word","escape_depth":properties["escape_depth"]})
 					if old_current == self.current:
 						return self.current
 
 				elif key == "scores":
-					if self.string[self.current] != "{":
+					properties["decimals"] = False
+					self.current = self.nested_entity_tag_parser(self.brigadier_range_parser, do_nested=False, properties=properties)
+					if self.string[self.current - 1] != "}":
 						return self.current
-					score_bracket_start = self.current
-					self.current += 1
-
-					while self.string[self.current] != "}":
-						reached_end = self.skip_whitespace(score_bracket_start)
-						if reached_end:
-							return self.current
-
-						start_of_score = self.current
-						self.current = self.regex_parser(self.regex["entity_tag_key"], [self.mccstring, self.mcccommand])
-						if start_of_score == self.current:
-							return self.current
-
-						reached_end = self.skip_whitespace(start_of_key)
-						if reached_end:
-							return self.current
-
-						self.current = self.range_parser(self.integer_parser)
-
-						reached_end = self.skip_whitespace(start_of_key)
-						if reached_end:
-							return self.current
-
-						if self.string[self.current] == ",":
-							self.current += 1
-						elif self.string[self.current] != "}":
-							self.invalid.append(sublime.Region(self.region_begin + self.current, self.region_begin + self.current + 1))
-							return self.current + 1
-
-						reached_end = self.skip_whitespace(start_of_key)
-						if reached_end:
-							return self.current
-
-					self.current += 1
 
 				elif key == "advancements":
-					self.current = self.advancement_tag_parser(self.string)
+					self.current = self.nested_entity_tag_parser(self.boolean_parser, do_nested=True)
+					#print(self.string[self.current])
 					if self.string[self.current - 1] != "}": #Make sure the parse was good
 						return self.current
 
@@ -390,13 +357,11 @@ class Parser:
 
 				if self.string[self.current] == ",":
 					self.current += 1
-				elif self.string[self.current] != "]":
+				elif self.string[self.current] == "]":
+					continue_parsing = False
+				else:
 					self.invalid.append(sublime.Region(self.region_begin + self.current, self.region_begin + self.current + 1))
 					return self.current + 1
-
-				reached_end = self.skip_whitespace(start_of_key)
-				if reached_end:
-					return self.current
 
 			self.mccentity.append(sublime.Region(self.region_begin + self.current, self.region_begin + self.current + 1))
 			return self.current + 1
@@ -405,9 +370,9 @@ class Parser:
 
 	def brigadier_range_parser(self, properties={}):
 		if properties["decimals"]:
-			return self.range_parser(self.float_parser, self.current, properties)
+			return self.range_parser(self.float_parser, properties)
 		else:
-			return self.range_parser(self.integer_parser, self.current, properties)
+			return self.range_parser(self.integer_parser, properties)
 
 	def range_parser(self, parse_function, properties={}):
 		matched = False
@@ -430,62 +395,68 @@ class Parser:
 
 		return self.current
 
-	def advancement_tag_parser(self, do_nested=True):
+	def nested_entity_tag_parser(self, parser, do_nested=False, properties={}): # scores= and advancements=
 		if self.string[self.current] != "{":
 			return self.current
 		bracket_start = self.current
 		self.current += 1
+		continue_parsing = True
 
-		while self.string[self.current] != "}":
-			reached_end = self.skip_whitespace(bracket_start)
+		while continue_parsing:
+			reached_end = self.skip_whitespace(self.current)
 			if reached_end:
 				return self.current
 
-			start_of_advancement = self.current
-			advancement_match = self.regex["entity_tag_advancement_key"].match(self.string, self.current)
-			if not advancement_match:
+			start_of_key = self.current
+			key_match = self.regex["entity_tag_advancement_key"].match(self.string, self.current)
+			if not key_match:
+				print("No Key match")
 				return self.current
 
-			elif not do_nested and advancement_match.group(1): # if theres a nested advancement thing in a nested advancement thing that's not good
-				self.invalid.append(sublime.Region(self.region_begin + self.current, self.region_begin + advancement_match.end()))
-				self.current = advancement_match.end
+			elif not do_nested and key_match.group(1): # If theres a nested tag where there shouldn't be
+				print("Do nested when no do nested")
+				self.invalid.append(sublime.Region(self.region_begin + self.current, self.region_begin + key_match.end()))
+				self.current = key_match.end()
 				return self.current
 
-			self.mccstring.append(sublime.Region(self.region_begin + advancement_match.start(2), 
-				                                 self.region_begin + advancement_match.end(2)))
+			self.mccstring.append(sublime.Region(self.region_begin + key_match.start(2), 
+				                                 self.region_begin + key_match.end(2)))
 
-			self.mcccommand.append(sublime.Region(self.region_begin + advancement_match.start(3), 
-				                                  self.region_begin + advancement_match.end(3)))
-			self.current = advancement_match.end()
+			self.mcccommand.append(sublime.Region(self.region_begin + key_match.start(3), 
+				                                  self.region_begin + key_match.end(3)))
+			self.current = key_match.end()
 
-			reached_end = self.skip_whitespace(start_of_advancement)
+			reached_end = self.skip_whitespace(start_of_key)
 			if reached_end:
 				return self.current
 
-			if advancement_match.group(1) != None:
-				self.mccliteral.append(sublime.Region(self.region_begin + advancement_match.start(1), 
-				                                  self.region_begin + advancement_match.end(1)))
-				self.current = self.advancement_tag_parser(do_nested=False)
+			if key_match.group(1) != None:
+				self.mccliteral.append(sublime.Region(self.region_begin + key_match.start(1), 
+				                                      self.region_begin + key_match.end(1)))
+				self.current = self.nested_entity_tag_parser(parser, do_nested=False, properties=properties)
 				if self.string[self.current - 1] != "}": #This tests to see if the parse was successful
+					print("Bad nested tag")
 					return self.current
 			else:
-				new_current = self.boolean_parser(self.string)
-				if new_current == self.current:
+				old_current = self.current
+				self.current = parser(properties)
+				if old_current == self.current:
+					self.mccstring.pop()
+					self.mcccommand.pop()
+					print("Error on parsing value")
 					return self.current
-				self.current = new_current
 
-			reached_end = self.skip_whitespace(start_of_advancement)
+			reached_end = self.skip_whitespace(start_of_key)
 			if reached_end:
 				return self.current
 
 			if self.string[self.current] == ",":
 				self.current += 1
 			elif self.string[self.current] != "}":
-				return self.current
-
-			reached_end = self.skip_whitespace(start_of_advancement)
-			if reached_end:
-				return self.current
+				self.invalid.append(sublime.Region(self.region_begin + self.current, self.region_begin + self.current + 1))
+				return self.current + 1
+			else:
+				continue_parsing = False
 
 		self.current += 1
 		return self.current
@@ -524,8 +495,9 @@ class Parser:
 
 		braces_start = self.current
 		self.current += 1
+		continue_parsing = True
 
-		while self.string[self.current] != "}":
+		while continue_parsing:
 			reached_end = self.skip_whitespace(braces_start)
 			if reached_end:
 				return self.current
@@ -634,9 +606,12 @@ class Parser:
 
 			if self.string[self.current] == ",":
 				self.current += 1
+
 			elif self.string[self.current] != "}":
 				self.invalid.append(sublime.Region(self.region_begin + self.current, self.region_begin + self.current + 1))
 				return self.current + 1
+			else:
+				continue_parsing = False
 		
 		self.current += 1
 		return self.current
@@ -722,7 +697,10 @@ class Parser:
 
 		block_match = self.regex["item_block_id"].match(self.string, self.current)
 		if block_match:
-			self.mccliteral.append(sublime.Region(self.region_begin + start, self.region_begin + block_match.end(1)))
+			if block_match.group(1) != None:
+				self.mccliteral.append(sublime.Region(self.region_begin + start, self.region_begin + block_match.end(1)))
+			elif self.string[start] == "#":
+				self.invalid.append(sublime.Region(self.region_begin + start, self.region_begin + start + 1))
 			self.mccstring.append(sublime.Region(self.region_begin + block_match.start(2), self.region_begin + block_match.end(2)))
 			self.current =block_match.end()
 
