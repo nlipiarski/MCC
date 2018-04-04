@@ -2758,7 +2758,7 @@
       "children": {
         "sound": {
           "type": "argument",
-          "parser": "minecraft:resource_location",
+          "parser": "minecraft:sound",
           "children": {
             "ambient": {
               "type": "literal",
@@ -4006,7 +4006,7 @@
       "children": {
         "entity": {
           "type": "argument",
-          "parser": "minecraft:resource_location",
+          "parser": "minecraft:entity_location",
           "children": {
             "pos": {
               "type": "argument",

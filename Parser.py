@@ -15,7 +15,7 @@ class Parser:
 		"axes" : re.compile("[xyz]+"),
 		"entity_tag" : re.compile("\w+"),
 		"entity_tag_key" : re.compile("(\w+)[\t ]*(=)"),
-		"entity_tag_advancement_key" : re.compile("([a-z_\-1-9]+:)?([a-z_]+)[\t ]*(=)"),
+		"entity_tag_advancement_key" : re.compile("([a-z_\-1-9]+:)?(\w+)[\t ]*(=)"),
 		"nbt_key" : re.compile("(\w+)[\t ]*:"),
 		"nbt_boolean" : re.compile("[01]"),
 		"color" : re.compile("none|black|dark_blue|dark_green|dark_aqua|dark_red|dark_purple|gold|gray|dark_gray|blue|green|aqua|red|light_purple|yellow|white"),
@@ -35,7 +35,8 @@ class Parser:
 		"operation" : re.compile("[+\-\*\%\/]?=|>?<|>"),
 		"entity_anchor" : re.compile("feet|eyes"),
 		"resource_location" : re.compile("([\w]+:)?([\w\.]+)"),
-		"potions" : re.compile("(minecraft:)?(water|mundane|thick|awkward|night_vision|long_night_vision|invisibility|long_invisibility|leaping|strong_leaping|long_leaping|fire_resistance|long_fire_resistance|swiftness|strong_swiftness|long_swiftness|slowness|long_slowness|water_breathing|long_water_breathing|healing|strong_healing|strong_harming|poison|strong_poison|long_poison|regeneration|strong_regeneration|long_regeneration|strength|strong_strength|long_strength|weakness|long_weakness|luck|turtle_master|strong_turtle_master|long_turtle_master)")
+		"potions" : re.compile("(minecraft:)?(water|mundane|thick|awkward|night_vision|long_night_vision|invisibility|long_invisibility|leaping|strong_leaping|long_leaping|fire_resistance|long_fire_resistance|swiftness|strong_swiftness|long_swiftness|slowness|long_slowness|water_breathing|long_water_breathing|healing|strong_healing|strong_harming|poison|strong_poison|long_poison|regeneration|strong_regeneration|long_regeneration|strength|strong_strength|long_strength|weakness|long_weakness|luck|turtle_master|strong_turtle_master|long_turtle_master)"),
+		"sound" : re.compile("(\w+\.)+\w+")
 	}
 
 	def __init__(self, view):
@@ -52,6 +53,7 @@ class Parser:
 
 		self.nbt_value_parsers = [
 			(self.nbt_list_parser, self.string_parser, None, ""),
+			(self.nbt_list_parser, self.float_parser, self.mccconstant, "d"),
 			(self.nbt_list_parser, self.integer_parser, None, ""),
 			(self.nbt_value_parser, self.float_parser, self.mccconstant, "d"),
 			(self.nbt_list_parser, self.nbt_parser, None, ""),
@@ -655,7 +657,9 @@ class Parser:
 
 	def block_parser(self, properties={}):
 		start = self.current
+		lenient = False
 		if self.current < len(self.string) and self.string[self.current] ==  "#":
+			lenient=True
 			self.current += 1
 
 		block_match = self.regex["item_block_id"].match(self.string, self.current)
@@ -673,9 +677,9 @@ class Parser:
 				block_name = block_match.group(0)
 
 			if block_name in BLOCKS:
-				states = BLOCKS[block_name]
+				properties = BLOCKS[block_name]["properties"]
 			else:
-				states = {}
+				properties = {}
 
 			if self.current >= len(self.string) or self.string[self.current] != "[":
 				return self.nbt_parser(properties)
@@ -694,11 +698,12 @@ class Parser:
 					return self.current + 1
 
 				key = key_match.group(1)
-				if key in states:
+				if lenient or key in properties:
 					self.mccstring.append(sublime.Region(self.region_begin + key_match.start(1), self.region_begin + key_match.end(1)))
 				else:
 					self.invalid.append(sublime.Region(self.region_begin + key_match.start(1), self.region_begin + key_match.end(1)))
 				self.mcccommand.append(sublime.Region(self.region_begin + key_match.start(2), self.region_begin + key_match.end(2)))
+				self.current = key_match.end()
 
 				reached_end = self.skip_whitespace(start_of_key)
 				if reached_end:
@@ -709,10 +714,11 @@ class Parser:
 					self.invalid.append(sublime.Region(self.region_begin + self.current, self.region_begin + self.current + 1))
 					return self.current + 1
 
-				if key in states and value_match.group(0) in states[key]:
-					self.mccstring.append(self.region_begin + value_match.start(), self.region_begin + value_match.end())
+				print("Key: " + key +" value: " + value_match.group())
+				if lenient or (key in properties and value_match.group() in properties[key]):
+					self.mccstring.append(sublime.Region(self.region_begin + value_match.start(), self.region_begin + value_match.end()))
 				else: 
-					self.invalid.append(self.region_begin + value_match.start(), self.region_begin + value_match.end())
+					self.invalid.append(sublime.Region(self.region_begin + value_match.start(), self.region_begin + value_match.end()))
 				self.current = value_match.end()
 
 				reached_end = self.skip_whitespace(start_of_key)
@@ -1134,6 +1140,9 @@ class Parser:
 	def objective_criteria_parser(self, properties={}):
 		return self.string_parser({"type":"word"})
 
+	def entity_location_parser(self, properties={}):
+		return self.regex_parser(self.regex["entity"], [self.mccliteral, self.mccstring])
+
 	def resource_location_parser(self, properties={}):
 		return self.regex_parser(self.regex["resource_location"], [self.mccliteral, self.mccstring])
 
@@ -1166,6 +1175,9 @@ class Parser:
 
 	def mob_effect_parser(self, proeprties={}):
 		return self.regex_parser(self.regex["potions"], [self.mccliteral, self.mccstring])
+
+	def sound_parser(self, properties={}):
+		return self.regex_parser(self.regex["sound"], [self.mccstring])
 
 	def regex_parser(self, pattern, scopes, properties={}):
 		pattern_match = pattern.match(self.string, self.current)
@@ -1247,12 +1259,15 @@ class Parser:
 		"minecraft:entity_anchor"    : entity_anchor_parser,
 		"minecraft:operation"        : scoreboard_operation_parser, # +=, = , <>, etc
 		"minecraft:range"            : brigadier_range_parser,
+		"minecraft:mob_effect"       : mob_effect_parser,
+		"minecraft:sound"            : sound_parser,
 		"minecraft:objective_criteria":objective_criteria_parser,
-		"minecraft:mob_effect"       : mob_effect_parser
+		"minecraft:entity_location": entity_location_parser
 	}
 
 	nbt_key_lists = [
 		NBT_STRING_LIST_TAGS,
+		NBT_DOUBLE_LIST_TAGS,
 		NBT_INTEGER_LIST_TAGS,
 		NBT_DOUBLE_TAGS,
 		NBT_COMPOUNT_LIST_TAGS,
