@@ -6,37 +6,33 @@ from .CommandTree import COMMAND_TREE
 class Parser:
 	add_regions_flags = sublime.DRAW_NO_OUTLINE
 	regex = {
-		"position-2" : re.compile("(~?-?\d*\.?\d+|~)[\t ]+(~?-?\d*\.?\d+|~)"),
-		"float" : re.compile("-?\d+(?:\.\d+)?"),
-		"integer" : re.compile("-?\d+"),
-		"namespace" : re.compile("([a-z_\-1-9]+:)([a-z_\-1-9]+(?:\/[a-z_\-1-9]+)*)(\/?)"),
-		"word_string" : re.compile("\w+|\"(?:[^\\\\\"]|(\\\\.))*\""),
-		"username" : re.compile("[\w-]{,16}"),
 		"axes" : re.compile("[xyz]+"),
-		"entity_tag" : re.compile("\w+"),
-		"entity_tag_key" : re.compile("(\w+)[\t ]*(=)"),
-		"entity_tag_advancement_key" : re.compile("([a-z_\-1-9]+:)?(\w+)[\t ]*(=)"),
-		"nbt_key" : re.compile("(\w+)[\t ]*:"),
-		"nbt_boolean" : re.compile("[01]"),
-		"color" : re.compile("none|black|dark_blue|dark_green|dark_aqua|dark_red|dark_purple|gold|gray|dark_gray|blue|green|aqua|red|light_purple|yellow|white"),
-		"scoreboard_slot" : re.compile("belowName|list|sidebar(?:.team.(?:black|dark_blue|dark_green|dark_aqua|dark_red|dark_purple|gold|gray|dark_gray|blue|green|aqua|red|light_purple|yellow|white))?"),
-		"item_slot" : re.compile("slot\.(?:container\.\d+|weapon\.(?:main|off)hand|\.(?:enderchest|inventory)\.(?:2[0-6]|1?[0-9])|hotbar.[0-8]|horse\.(?:saddle|chest|armor|1[0-4]|[0-9])|villager\.[0-7])"),
-		"gamemode" : re.compile("survival|creative|adventure|spectator"),
-		"sort" : re.compile("nearest|furthest|random|arbitrary"),
-		"entity" : re.compile("(minecraft:)?(item|xp_orb|area_effect_cloud|leash_knot|painting|item_frame|armor_stand|evocation_fangs|ender_crystal|egg|arrow|snowball|fireball|small_fireball|ender_pearl|eye_of_ender_signal|potion|xp_bottle|wither_skull|fireworks_rocket|spectral_arrow|shulker_bullet|dragon_fireball|llama_spit|tnt|falling_block|commandblock_minecart|boat|minecart|chest_minecart|furnace_minecart|tnt_minecart|hopper_minecart|spawner_minecart|elder_guardian|wither_skeleton|stray|husk|zombie_villager|evocation_illager|vex|vindication_illager|illusion_illager|creeper|skeleton|spider|giant|zombie|slime|ghast|zombie_pigman|enderman|cave_spider|silverfish|blaze|magma_cube|ender_dragon|wither|witch|endermite|guardian|shulker|skeleton_horse|zombie_horse|donkey|mule|bat|pig|sheep|cow|chicken|squid|wolf|mooshroom|snowman|ocelot|villager_golem|horse|rabbit|polar_bear|llama|parrot|villager|player|lightning_bolt)"),
-		"comment" :  re.compile('^[\t ]*#.*$'),
-		"command" : re.compile('[\t ]*(/?)([a-z]+)'),
-		"hover_event_action" : re.compile("show_(?:text|item|entity|achievement)"),
 		"click_event_action": re.compile("(?:run|suggest)_command|open_url|change_page"),
-		"item_block_id" : re.compile("([a-z_]+:)?([a-z_]+)"),
-		"position-3" : re.compile("([~\^]?-?\d*\.?\d+|[~\^])[\t ]+([~\^]?-?\d*\.?\d+|[~\^])[\t ]+([~\^]?-?\d*\.?\d+|[~\^])"),
-		"strict_string" : re.compile("\"(?:[^\\\\\"]|(\\\\.))*\""),
-		"greedy_string" : re.compile("[^\n]*"),
-		"operation" : re.compile("[+\-\*\%\/]?=|>?<|>"),
+		"color" : re.compile("none|black|dark_blue|dark_green|dark_aqua|dark_red|dark_purple|gold|gray|dark_gray|blue|green|aqua|red|light_purple|yellow|white"),
+		"command" : re.compile('[\t ]*(/?)([a-z]+)'),
+		"comment" :  re.compile('^[\t ]*#[^\n]*$'),
 		"entity_anchor" : re.compile("feet|eyes"),
-		"resource_location" : re.compile("([\w]+:)?([\w\.]+)"),
-		"potions" : re.compile("(minecraft:)?(water|mundane|thick|awkward|night_vision|long_night_vision|invisibility|long_invisibility|leaping|strong_leaping|long_leaping|fire_resistance|long_fire_resistance|swiftness|strong_swiftness|long_swiftness|slowness|long_slowness|water_breathing|long_water_breathing|healing|strong_healing|strong_harming|poison|strong_poison|long_poison|regeneration|strong_regeneration|long_regeneration|strength|strong_strength|long_strength|weakness|long_weakness|luck|turtle_master|strong_turtle_master|long_turtle_master)"),
-		"sound" : re.compile("(\w+\.)+\w+")
+		"entity_tag_advancement_key" : re.compile("([a-z_\-1-9]+:)?(\w+)[\t ]*(=)"),
+		"entity_tag_key" : re.compile("(\w+)[\t ]*(=)"),
+		"float" : re.compile("-?\d+(?:\.\d+)?"),
+		"gamemode" : re.compile("survival|creative|adventure|spectator"),
+		"greedy_string" : re.compile("[^\n]*"),
+		"hex4" : re.compile("[0-9a-fA-F]{4}"),
+		"hover_event_action" : re.compile("show_(?:text|item|entity|achievement)"),
+		"integer" : re.compile("-?\d+"),
+		"item_block_id" : re.compile("([a-z_]+:)?([a-z_]+)"),
+		"item_slot" : re.compile("slot\.(?:container\.\d+|weapon\.(?:main|off)hand|\.(?:enderchest|inventory)\.(?:2[0-6]|1?[0-9])|hotbar.[0-8]|horse\.(?:saddle|chest|armor|1[0-4]|[0-9])|villager\.[0-7])"),
+		"namespace" : re.compile("([a-z_\-1-9]+:)([a-z_\-1-9]+(?:\/[a-z_\-1-9]+)*)(\/?)"),
+		"nbt_key" : re.compile("(\w+)[\t ]*:"),
+		"operation" : re.compile("[+\-\*\%\/]?=|>?<|>"),
+		"position-2" : re.compile("(~?-?\d*\.?\d+|~)[\t ]+(~?-?\d*\.?\d+|~)"),
+		"position-3" : re.compile("([~\^]?-?\d*\.?\d+|[~\^])[\t ]+([~\^]?-?\d*\.?\d+|[~\^])[\t ]+([~\^]?-?\d*\.?\d+|[~\^])"),
+		"resource_location" : re.compile("(\w+:)?([\w\.]+)"),
+		"scoreboard_slot" : re.compile("belowName|list|sidebar(?:.team.(?:black|dark_blue|dark_green|dark_aqua|dark_red|dark_purple|gold|gray|dark_gray|blue|green|aqua|red|light_purple|yellow|white))?"),
+		"sort" : re.compile("nearest|furthest|random|arbitrary"),
+		"username" : re.compile("[\w-]{,16}"),
+		"vec4" : re.compile("((?:\d*\.)?\d+)[\t ]+((?:\d*\.)?\d+)[\t ]+((?:\d*\.)?\d+)[\t ]+((?:\d*\.)?\d+)"),
+		"word_string" : re.compile("\w+")
 	}
 
 	def __init__(self, view):
@@ -67,8 +63,6 @@ class Parser:
 			(self.nbt_value_parser, self.integer_parser, None, "")
 		]
 
-	# start is inclusive while end is exclusive, like string slices
-	# Updates token_id
 	def add_regions(self):
 		self.view.add_regions("mcccomment", self.mcccomment, "mcccomment", flags=self.add_regions_flags)
 		self.view.add_regions("mcccommand", self.mcccommand, "mcccommand", flags=self.add_regions_flags)
@@ -76,7 +70,7 @@ class Parser:
 		self.view.add_regions("mccstring", self.mccstring, "mccstring", flags=self.add_regions_flags)
 		self.view.add_regions("mccentity", self.mccentity, "mccentity", flags=self.add_regions_flags)
 		self.view.add_regions("mccliteral", self.mccliteral, "mccliteral", flags=self.add_regions_flags)
-		self.view.add_regions("invalid", self.invalid, "invalid", flags=self.add_regions_flags)
+		self.view.add_regions("invalid", self.invalid, "invalid.illegal", flags=self.add_regions_flags)
 
 	def highlight(self, command_tree, line_region, current):
 		self.current = current
@@ -290,7 +284,7 @@ class Parser:
 							return start_of_key
 
 					old_current = self.current
-					self.current = self.regex_parser(self.regex["entity_tag"], [self.mccstring])
+					self.current = self.regex_parser(self.regex["word_string"], [self.mccstring])
 					if old_current == self.current:
 						return self.current
 
@@ -324,7 +318,7 @@ class Parser:
 							return start_of_key
 
 					old_current = self.current
-					self.current = self.regex_parser(self.regex["entity"], [self.mccliteral])
+					self.current = self.entity_location_parser(properties)
 					if old_current == self.current:
 						return self.current
 
@@ -486,17 +480,86 @@ class Parser:
 	# Word means "up to the next space", phrase is "an unquoted word or quoted string", and greedy is "everything from this point to the end of input".
 	# strict means only a regular quote enclosed string will work
 	def string_parser(self, properties={}):
-		if properties["type"] == "word":
-			string_match = self.regex["word_string"].match(self.string, self.current)
-		elif properties["type"] == "greedy":
-			string_match = self.regex["greedy_string"].match(self.string, self.current)
-		elif properties["type"] == "strict":
-			string_match = self.regex["strict_string"].match(self.string, self.current)
+		if self.current >= len(self.string):
+			return self.current
 
-		if string_match:
-			self.mccstring.append(sublime.Region(self.region_begin + self.current, 
-				                                  self.region_begin + string_match.end()))
-			return string_match.end()
+		if not "escape_depth" in properties:
+			escape_depth = 0
+		else:
+			escape_depth = properties["escape_depth"]
+
+		if properties["type"] == "word":
+			old_current = self.current
+			self.current = self.regex_parser(self.regex["word_string"], [self.mccstring])
+			if old_current != self.current:
+				return self.current
+
+		if properties["type"] == "greedy":
+			old_current = self.current
+			self.current = self.regex_parser(self.regex["greedy_string"], [self.mccstring])
+
+		elif properties["type"] in {"strict", "word"}:
+			quote = self.generate_quote(escape_depth)
+			escape = self.generate_quote(escape_depth + 1)[:-1] # Gets the needed backslashes to escape
+
+			string_start = self.current
+			start = self.current
+
+			if not self.string.startswith(quote, self.current):
+				return self.current
+
+			self.current += len(quote)
+			continue_parsing = True
+			while continue_parsing:
+				if self.current >= len(self.string):
+					self.invalid.append(sublime.Region(self.region_begin + self.current, self.region_begin + self.current - 1))
+					return self.current
+
+				elif self.string.startswith(quote, self.current):
+						self.mccstring.append(sublime.Region(self.region_begin + start, 
+															 self.region_begin + self.current + len(quote)))
+						self.current += len(quote)
+						continue_parsing = False
+
+				elif self.string.startswith(escape, self.current) and self.current + len(escape) < len(self.string):
+					escape_char = self.string[self.current + len(escape)]
+					if escape_char in "\"\\/bfnrt":
+						if self.current - start > 0:
+							self.mccstring.append(sublime.Region(self.region_begin + start, 
+								                                 self.region_begin + self.current))
+
+						self.mccconstant.append(sublime.Region(self.region_begin + self.current, 
+															   self.region_begin + self.current + len(escape) + 1))
+						self.current += len(escape) + 1
+						start = self.current
+					elif escape_char == "u":
+						if self.current - start > 0:
+							self.mccstring.append(sublime.Region(self.region_begin + start, 
+								                                 self.region_begin + self.current))
+						
+						hex_match = self.regex["hex4"].match(self.string, self.current + len(escape) + 1)
+						if not hex_match:
+							self.invalid.append(sublime.Region(self.region_begin + self.current, 
+															   self.region_begin + self.current + len(escape) + 1))
+							return self.current + len(escape) + 1
+
+						self.mccconstant.append(sublime.Region(self.region_begin + self.current,
+															   self.region_begin + self.current + len(escape) + 5))
+						self.current += len(escape) + 5
+						start = self.current
+
+					else:
+						self.invalid.append(sublime.Region(self.region_begin + self.current, 
+														   self.region_begin + self.current + 1))
+						return self.current + 1
+
+				elif self.string[self.current] in "\n\r\"\\":
+					self.invalid.append(sublime.Region(self.region_begin + self.current, 
+													   self.region_begin + self.current + 1))
+					return self.current + 1
+				else:
+					self.current += 1
+
 		return self.current
 
 	# Todo: add entity highlighting
@@ -709,12 +772,11 @@ class Parser:
 				if reached_end:
 					return self.current
 
-				value_match = self.regex["entity_tag"].match(self.string, self.current)
+				value_match = self.regex["word_string"].match(self.string, self.current)
 				if not value_match:
 					self.invalid.append(sublime.Region(self.region_begin + self.current, self.region_begin + self.current + 1))
 					return self.current + 1
 
-				print("Key: " + key +" value: " + value_match.group())
 				if lenient or (key in properties and value_match.group() in properties[key]):
 					self.mccstring.append(sublime.Region(self.region_begin + value_match.start(), self.region_begin + value_match.end()))
 				else: 
@@ -807,9 +869,18 @@ class Parser:
 			self.mccliteral.append(sublime.Region(self.region_begin + particle_match.start(1), self.region_begin + particle_match.end(1)))
 			self.mccstring.append(sublime.Region(self.region_begin + particle_match.start(2), self.region_begin + particle_match.end(2)))
 			self.current = particle_match.end(2)
-			if particle_match.group(2) == "block":
+
+			if particle_match.group(2) == "block" or particle_match.group(2) == "falling_dust":
 				self.skip_whitespace(self.current)
 				return self.block_parser(self.current)
+
+			elif particle_match.group(2) == "item":
+				self.skip_whitespace(self.current)
+				return self.item_parser(self.current)
+
+			elif particle_match.group(2) == "dust":
+				self.skip_whitespace(self.current)
+				return self.regex_parser(self.regex["vec4"], [self.mccconstant, self.mccconstant, self.mccconstant, self.mccconstant])
 
 		return self.current
 
@@ -1141,7 +1212,13 @@ class Parser:
 		return self.string_parser({"type":"word"})
 
 	def entity_location_parser(self, properties={}):
-		return self.regex_parser(self.regex["entity"], [self.mccliteral, self.mccstring])
+		entity_match = self.regex["item_block_id"].match(self.string, self.current)
+		if entity_match and entity_match.group(2) in ENTITIES and entity_match.group(1) in [None, "minecraft:"]:
+			self.mccliteral.append(sublime.Region(self.region_begin + entity_match.start(1), self.region_begin + entity_match.end(1)))
+			self.mccstring.append(sublime.Region(self.region_begin + entity_match.start(2), self.region_begin + entity_match.end(2)))
+			self.current = entity_match.end(2)
+
+		return self.current
 
 	def resource_location_parser(self, properties={}):
 		return self.regex_parser(self.regex["resource_location"], [self.mccliteral, self.mccstring])
@@ -1174,10 +1251,22 @@ class Parser:
 		return self.regex_parser(self.regex["operation"], [self.mcccommand])
 
 	def mob_effect_parser(self, proeprties={}):
-		return self.regex_parser(self.regex["potions"], [self.mccliteral, self.mccstring])
+		potion_match = self.regex["item_block_id"].match(self.string, self.current)
+		if potion_match and potion_match.group(2) in POTIONS and potion_match.group(1) in [None, "minecraft:"]:
+			self.mccliteral.append(sublime.Region(self.region_begin + potion_match.start(1), self.region_begin + potion_match.end(1)))
+			self.mccstring.append(sublime.Region(self.region_begin + potion_match.start(2), self.region_begin + potion_match.end(2)))
+			self.current = potion_match.end(2)
+
+		return self.current
 
 	def sound_parser(self, properties={}):
-		return self.regex_parser(self.regex["sound"], [self.mccstring])
+		sound_match = self.regex["resource_location"].match(self.string, self.current)
+		if sound_match and sound_match.group(2) in SOUNDS and sound_match.group(1) in [None, "minecraft:"]:
+			self.mccliteral.append(sublime.Region(self.region_begin + sound_match.start(1), self.region_begin + sound_match.end(1)))
+			self.mccstring.append(sublime.Region(self.region_begin + sound_match.start(2), self.region_begin + sound_match.end(2)))
+			self.current = sound_match.end(2)
+
+		return self.current
 
 	def regex_parser(self, pattern, scopes, properties={}):
 		pattern_match = pattern.match(self.string, self.current)
@@ -1199,7 +1288,7 @@ class Parser:
 			escape_depth = properties["escape_depth"]
 		start = self.current
 		quote = self.generate_quote(escape_depth)
-		if self.current + len(quote) > len(self.string) or self.string[self.current:self.current + len(quote)] != quote:
+		if not self.string.startswith(quote, self.current):
 			return self.current
 
 		self.mccstring.append(sublime.Region(self.region_begin + self.current, self.region_begin + self.current + len(quote)))
@@ -1211,7 +1300,7 @@ class Parser:
 			self.mccstring.pop()
 			return self.current
 
-		if self.current + len(quote) > len(self.string) or self.string[self.current:self.current + len(quote)] != quote:
+		if not self.string.startswith(quote, self.current):
 			self.mccstring.pop()
 			return start
 		self.mccstring.append(sublime.Region(self.region_begin + self.current, self.region_begin + self.current + len(quote)))
@@ -1226,7 +1315,7 @@ class Parser:
 			quote += "\\"
 		return quote + self.generate_quote(escape_depth - 1)
 
-	parsers = { #need to include the properties tag
+	parsers = { # Master list of what function the parser name in commands.json corresponds to
 		"minecraft:resource_location": resource_location_parser,
 		"minecraft:function"         : function_parser,
 		"minecraft:entity"           : entity_parser,
@@ -1241,14 +1330,14 @@ class Parser:
 		"minecraft:block_state"      : block_parser,
 		"minecraft:block_predicate"  : block_parser,
 		"minecraft:nbt_path"         : nbt_path_parser,
-		"brigadier:float"            : float_parser, #Properties has min and max
-		"brigadier:double"           : float_parser, #Properties has min and max
+		"brigadier:float"            : float_parser,
+		"brigadier:double"           : float_parser,
 		"brigadier:bool"             : boolean_parser,
 		"minecraft:swizzle"          : axes_parser, # any cobination of x, y, and z e.g. x, xy, xz. AKA swizzle
 		"minecraft:score_holder"     : score_holder_parser, #Has options to include wildcard or not
 		"minecraft:objective"        : username_parser,
-		"minecraft:vec3"             : vec3d_parser, #Assuming this doesn't include relative coords?
-		"minecraft:vec2"             : vec2d_parser, #Pretty sure these don't
+		"minecraft:vec3"             : vec3d_parser,
+		"minecraft:vec2"             : vec2d_parser,
 		"minecraft:particle"         : particle_parser,
 		"minecraft:item_slot"        : item_slot_parser, #Check the wiki on this one I guess
 		"minecraft:scoreboard_slot"  : scoreboard_slot_parser,
