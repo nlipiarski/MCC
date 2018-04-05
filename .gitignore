@@ -2,3 +2,4 @@
 *.mcfunction
 *.mcc13
 ModifiedColorSchemes/*
+!ModifiedColorSchems/Nate The Plate Special Edition.tmTheme
