@@ -9,11 +9,11 @@ from .Parser import Parser
 
 color_scheme_colors ={ 
 	"mcccomment"       : ["comment"],
-	"mcccommand"       : ["keyword"],
-	"mccentity"        : ["entity.name"],
-	"mccliteral"       : ["support.type", "support.constant"],
+	"mcccommand"       : ["keyword.control", "keyword"],
+	"mccentity"        : ["entity.name", "entity.name.function", "entity"],
+	"mccliteral"       : ["support.type", "support", "support.constant", "support.function"],
 	"mccstring"        : ["string"],
-	"mccconstant"      : ["constant.numeric"]
+	"mccconstant"      : ["constant.numeric", "constant"]
 }
 
 class MccHighlightCommand(sublime_plugin.EventListener):
@@ -58,25 +58,27 @@ class MccHighlightCommand(sublime_plugin.EventListener):
 		try:
 			new_background_rgb = "#000000"
 			if "background" in scheme_data["settings"][0]["settings"]:
-				original_bg = scheme_data["settings"][0]["settings"]["background"]
-				background_rgb = max(1, int(original_bg[1:], 16))
-				new_background_rgb = "#{0:0>6x}".format(background_rgb - 1)
+				original_bg_decimal = int(scheme_data["settings"][0]["settings"]["background"][1:], 16)
+				if original_bg_decimal == 0:
+					new_background_decimal = 1
+
+				elif original_bg_decimal % 65536 == 0: # For when green and blue are 0 e.g. #340000
+					new_background_decimal = original_bg_decimal - 65536
+
+				elif original_bg_decimal % 256 == 0: # For when just blue is 0 e.g. #090300
+					new_background_decimal = original_bg_decimal - 256
+					
+				else: #Otherwise proceed regularly
+					new_background_decimal = original_bg_decimal - 1
+
+				new_background_rgb = "#{0:0>6x}".format(new_background_decimal)
 			
 			for mcc_scope, copy_scopes in color_scheme_colors.items():
 				for copy_scope in copy_scopes:
 					found = False
 					for item in scheme_data["settings"]:
 						if "scope" in item:
-							comma_index = item["scope"].find(",")
-							space_index = item["scope"].find(" ")
-							if comma_index < 0 and space_index < 0:
-								scope_from_scheme = item["scope"]
-							else: 
-								if comma_index < 0 or space_index < 0:
-									scope_from_scheme = item["scope"][:max(comma_index, space_index)]
-								else:
-									scope_from_scheme = item["scope"][:min(comma_index, space_index)]
-							if copy_scope == scope_from_scheme:
+							if copy_scope in item["scope"].replace(", ", " ").split(" "):
 								scheme_data["settings"].append({
 									"scope": mcc_scope,
 									"settings": {
@@ -88,7 +90,7 @@ class MccHighlightCommand(sublime_plugin.EventListener):
 					if found:
 						break
 				else:
-					sublime.error_message("MCC couldn't find a matching scope for " + copy_scope)
+					sublime.error_message("MCC couldn't find a matching scope for " + mcc_scope)
 			if not os.path.exists(sublime.packages_path() + "/MCC/ModifiedColorSchemes/"):
 				os.makedirs(sublime.packages_path() + "/MCC/ModifiedColorSchemes/")
 
