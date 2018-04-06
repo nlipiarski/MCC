@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
+<!-- 
+	Based off of the 3024 color scheme
+	https://packagecontrol.io/packages/3024%20Color%20Scheme
+	https://github.com/idleberg/3024.tmTheme
+
+	My edits consist of making things more saturated as well as adding in a few
+	scopes that were missing.  Also, I (obviously) added support for MCC.
+-->
 <dict>
 	<key>author</key>
 	<string>Nate Lipiarski</string>

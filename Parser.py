@@ -10,13 +10,13 @@ class Parser:
 		"click_event_action": re.compile("(?:run|suggest)_command|open_url|change_page"),
 		"color" : re.compile("none|black|dark_blue|dark_green|dark_aqua|dark_red|dark_purple|gold|gray|dark_gray|blue|green|aqua|red|light_purple|yellow|white"),
 		"command" : re.compile('[\t ]*(/?)([a-z]+)'),
-		"comment" :  re.compile('^[\t ]*#[^\n]*$'),
+		"comment" :  re.compile('[\t ]*#.*$'),
 		"entity_anchor" : re.compile("feet|eyes"),
 		"entity_tag_advancement_key" : re.compile("([a-z_\-1-9]+:)?(\w+)[\t ]*(=)"),
 		"entity_tag_key" : re.compile("(\w+)[\t ]*(=)"),
 		"float" : re.compile("-?\d+(?:\.\d+)?"),
 		"gamemode" : re.compile("survival|creative|adventure|spectator"),
-		"greedy_string" : re.compile("[^\n]*"),
+		"greedy_string" : re.compile(".*$"),
 		"hex4" : re.compile("[0-9a-fA-F]{4}"),
 		"hover_event_action" : re.compile("show_(?:text|item|entity|achievement)"),
 		"integer" : re.compile("-?\d+"),
@@ -36,6 +36,7 @@ class Parser:
 	}
 
 	def __init__(self, view):
+
 		self.current = 0
 		self.view = view
 		self.mcccomment = []
@@ -45,7 +46,6 @@ class Parser:
 		self.mccentity = []
 		self.mccliteral = []
 		self.invalid = []
-
 
 		self.nbt_value_parsers = [
 			(self.nbt_list_parser, self.string_parser, None, ""),
@@ -63,6 +63,7 @@ class Parser:
 			(self.nbt_value_parser, self.integer_parser, None, "")
 		]
 
+
 	def add_regions(self):
 		self.view.add_regions("mcccomment", self.mcccomment, "mcccomment", flags=self.add_regions_flags)
 		self.view.add_regions("mcccommand", self.mcccommand, "mcccommand", flags=self.add_regions_flags)
@@ -72,8 +73,9 @@ class Parser:
 		self.view.add_regions("mccliteral", self.mccliteral, "mccliteral", flags=self.add_regions_flags)
 		self.view.add_regions("invalid", self.invalid, "invalid.illegal", flags=self.add_regions_flags)
 
-	def highlight(self, command_tree, line_region, current):
+	def highlight(self, command_tree, line_region, current, update_region=True):
 		self.current = current
+
 		if ("redirect" in command_tree):
 			redirect_command = command_tree["redirect"][0]
 			if redirect_command == "root":
@@ -90,25 +92,26 @@ class Parser:
 			else:
 				while (self.current < len(self.string) and self.string[self.current] in " \t"):
 					self.current += 1
-				newline_index = self.string.find("\n", self.current)
-				if self.current < newline_index:
-					self.invalid.append(sublime.Region(self.region_begin + self.current, newline_index))
-					self.current = newline_index
-					return False
-				elif self.current < line_region.size():
+
+				if self.current < line_region.size():
 					self.invalid.append(sublime.Region(self.region_begin + self.current, line_region.end()))
 					self.current = line_region.size()
 					return False
+
 				return True
 
 		self.string = self.view.substr(line_region)
 		self.region = line_region
 		self.region_begin = self.region.begin()
-		if self.regex["comment"].match(self.string):
-			self.mcccomment.append(sublime.Region(self.region_begin, line_region.end()))
+
+		comment_match = self.regex["comment"].match(self.string, self.current)
+		if comment_match:
+			self.mcccomment.append(sublime.Region(self.region_begin + comment_match.start(), 
+												  self.region_begin + comment_match.end()))
+			self.current = comment_match.end()
 			return True
 		elif command_tree["type"] == "root":
-			command_match = self.regex["command"].search(self.string, self.current)
+			command_match = self.regex["command"].match(self.string, self.current)
 			if not command_match:
 				return False
 			command = command_match.group(2)
@@ -125,7 +128,7 @@ class Parser:
 				self.invalid.append(sublime.Region(self.region_begin, line_region.end()))
 				return False
 		else:
-			while (self.current < len(self.string) and self.string[self.current] in " \t\n"):
+			while (self.current < len(self.string) and self.string[self.current] in " \t"):
 				self.current += 1
 
 			if self.current >= len(self.string):
@@ -171,11 +174,7 @@ class Parser:
 			while (self.current < len(self.string) and self.string[self.current] in " \t"):
 				self.current += 1
 
-			newline_index = self.string.find("\n", self.current)
-			if self.current < newline_index:
-				self.invalid.append(sublime.Region(self.region_begin + self.current, newline_index))
-				self.current = newline_index
-			elif self.current < line_region.size():
+			if self.current < line_region.size():
 				self.invalid.append(sublime.Region(self.region_begin + self.current, line_region.end()))
 				self.current = line_region.size()
 
@@ -190,7 +189,7 @@ class Parser:
 		if self.current >= len(self.string):
 			self.invalid.append(sublime.Region(self.region_begin + err_start, self.region_begin + self.current))
 			return True
-		while self.string[self.current] in " \n\t":
+		while self.string[self.current] in " \t":
 			self.current += 1
 			if self.current >= len(self.string):
 				self.invalid.append(sublime.Region(self.region_begin + err_start, self.region_begin + self.current))
@@ -553,7 +552,7 @@ class Parser:
 														   self.region_begin + self.current + 1))
 						return self.current + 1
 
-				elif self.string[self.current] in "\n\r\"\\":
+				elif self.string[self.current] in "\"\\":
 					self.invalid.append(sublime.Region(self.region_begin + self.current, 
 													   self.region_begin + self.current + 1))
 					return self.current + 1
@@ -564,13 +563,8 @@ class Parser:
 
 	# Todo: add entity highlighting
 	def message_parser(self, properties={}):
-		newline_index = self.string.find("\n", self.current)
-		if newline_index < 0:
-			self.mccstring.append(sublime.Region(self.region_begin + self.current, self.region.end()))
-			return len(self.string)
-		else:
-			self.mccstring.append(sublime.Region(self.region_begin + self.current, self.region_begin + newline_index))
-			return newline_index
+		self.mccstring.append(sublime.Region(self.region_begin + self.current, self.region.end()))
+		return len(self.string)
 
 	def nbt_parser(self, properties={}):
 		if self.current >= len(self.string) or self.string[self.current] != "{":
@@ -1215,7 +1209,7 @@ class Parser:
 		entity_match = self.regex["item_block_id"].match(self.string, self.current)
 		if entity_match and entity_match.group(2) in ENTITIES and entity_match.group(1) in [None, "minecraft:"]:
 			self.mccliteral.append(sublime.Region(self.region_begin + entity_match.start(1), self.region_begin + entity_match.end(1)))
-			self.mccstring.append(sublime.Region(self.region_begin + entity_match.start(2), self.region_begin + entity_match.end(2)))
+			self.mccentity.append(sublime.Region(self.region_begin + entity_match.start(2), self.region_begin + entity_match.end(2)))
 			self.current = entity_match.end(2)
 
 		return self.current
