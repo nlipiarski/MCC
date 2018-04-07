@@ -111,7 +111,7 @@
 			<key>name</key>
 			<string>Operators</string>
 			<key>scope</key>
-			<string>keyword.operator</string>
+			<string>keyword.operator, punctuation.separator</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -166,11 +166,11 @@
 			<key>name</key>
 			<string>Classes</string>
 			<key>scope</key>
-			<string>meta.class, support.class, entity.name.class, entity.name.type.class</string>
+			<string>support.class, entity.name.class, entity.name.type.class</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#c4ba23</string>
+				<string>#b2a920</string>
 			</dict>
 		</dict>
 		<dict>
@@ -208,6 +208,18 @@
 				<string>#59a1d1</string>
 			</dict>
 		</dict>
+
+		<dict>
+			<key>name</key>
+			<string>Return Type</string>
+			<key>scope</key>
+			<string>meta.method.return-type</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#59a1d1</string>
+			</dict>
+		</dict>
 		<dict>
 			<key>name</key>
 			<string>Support</string>
@@ -223,7 +235,7 @@
 			<key>name</key>
 			<string>Strings, Inherited Class</string>
 			<key>scope</key>
-			<string>string, constant.other.symbol, entity.other.inherited-class</string>
+			<string>string, constant.other.symbol, entity.other</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -267,7 +279,7 @@
 			<key>name</key>
 			<string>Constants</string>
 			<key>scope</key>
-			<string>constant</string>
+			<string>constant, support.constant</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -361,7 +373,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#e8bbd0</string>
+				<string>#e5629f</string>
 			</dict>
 		</dict>
 		<dict>
@@ -499,7 +511,7 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#b5e4f4</string>
+				<string>#e5629f</string>
 			</dict>
 		</dict>
 		<dict>

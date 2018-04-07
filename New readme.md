@@ -47,13 +47,13 @@ The first thing you should know is that MCC already automatically converts color
 
 
 There are six scopes you will need to add and one you should propably already have in your color scheme.
-1. *mccconstant:* Numbers, true/false, relative coords, and suffixes in nbt values will all have this scope.
-2. *mcccoment:* Comments
-3. *mccstring:* Any quoted or unquoted strings (e.g. usernames) will have this scope
-4. *mcccommand:* All commands as well as any operators such as =, <, \*=, etc.
-5. *mccentity:* Entity selectors as well as specific entities such as armor_stand will get this scope
-6. *mccliteral:* This scope is applied to keywords liek merge, grant, set
-7. *invalid.illegal or invalid:* Like I said above, most color schemes already have this one.
+1. **mccconstant:** Numbers, true/false, relative coords, and suffixes in nbt values will all have this scope.
+2. **mcccoment:** Comments
+3. **mccstring:** Any quoted or unquoted strings (e.g. usernames) will have this scope
+4. **mcccommand:** All commands as well as any operators such as =, <, \*=, etc.
+5. **mccentity:** Entity selectors as well as specific entities such as armor_stand will get this scope
+6. **mccliteral:** This scope is applied to keywords liek merge, grant, set
+7. **invalid.illegal or invalid:** Like I said above, most color schemes already have this one.
 
 
 While usually you just have to set the foreground color when styling your scopes, because of the way MCC and Sublime work you also have to set the background parameter for all of the mcc scopes.  The background color should be a color that is just one away in red, green, or blue from whatever you chose as the background color.  Be aware that if your hex color ends in two zeros or four zeros you can not just subtract one from the hex value.  For example, say you chose #090300, a nice gray, as your background color.  If you subtract one from this, you get #0902FF which is a dark blue.  What you should do instead is subtract one from the middle two set of digits to get #090200 which is a color imperceptibly different from your original color.
