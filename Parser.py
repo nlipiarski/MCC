@@ -1,5 +1,6 @@
 import sublime, re
 from .Blocks import BLOCKS
+from .Items import ITEMS
 from .Data import *
 from .CommandTree import COMMAND_TREE
 
@@ -27,7 +28,7 @@ class Parser:
 		"operation" : re.compile("[+\-\*\%\/]?=|>?<|>"),
 		"position-2" : re.compile("(~?-?\d*\.?\d+|~)[\t ]+(~?-?\d*\.?\d+|~)"),
 		"position-3" : re.compile("([~\^]?-?\d*\.?\d+|[~\^])[\t ]+([~\^]?-?\d*\.?\d+|[~\^])[\t ]+([~\^]?-?\d*\.?\d+|[~\^])"),
-		"resource_location" : re.compile("(\w+:)?([\w\.]+)"),
+		"resource_location" : re.compile("([\w\.]+:)?([\w\.]+)"),
 		"scoreboard_slot" : re.compile("belowName|list|sidebar(?:.team.(?:black|dark_blue|dark_green|dark_aqua|dark_red|dark_purple|gold|gray|dark_gray|blue|green|aqua|red|light_purple|yellow|white))?"),
 		"sort" : re.compile("nearest|furthest|random|arbitrary"),
 		"username" : re.compile("[\w-]{,16}"),
@@ -47,20 +48,25 @@ class Parser:
 		self.mccliteral = []
 		self.invalid = []
 
-		self.nbt_value_parsers = [ #The order of this list corresponds to the ordering of nbt_tag_lists
-			(self.nbt_list_parser, self.string_parser, None, ""),
-			(self.nbt_list_parser, self.float_parser, self.mccconstant, "d"),
-			(self.nbt_list_parser, self.integer_parser, None, ""),
-			(self.nbt_value_parser, self.float_parser, self.mccconstant, "d"),
-			(self.nbt_list_parser, self.nbt_parser, None, ""),
-			(self.nbt_list_parser, self.float_parser, self.mccconstant, "f"),
-			(self.nbt_value_parser, self.float_parser, self.mccconstant, "f"),
-			(self.nbt_value_parser, self.integer_parser, self.mccconstant, "L"),
-			(self.nbt_value_parser, self.integer_parser, self.mccconstant, "s"),
-			(self.nbt_value_parser, self.string_parser, None, ""),
-			(self.nbt_value_parser, self.nbt_parser, None, ""),
-			(self.nbt_value_parser, self.nbt_byte_parser, None, ""),
-			(self.nbt_value_parser, self.integer_parser, None, "")
+		#The order of this list corresponds to the ordering of nbt_tag_lists.
+		# The tuples are ordered like this
+		# (isList, parser,  item suffix scope, item suffix)
+		self.nbt_value_parsers = [ 
+			(True, self.string_parser, None, ""),
+			(True, self.float_parser, self.mccconstant, "d"),
+			(True, self.integer_parser, None, ""),
+			(False, self.float_parser, self.mccconstant, "d"),
+			(True, self.nbt_parser, None, ""),
+			(True, self.float_parser, self.mccconstant, "f"),
+			(False, self.float_parser, self.mccconstant, "f"),
+			(False, self.integer_parser, self.mccconstant, "L"),
+			(False, self.integer_parser, self.mccconstant, "s"),
+			(False, self.string_parser, None, ""),
+			(False, self.nbt_parser, None, ""),
+			(False, self.nbt_byte_parser, None, ""),
+			(False, self.integer_parser, None, ""),
+			(False, self.json_in_nbt_parser, None, ""),
+			(True, self.json_in_nbt_parser, None, "")
 		]
 
 
@@ -73,7 +79,7 @@ class Parser:
 		self.view.add_regions("mccliteral", self.mccliteral, "mccliteral", flags=self.add_regions_flags)
 		self.view.add_regions("invalid", self.invalid, "invalid.illegal", flags=self.add_regions_flags)
 
-	def highlight(self, command_tree, line_region, current, update_region=True):
+	def highlight(self, command_tree, line_region, current):
 		self.current = current
 
 		if ("redirect" in command_tree):
@@ -85,6 +91,7 @@ class Parser:
 			#print("Redirecting to: " + redirect_command + ", " + str(self.current))
 			return self.highlight(new_command_tree, line_region, self.current)
 		elif not "children" in command_tree or self.current >= line_region.size():
+			
 			if not "executable" in command_tree or not command_tree["executable"]:
 				self.invalid.append(sublime.Region(self.region_begin, line_region.end()))
 				self.current = self.region.size()
@@ -110,10 +117,12 @@ class Parser:
 												  self.region_begin + comment_match.end()))
 			self.current = comment_match.end()
 			return True
+
 		elif command_tree["type"] == "root":
 			command_match = self.regex["command"].match(self.string, self.current)
 			if not command_match:
 				return False
+
 			command = command_match.group(2)
 			#print("command: " + command)
 			if command in command_tree["children"]:
@@ -128,20 +137,25 @@ class Parser:
 				self.invalid.append(sublime.Region(self.region_begin, line_region.end()))
 				return False
 		else:
+			was_space = False
 			while (self.current < len(self.string) and self.string[self.current] in " \t"):
 				self.current += 1
+				was_space = True
 
 			if self.current >= len(self.string):
 				if not "executable" in command_tree or not command_tree["executable"]:
 					return False
 				else:
-					return True		
+					return True
+
+			elif not was_space:
+				return False	
 
 			#print(command_tree)
 			start = self.current
 			for key, properties in command_tree["children"].items():
 				#print("Key: " + key)
-				if properties["type"] == "literal" and self.current + len(key) <= len(self.string) and self.string[self.current:self.current + len(key)] == key:
+				if properties["type"] == "literal" and self.string.startswith(key, self.current):
 					#print("String segment: " + self.string[self.current:self.current + len(key)])
 					self.mccliteral.append(sublime.Region(self.region_begin + self.current, self.region_begin + self.current + len(key)))
 					self.current += len(key)
@@ -151,7 +165,6 @@ class Parser:
 					else:
 						self.current = start
 						self.mccliteral.pop()
-						self.invalid.pop()
 
 				elif properties["type"] == "argument":
 					parser_name = properties["parser"]
@@ -168,7 +181,6 @@ class Parser:
 						if success:
 							return True
 						else:
-							self.invalid.pop()
 							self.current = start
 
 			while (self.current < len(self.string) and self.string[self.current] in " \t"):
@@ -186,13 +198,13 @@ class Parser:
 	# Returns True if the end of the string is reached, else False and will advacne self.current to the next non-whitespace character
 	# this will error highlight the section from err_start until the end of the string
 	def skip_whitespace(self, err_start):
+		start = self.current
 		if self.current >= len(self.string):
-			self.invalid.append(sublime.Region(self.region_begin + err_start, self.region_begin + self.current))
 			return True
 		while self.string[self.current] in " \t":
 			self.current += 1
 			if self.current >= len(self.string):
-				self.invalid.append(sublime.Region(self.region_begin + err_start, self.region_begin + self.current))
+				self.current = start
 				return True
 		return False
 
@@ -607,9 +619,13 @@ class Parser:
 			for i in range(len(nbt_key_lists)):
 				keys = nbt_key_lists[i]
 				if key in keys:
-					list_value_parser, key_parser, suffix_scope, suffix = nbt_value_parsers[i]
+					is_list, value_parser, suffix_scope, suffix = nbt_value_parsers[i]
 					old_current = self.current
-					self.current = list_value_parser(key_parser, suffix_scope, suffix, properties)
+					if is_list:
+						self.current = self.nbt_list_parser(value_parser, suffix_scope, suffix, properties)
+					else:
+						self.current = self.nbt_value_parser(value_parser, suffix_scope, suffix, properties)
+
 					if old_current != self.current:
 						matched = True
 						break
@@ -618,9 +634,8 @@ class Parser:
 				properties["type"] = old_type
 
 			if not matched:
-				self.mccstring.pop()
-				self.invalid.append(sublime.Region(self.region_begin + start_of_key, self.region_begin + self.current))
-				return self.current
+				self.invalid.append(sublime.Region(self.region_begin + self.current, self.region_begin + self.current + 1))
+				return self.current + 1
 
 			reached_end = self.skip_whitespace(start_of_key)
 			if reached_end:
@@ -693,14 +708,6 @@ class Parser:
 				return start
 		return self.boolean_parser(properties)
 
-	def item_parser(self, properties={}):
-		item_match = self.regex["item_block_id"].match(self.string, self.current)
-		start = self.current
-		self.current = self.regex_parser(self.regex["item_block_id"], [self.mccliteral, self.mccstring])
-		if self.current != start:
-			return self.nbt_parser(properties)
-		return start
-
 	def integer_parser(self, properties={}):
 		integer_match = self.regex["integer"].match(self.string, self.current)
 		if integer_match:
@@ -725,15 +732,16 @@ class Parser:
 				self.mccliteral.append(sublime.Region(self.region_begin + start, self.region_begin + block_match.end(1)))
 			elif self.string[start] == "#":
 				self.invalid.append(sublime.Region(self.region_begin + start, self.region_begin + start + 1))
+
 			self.mccstring.append(sublime.Region(self.region_begin + block_match.start(2), self.region_begin + block_match.end(2)))
-			self.current =block_match.end()
+			self.current = block_match.end()
 
 			if block_match.start(1) == block_match.end(1):
 				block_name = "minecraft:" + block_match.group(2)
 			else:
 				block_name = block_match.group(0)
 
-			if block_name in BLOCKS:
+			if block_name in BLOCKS and "properties" in BLOCKS[block_name]:
 				properties = BLOCKS[block_name]["properties"]
 			else:
 				properties = {}
@@ -908,10 +916,7 @@ class Parser:
 				self.invalid.append(sublime.Region(self.region_begin + self.current, self.region_begin + self.current + 1))
 				return self.current + 1
 
-			# " \" \\\" \\\\\\\" ...
-			# 1 2  4    8        ...
 			key = self.string[start_of_key + len(quote) : self.current - len(quote)]
-			#print("Json key: " + key)
 
 			reached_end = self.skip_whitespace(start_of_key)
 			if reached_end:
@@ -1203,16 +1208,29 @@ class Parser:
 		return self.current
 
 	def objective_criteria_parser(self, properties={}):
+		criteria_match = self.regex["resource_location"].match(self.string, self.current)
+		if criteria_match:
+			criteria = criteria_match.group()
+			namespace = criteria_match.group(1)
+			location = criteria_match.group(2)
+			if (criteria in OBJECTIVE_CRITERIA or 
+			   (namespace in CRITERIA_BLOCKS and location in BLOCKS) or
+			   (namespace in CRITERIA_ITEMS and location in ITEMS) or
+			   (namespace in CRITERIA_ENTITIES and location in ENTITIES)):
+				if namespace != None:
+					self.mccliteral.append(sublime.Region(self.region_begin + criteria_match.start(1), 
+														  self.region_begin + criteria_match.end(1)))
+
+				self.mccstring.append(sublime.Region(self.region_begin + criteria_match.start(2),
+													  self.region_begin + criteria_match.end(2)))
+				self.current = criteria_match.end()
+
+		return self.current
+
 		return self.string_parser({"type":"word"})
 
 	def entity_location_parser(self, properties={}):
-		entity_match = self.regex["item_block_id"].match(self.string, self.current)
-		if entity_match and entity_match.group(2) in ENTITIES and entity_match.group(1) in [None, "minecraft:"]:
-			self.mccliteral.append(sublime.Region(self.region_begin + entity_match.start(1), self.region_begin + entity_match.end(1)))
-			self.mccentity.append(sublime.Region(self.region_begin + entity_match.start(2), self.region_begin + entity_match.end(2)))
-			self.current = entity_match.end(2)
-
-		return self.current
+		return self.location_from_list_parser(self.regex["item_block_id"], ENTITIES)
 
 	def resource_location_parser(self, properties={}):
 		return self.regex_parser(self.regex["resource_location"], [self.mccliteral, self.mccstring])
@@ -1245,21 +1263,64 @@ class Parser:
 		return self.regex_parser(self.regex["operation"], [self.mcccommand])
 
 	def mob_effect_parser(self, proeprties={}):
-		potion_match = self.regex["item_block_id"].match(self.string, self.current)
-		if potion_match and potion_match.group(2) in POTIONS and potion_match.group(1) in [None, "minecraft:"]:
-			self.mccliteral.append(sublime.Region(self.region_begin + potion_match.start(1), self.region_begin + potion_match.end(1)))
-			self.mccstring.append(sublime.Region(self.region_begin + potion_match.start(2), self.region_begin + potion_match.end(2)))
-			self.current = potion_match.end(2)
+		return self.location_from_list_parser(self.regex["item_block_id"], POTIONS)
+
+	def sound_parser(self, properties={}):
+		return self.location_from_list_parser(self.regex["resource_location"], SOUNDS)
+
+	def item_parser(self, properties={}):
+		old_current = self.current
+		self.current = self.location_from_list_parser(self.regex["item_block_id"], ITEMS)
+		if self.current != old_current:
+			return self.nbt_parser(properties)
+		return self.current
+
+	def location_from_list_parser(self, regex, possibilities):
+		match = regex.match(self.string, self.current)
+		if match and match.group(2) in possibilities and match.group(1) in [None, "minecraft:"]:
+			self.mccliteral.append(sublime.Region(self.region_begin + match.start(1), self.region_begin + match.end(1)))
+			self.mccstring.append(sublime.Region(self.region_begin + match.start(2), self.region_begin + match.end(2)))
+			self.current = match.end()
 
 		return self.current
 
-	def sound_parser(self, properties={}):
-		sound_match = self.regex["resource_location"].match(self.string, self.current)
-		if sound_match and sound_match.group(2) in SOUNDS and sound_match.group(1) in [None, "minecraft:"]:
-			self.mccliteral.append(sublime.Region(self.region_begin + sound_match.start(1), self.region_begin + sound_match.end(1)))
-			self.mccstring.append(sublime.Region(self.region_begin + sound_match.start(2), self.region_begin + sound_match.end(2)))
-			self.current = sound_match.end(2)
+	# properties["type"] must equal "word".  This should be done already.
+	def json_in_nbt_parser(self, properties):
+		if not "escape_depth" in properties:
+			escape_depth = 0
+		else:
+			escape_depth = properties["escape_depth"]
 
+		quote = self.generate_quote(escape_depth)
+		if not self.string.startswith(quote, self.current):
+			return self.string_parser(properties)
+
+		start = self.current
+		self.mccstring.append(sublime.Region(self.region_begin + self.current, 
+											 self.region_begin + self.current + len(quote)))
+		self.current += len(quote)
+
+		old_current = self.current
+		properties["escape_depth"] = escape_depth + 1
+		self.current = self.json_parser(properties)
+		if old_current == self.current:
+			self.mccstring.pop()
+			properties["escape_depth"] = escape_depth
+			self.current = start
+			return self.string_parser(properties)
+
+		if not self.string.startswith(quote, self.current):
+			if self.current < len(self.string):
+				delta = 1
+			else:
+				delta = -1
+			self.invalid.append(sublime.Region(self.region_begin + self.current, 
+											   self.region_begin + self.current + delta))
+			return self.current + max(0, delta)
+
+		self.mccstring.append(sublime.Region(self.region_begin + self.current,
+											 self.region_begin + self.current + len(quote)))
+		self.current += len(quote)
 		return self.current
 
 	def regex_parser(self, pattern, scopes, properties={}):
@@ -1361,5 +1422,7 @@ class Parser:
 		NBT_STRING_TAGS,
 		NBT_COMPOUND_TAGS,
 		NBT_BYTE_TAGS,
-		NBT_INTEGER_TAGS
+		NBT_INTEGER_TAGS,
+		NBT_JSON_TAGS,
+		NBT_JSON_LIST_TAGS
 	]
