@@ -10,7 +10,7 @@ class Parser:
 		"click_event_action": re.compile("(?:run|suggest)_command|open_url|change_page"),
 		"color" : re.compile("none|black|dark_blue|dark_green|dark_aqua|dark_red|dark_purple|gold|gray|dark_gray|blue|green|aqua|red|light_purple|yellow|white"),
 		"command" : re.compile('[\t ]*(/?)([a-z]+)'),
-		"comment" :  re.compile('[\t ]*#.*$'),
+		"comment" :  re.compile('^[\t ]*#.*$'),
 		"entity_anchor" : re.compile("feet|eyes"),
 		"entity_tag_advancement_key" : re.compile("([a-z_\-1-9]+:)?(\w+)[\t ]*(=)"),
 		"entity_tag_key" : re.compile("(\w+)[\t ]*(=)"),
@@ -47,7 +47,7 @@ class Parser:
 		self.mccliteral = []
 		self.invalid = []
 
-		self.nbt_value_parsers = [
+		self.nbt_value_parsers = [ #The order of this list corresponds to the ordering of nbt_tag_lists
 			(self.nbt_list_parser, self.string_parser, None, ""),
 			(self.nbt_list_parser, self.float_parser, self.mccconstant, "d"),
 			(self.nbt_list_parser, self.integer_parser, None, ""),

@@ -29,13 +29,21 @@ class MccHighlightCommand(sublime_plugin.EventListener):
 
 	def run(self, view):
 		file_name = view.file_name()
-		if file_name == None or len(file_name) < 6 or file_name[-6:] != ".mcc13":
+		if file_name == None or (not file_name.endswith(".mcc13") and not file_name.endswith(".mcfunction")):
 			return
 
 		full_region = sublime.Region(0, view.size())
+		file_lines = view.lines(full_region)
+
+		if file_name.endswith(".mcfunction"):
+			first_line_string = view.substr(file_lines[0])
+			if not re.match("(?i)[ \t]*#[ \t]*use[ \t]+1\.13[ \t]*parsing[ \t]*$", first_line_string):
+				return
+			else:
+				view.settings().set("syntax", "Packages/Text/Plain text.tmLanguage")
+
 		parser = Parser(view)
 		
-		file_lines = view.lines(full_region)
 		for line in file_lines:
 			if not line.empty():
 				parser.highlight(COMMAND_TREE, line, 0)
@@ -105,6 +113,7 @@ class MccHighlightCommand(sublime_plugin.EventListener):
 			# sublime.error_message("MCC couldn't convert your current color scheme")
 			print(e)
 			sublime.active_window().run_command("show_panel", {"panel": "console", "toggle": True})
+
 
 def plugin_loaded():
 	sublime.load_settings("Preferences.sublime-settings").add_on_change('color_scheme',MccHighlightCommand.edit_color_scheme)
