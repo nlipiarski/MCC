@@ -34,15 +34,17 @@ class MccHighlightCommand(sublime_plugin.EventListener):
 
 		full_region = sublime.Region(0, view.size())
 		file_lines = view.lines(full_region)
+		parser = Parser(view)
 
 		if file_name.endswith(".mcfunction"):
 			first_line_string = view.substr(file_lines[0])
 			if not re.match("(?i)[ \t]*#[ \t]*use[ \t]+1\.13[ \t]*parsing[ \t]*$", first_line_string):
+				parser.add_regions()
+				view.settings().set("syntax", "Packages/MinecraftCommandCode/Minecraft Command Code.tmLanguage")
 				return
 			else:
 				view.settings().set("syntax", "Packages/Text/Plain text.tmLanguage")
 
-		parser = Parser(view)
 		
 		for line in file_lines:
 			if not line.empty():
