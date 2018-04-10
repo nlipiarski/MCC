@@ -305,14 +305,14 @@
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
-				<string>#e8bbd0</string>
+				<string>#e07baa</string>
 			</dict>
 		</dict>
 		<dict>
 			<key>name</key>
 			<string>Attribute IDs</string>
 			<key>scope</key>
-			<string>entity.other.attribute-name.id, punctuation.definition.entity</string>
+			<string>entity.other.attribute-name.id, punctuation.definition.entity, entity.other.attribute-name.class</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
