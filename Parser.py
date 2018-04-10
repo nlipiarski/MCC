@@ -181,6 +181,7 @@ class Parser:
 						if success:
 							return True
 						else:
+							self.invalid.pop()
 							self.current = start
 
 			while (self.current < len(self.string) and self.string[self.current] in " \t"):
