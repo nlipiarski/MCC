@@ -40,7 +40,11 @@ class MccHighlightCommand(sublime_plugin.EventListener):
 			first_line_string = view.substr(file_lines[0])
 			if not re.match("(?i)[ \t]*#[ \t]*use[ \t]+1\.13[ \t]*parsing[ \t]*$", first_line_string):
 				parser.add_regions()
-				view.settings().set("syntax", "Packages/MinecraftCommandCode/Minecraft Function.tmLanguage")
+				if os.path.exists(sublime.installed_packages_path() + "/Marshal Command Code.sublime-package"):
+					print("Ayyo found it boe")
+					view.settings().set("syntax", "Packages/Marshal Command Code/Minecraft Function.tmLanguage")
+				else:
+					view.settings().set("syntax", "Packages/MinecraftCommandCode/Minecraft Function.tmLanguage")
 				return
 			else:
 				view.settings().set("syntax", "Packages/Text/Plain text.tmLanguage")

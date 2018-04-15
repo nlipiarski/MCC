@@ -157,7 +157,8 @@ class Parser:
 				#print("Key: " + key)
 				if properties["type"] == "literal" and self.string.startswith(key, self.current):
 					#print("String segment: " + self.string[self.current:self.current + len(key)])
-					self.mccliteral.append(sublime.Region(self.region_begin + self.current, self.region_begin + self.current + len(key)))
+					self.mccliteral.append(sublime.Region(self.region_begin + self.current, 
+														  self.region_begin + self.current + len(key)))
 					self.current += len(key)
 					success = self.highlight(properties, line_region, self.current)
 					if success:
