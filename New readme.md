@@ -36,7 +36,7 @@ Sublime is an extremely powerful, but kind of complicated, text editor. Learning
 2. Install [Package Control Plugin](https://packagecontrol.io/installation) (double-check your Sublime version)
 3. With Sublime opened, press Ctrl+Shift+P to open the Command Palette
 4. Type "install package" into the Command Palette and select "Package Control: Install Package"
-5. Type "MCC" to filter the packages and select the option for "Minecraft Command Code"
+5. Type "Marshal Command Code" to filter the packages and select "Marshal Command Code Syntax Highlighter"
 
 Now any file with an .mcc or .mcfunction extension will use the Marshal Command Code syntax highlighting.
 
