@@ -42,8 +42,8 @@ Now any file with an .mcc or .mcfunction extension will use the Marshal Command 
 
 If you run into any issues, feel free to send an email to [Moesh](mailto:moesh@moesh.ca) with the details or open an issue on the [github issue page](https://github.com/42iscool42/MCC/issues).
 
-## What If You Want to Make Your Color Scheme Work With MCC
-The first thing you should know is that MCC already automatically converts color schemes on its own, so you don't have to do anything if you don't want to.  If you really want to make sure your color scheme works with MCC, continue reading.
+## What If You Want to Make Sure Your Color Scheme Works With MCC
+The first thing you should know is that MCC already automatically converts color schemes on its own, so you won't have to do anything if you don't want to.  If you really want to make sure your color scheme works with MCC, continue reading.
 
 
 There are six scopes you will need to add and one you should propably already have in your color scheme.
@@ -52,11 +52,11 @@ There are six scopes you will need to add and one you should propably already ha
 3. **mccstring:** Any quoted or unquoted strings (e.g. usernames) will have this scope
 4. **mcccommand:** All commands as well as any operators such as =, <, \*=, etc.
 5. **mccentity:** Entity selectors as well as specific entities such as armor_stand will get this scope
-6. **mccliteral:** This scope is applied to keywords liek merge, grant, set
+6. **mccliteral:** This scope is applied to keywords like merge, grant, set
 7. **invalid.illegal or invalid:** Like I said above, most color schemes already have this one.
 
 
 While usually you just have to set the foreground color when styling your scopes, because of the way MCC and Sublime work you also have to set the background parameter for all of the mcc scopes.  The background color should be a color that is just one away in red, green, or blue from whatever you chose as the background color.  Be aware that if your hex color ends in two zeros or four zeros you can not just subtract one from the hex value.  For example, say you chose #090300, a nice gray, as your background color.  If you subtract one from this, you get #0902FF which is a dark blue.  What you should do instead is subtract one from the middle two set of digits to get #090200 which is a color imperceptibly different from your original color.
 
 
-The final thing that you need to do is add (MCC) to the name string within the p list for your color scheme or put (MCC) in the actual file name of your scheme.  It is important that you write (MCC) in all caps or else MCC won't recognize that it is a compatible color scheme.
+The final thing that you need to do is add "(MCC)" to the name string within the p list for your color scheme or put "(MCC)" in the actual file name of your scheme.  It is important that you write (MCC) in all caps or else it won't be recognized as a compatible color scheme.
