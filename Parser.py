@@ -15,7 +15,7 @@ class Parser:
 		"entity_anchor" : re.compile("feet|eyes"),
 		"entity_tag_advancement_key" : re.compile("([a-z_\-1-9]+:)?(\w+)[\t ]*(=)"),
 		"entity_tag_key" : re.compile("(\w+)[\t ]*(=)"),
-		"float" : re.compile("-?\d+(?:\.\d+)?"),
+		"float" : re.compile("-?(\d(\.\d+)?|\.\d+)"),
 		"gamemode" : re.compile("survival|creative|adventure|spectator"),
 		"greedy_string" : re.compile(".*$"),
 		"hex4" : re.compile("[0-9a-fA-F]{4}"),
@@ -121,6 +121,7 @@ class Parser:
 		elif command_tree["type"] == "root":
 			command_match = self.regex["command"].match(self.string, self.current)
 			if not command_match:
+				self.invalid.append(sublime.Region(self.region_begin, line_region.end()))
 				return False
 
 			command = command_match.group(2)
@@ -981,6 +982,7 @@ class Parser:
 					self.current = self.json_score_parser(properties)
 					if not self.string[self.current - 1] in "}":
 						return self.current
+					matched = True
 
 				if not matched:
 					self.mccstring.pop()
@@ -1141,7 +1143,7 @@ class Parser:
 	def json_score_parser(self, properties={}):
 		if self.string[self.current] != "{": #Can't be [] since its an object
 			return self.current
-		current += 1
+		self.current += 1
 		quote = self.generate_quote(properties["escape_depth"])
 
 		start_of_object = self.current
@@ -1157,7 +1159,6 @@ class Parser:
 				return self.current + 1
 
 			key = self.string[start_of_key + len(quote) : self.current - len(quote)]
-
 			reached_end = self.skip_whitespace(start_of_object)
 			if reached_end:
 				return self.current
@@ -1205,7 +1206,7 @@ class Parser:
 			elif self.string[self.current] != "}":
 				self.invalid.append(sublime.Region(self.region_begin + self.current, self.region_begin + self.current + 1))
 				return self.current + 1
-			
+
 		self.current += 1
 		return self.current
 
