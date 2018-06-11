@@ -2,21 +2,12 @@ import sublime
 import sublime_plugin
 import os
 import os.path
-import plistlib
 import re
 from .CommandTree import COMMAND_TREE
 from .Parser import Parser
+from .ColorSchemeEditor import ColorSchemeEditor
 
-color_scheme_colors ={ 
-	"mcccomment"       : ["comment"],
-	"mcccommand"       : ["keyword.control", "keyword"],
-	"mccentity"        : ["entity.name", "entity.name.function", "entity"],
-	"mccliteral"       : ["support.type", "support", "support.constant", "support.function"],
-	"mccstring"        : ["string"],
-	"mccconstant"      : ["constant.numeric", "constant"]
-}
-
-class MccHighlightCommand(sublime_plugin.EventListener):
+class MccHighlightCommand(sublime_plugin.EventListener): #dd
 
 	def on_load(self, view):
 		self.run(view)
@@ -29,7 +20,7 @@ class MccHighlightCommand(sublime_plugin.EventListener):
 
 	def run(self, view):
 		file_name = view.file_name()
-		if file_name == None or (not file_name.endswith(".mcc13") and not file_name.endswith(".mcfunction")):
+		if file_name == None or not (file_name.endswith(".mcc13") or file_name.endswith(".mcfunction")):
 			return
 
 		full_region = sublime.Region(0, view.size())
@@ -38,12 +29,13 @@ class MccHighlightCommand(sublime_plugin.EventListener):
 
 		if file_name.endswith(".mcfunction"):
 			first_line_string = view.substr(file_lines[0])
-			if not re.match("(?i)[ \t]*#[ \t]*use[ \t]+1\.13[ \t]*parsing[ \t]*$", first_line_string):
+			if not re.match("(?i)[ \t]*#[ \t]*use[ \t]*1\.13[ \t]*parsing[ \t]*$", first_line_string):
 				parser.add_regions()
 				if os.path.exists(sublime.installed_packages_path() + "/Marshal Command Code.sublime-package"):
 					view.settings().set("syntax", "Packages/Marshal Command Code/Minecraft Function.tmLanguage")
-				else:
+				elif os.path.exists(sublime.installed_packages_path() + "/MinecraftCommandCode.sublime-package"):
 					view.settings().set("syntax", "Packages/MinecraftCommandCode/Minecraft Function.tmLanguage")
+				print("MCC not found")
 				return
 			else:
 				view.settings().set("syntax", "Packages/Text/Plain text.tmLanguage")
@@ -55,71 +47,6 @@ class MccHighlightCommand(sublime_plugin.EventListener):
 
 		parser.add_regions()
 
-	@staticmethod
-	def edit_color_scheme():
-		original_color_scheme = sublime.load_settings("Preferences.sublime-settings").get('color_scheme')
-		if original_color_scheme.find("(MCC)") > -1:
-			return
-
-		scheme_data = plistlib.readPlistFromBytes(sublime.load_binary_resource(original_color_scheme))
-		if os.path.exists(sublime.packages_path() + "/MCC/ModifiedColorSchemes/" + scheme_data["name"] + ".tmTheme"):
-			sublime.load_settings("Preferences.sublime-settings").set("color_scheme", "Packages/MCC/ModifiedColorSchemes/" + scheme_data["name"] + ".tmTheme")
-			sublime.save_settings("Preferences.sublime-settings")
-			return
-		elif scheme_data["name"].find("(MCC)") > -1:
-			return
-		try:
-			new_background_rgb = "#000000"
-			if "background" in scheme_data["settings"][0]["settings"]:
-				original_bg_decimal = int(scheme_data["settings"][0]["settings"]["background"][1:], 16)
-				if original_bg_decimal == 0:
-					new_background_decimal = 1
-
-				elif original_bg_decimal % 65536 == 0: # For when green and blue are 0 e.g. #340000
-					new_background_decimal = original_bg_decimal - 65536
-
-				elif original_bg_decimal % 256 == 0: # For when just blue is 0 e.g. #090300
-					new_background_decimal = original_bg_decimal - 256
-					
-				else: #Otherwise proceed regularly
-					new_background_decimal = original_bg_decimal - 1
-
-				new_background_rgb = "#{0:0>6x}".format(new_background_decimal)
-			
-			for mcc_scope, copy_scopes in color_scheme_colors.items():
-				for copy_scope in copy_scopes:
-					found = False
-					for item in scheme_data["settings"]:
-						if "scope" in item:
-							if copy_scope in item["scope"].replace(", ", " ").split(" "):
-								scheme_data["settings"].append({
-									"scope": mcc_scope,
-									"settings": {
-										"foreground": item["settings"]["foreground"],
-										"background": new_background_rgb
-									}})
-								found = True
-								break
-					if found:
-						break
-				else:
-					sublime.error_message("MCC couldn't find a matching scope for " + mcc_scope)
-
-			if not os.path.exists(sublime.packages_path() + "/MCC/ModifiedColorSchemes/"):
-				os.makedirs(sublime.packages_path() + "/MCC/ModifiedColorSchemes/")
-
-			new_file_name = "/MCC/ModifiedColorSchemes/" + scheme_data["name"] + ".tmTheme"
-			scheme_data["name"] = scheme_data["name"] + " (MCC)"
-			plistlib.writePlist(scheme_data, sublime.packages_path() + new_file_name)
-
-			sublime.load_settings("Preferences.sublime-settings").set("color_scheme", "Packages" + new_file_name)
-			sublime.save_settings("Preferences.sublime-settings")
-		except Exception as e:
-			# sublime.error_message("MCC couldn't convert your current color scheme")
-			print(e)
-			sublime.active_window().run_command("show_panel", {"panel": "console", "toggle": True})
-
-
 def plugin_loaded():
-	sublime.load_settings("Preferences.sublime-settings").add_on_change('color_scheme',MccHighlightCommand.edit_color_scheme)
-	MccHighlightCommand.edit_color_scheme()
+	sublime.load_settings("Preferences.sublime-settings").add_on_change('color_scheme',ColorSchemeEditor.edit_color_scheme)
+	ColorSchemeEditor.edit_color_scheme()
