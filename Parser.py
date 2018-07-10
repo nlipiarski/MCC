@@ -23,7 +23,7 @@ class Parser:
 		"integer" : re.compile("-?\d+"),
 		"item_block_id" : re.compile("([a-z_]+:)?([a-z_]+)"),
 		"item_slot" : re.compile("slot\.(?:container\.\d+|weapon\.(?:main|off)hand|\.(?:enderchest|inventory)\.(?:2[0-6]|1?[0-9])|hotbar.[0-8]|horse\.(?:saddle|chest|armor|1[0-4]|[0-9])|villager\.[0-7])"),
-		"namespace" : re.compile("([a-z_\-1-9]+:)([a-z_\-1-9]+(?:\/[a-z_\-1-9]+)*)(\/?)"),
+		"namespace" : re.compile("([a-z_\-1-9\.]+:)([a-z_\-1-9\.]+(?:\/[a-z_\-1-9\.]+)*)(\/?)"),
 		"nbt_key" : re.compile("(\w+)[\t ]*:"),
 		"operation" : re.compile("[+\-\*\%\/]?=|>?<|>"),
 		"position-2" : re.compile("(~?-?\d*\.?\d+|~)[\t ]+(~?-?\d*\.?\d+|~)"),
@@ -134,10 +134,16 @@ class Parser:
 				self.invalid.append(sublime.Region(self.region_begin + command_match.start(1), 
 	                                               self.region_begin + command_match.end(1)))
 
-				self.mcccommand.append(sublime.Region(self.region_begin + command_match.start(2), 
-	                                               self.region_begin + command_match.end(2)))
 				self.current = command_match.end(2)
-				return self.highlight(command_tree["children"][command], line_region, command_match.end())
+				if self.highlight(command_tree["children"][command], line_region, command_match.end()):
+					self.mcccommand.append(sublime.Region(self.region_begin + command_match.start(2), 
+		                                               self.region_begin + command_match.end(2)))
+					return True
+				else:
+					self.invalid.append(sublime.Region(self.region_begin + command_match.start(2), 
+		                                               self.region_begin + command_match.end(2)))
+					return False
+
 			else:
 				self.invalid.append(sublime.Region(self.region_begin, line_region.end()))
 				return False
