@@ -31,9 +31,10 @@ class Parser:
 		"resource_location" : re.compile("([\w\.]+:)?([\w\.]+)"),
 		"scoreboard_slot" : re.compile("belowName|list|sidebar(?:.team.(?:black|dark_blue|dark_green|dark_aqua|dark_red|dark_purple|gold|gray|dark_gray|blue|green|aqua|red|light_purple|yellow|white))?"),
 		"sort" : re.compile("nearest|furthest|random|arbitrary"),
-		"username" : re.compile("[\w-]{,16}"),
+		"username" : re.compile("[\w\(\)\.\<\>_]+"),
 		"vec4" : re.compile("((?:\d*\.)?\d+)[\t ]+((?:\d*\.)?\d+)[\t ]+((?:\d*\.)?\d+)[\t ]+((?:\d*\.)?\d+)"),
-		"word_string" : re.compile("\w+")
+		"word_string" : re.compile("\w+"),
+		"white_space" : re.compile("^\s+$")
 	}
 
 	def __init__(self, view):
@@ -108,6 +109,9 @@ class Parser:
 				return True
 
 		self.string = self.view.substr(line_region)
+		if self.regex["white_space"].match(self.string):
+			return True
+
 		self.region = line_region
 		self.region_begin = self.region.begin()
 
