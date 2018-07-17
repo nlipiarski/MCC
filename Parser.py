@@ -21,9 +21,9 @@ class Parser:
 		"hex4" : re.compile("[0-9a-fA-F]{4}"),
 		"hover_event_action" : re.compile("show_(?:text|item|entity|achievement)"),
 		"integer" : re.compile("-?\d+"),
-		"item_block_id" : re.compile("([a-z_]+:)?([a-z_]+)"),
+		"item_block_id" : re.compile("(#?[a-z_]+:)?([a-z_]+)"),
 		"item_slot" : re.compile("slot\.(?:container\.\d+|weapon\.(?:main|off)hand|\.(?:enderchest|inventory)\.(?:2[0-6]|1?[0-9])|hotbar.[0-8]|horse\.(?:saddle|chest|armor|1[0-4]|[0-9])|villager\.[0-7])"),
-		"namespace" : re.compile("([a-z_\-1-9\.]+:)([a-z_\-1-9\.]+(?:\/[a-z_\-1-9\.]+)*)(\/?)"),
+		"namespace" : re.compile("(#?[a-z_\-1-9\.]+:)([a-z_\-1-9\.]+(?:\/[a-z_\-1-9\.]+)*)(\/?)"),
 		"nbt_key" : re.compile("(\w+)[\t ]*:"),
 		"operation" : re.compile("[+\-\*\%\/]?=|>?<|>"),
 		"position-2" : re.compile("(~?-?\d*\.?\d+|~)[\t ]+(~?-?\d*\.?\d+|~)"),
@@ -67,7 +67,8 @@ class Parser:
 			(False, self.nbt_byte_parser, None, ""),
 			(False, self.integer_parser, None, ""),
 			(False, self.json_in_nbt_parser, None, ""),
-			(True, self.json_in_nbt_parser, None, "")
+			(True, self.json_in_nbt_parser, None, ""),
+			(False, self.nbt_tags_parser, None, "")
 		]
 
 
@@ -664,6 +665,56 @@ class Parser:
 		self.current += 1
 		return self.current
 
+	def nbt_tags_parser(self, properties={}):
+		if self.current >= len(self.string) or self.string[self.current] != "{":
+			return self.current
+		elif not "escape_depth" in properties:
+			properties["escape_depth"] = 0
+
+		braces_start = self.current
+		self.current += 1
+
+		while self.string[self.current] != "}":
+			reached_end = self.skip_whitespace(braces_start)
+			if reached_end:
+				return self.current
+
+			start_of_key = self.current
+
+			key_match = self.regex["nbt_key"].match(self.string, self.current)
+			if not key_match:
+				if self.current < len(self.string):
+					self.invalid.append(sublime.Region(self.region_begin + self.current, self.region_begin + self.current + 1))
+				return self.current + 1
+
+			self.mccstring.append(sublime.Region(self.region_begin + key_match.start(1), self.region_begin + key_match.end(1)))
+			self.current = key_match.end()
+
+			reached_end = self.skip_whitespace(start_of_key)
+			if reached_end:
+				return self.current
+
+			start = self.current
+			self.current = self.nbt_value_parser(self.nbt_byte_parser, None, "", properties)
+
+			if start == self.current:
+				self.invalid.append(sublime.Region(self.region_begin + self.current, self.region_begin + self.current + 1))
+				return self.current + 1
+
+			reached_end = self.skip_whitespace(start_of_key)
+			if reached_end:
+				return self.current
+
+			if self.string[self.current] == ",":
+				self.current += 1
+
+			elif self.string[self.current] != "}":
+				self.invalid.append(sublime.Region(self.region_begin + self.current, self.region_begin + self.current + 1))
+				return self.current + 1
+		
+		self.current += 1
+		return self.current
+
 	def nbt_list_parser(self, item_parser, suffix_scope, item_suffix, properties={}):
 		if self.string[self.current] != "[":
 			return self.current
@@ -871,10 +922,15 @@ class Parser:
 		return self.current
 
 	def score_holder_parser(self, properties={}):
-		username_parser = self.parsers["minecraft:game_profile"]
 		start = self.current
+		if self.string[self.current] == "#":
+			self.current = self.current + 1
+
+		username_parser = self.parsers["minecraft:game_profile"]
+		username_start = self.current
 		self.current = username_parser(self, properties)
-		if start != self.current:
+		if username_start != self.current:
+			self.mccstring.append(sublime.Region(self.region_begin + start, self.region_begin + start + 1))
 			return self.current
 		return self.entity_parser(properties)
 
@@ -1290,7 +1346,8 @@ class Parser:
 
 	def location_from_list_parser(self, regex, possibilities):
 		match = regex.match(self.string, self.current)
-		if match and match.group(2) in possibilities and match.group(1) in [None, "minecraft:"]:
+		if match and match.group(1) != None and match.group(1)[0] == "#" or (
+		   match and match.group(2) in possibilities and match.group(1) in [None, "minecraft:"]):
 			self.mccliteral.append(sublime.Region(self.region_begin + match.start(1), self.region_begin + match.end(1)))
 			self.mccstring.append(sublime.Region(self.region_begin + match.start(2), self.region_begin + match.end(2)))
 			self.current = match.end()
@@ -1437,5 +1494,6 @@ class Parser:
 		NBT_BYTE_TAGS,
 		NBT_INTEGER_TAGS,
 		NBT_JSON_TAGS,
-		NBT_JSON_LIST_TAGS
+		NBT_JSON_LIST_TAGS,
+		NBT_CUSTOM_COMPOUND_TAGS
 	]
