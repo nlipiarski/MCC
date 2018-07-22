@@ -973,8 +973,9 @@ class Parser:
 		quote = self.generate_quote(properties["escape_depth"])
 		start_of_object = self.current
 		self.current += 1
+		finished_parsing = False
 
-		while self.string[self.current] != "}":
+		while not finished_parsing:
 			reached_end = self.skip_whitespace(self.current)
 			if reached_end:
 				return self.current
@@ -1015,8 +1016,8 @@ class Parser:
 						matched = True
 
 				if not matched and key in JSON_BOOLEAN_KEYS:
-					start_of_value == self.current
-					self.current = boolean_parser(properties)
+					start_of_value = self.current
+					self.current = self.boolean_parser(properties)
 					if start_of_value != self.current:
 						matched = True
 
@@ -1065,6 +1066,9 @@ class Parser:
 			elif self.string[self.current] != "}":
 				self.invalid.append(sublime.Region(self.region_begin + self.current, self.region_begin + self.current + 1))
 				return self.current + 1
+
+			else:
+				finished_parsing = True
 
 		return self.current + 1
 
