@@ -15,7 +15,7 @@ class Parser:
 		"entity_anchor" : re.compile("feet|eyes"),
 		"entity_tag_advancement_key" : re.compile("([a-z_\-1-9]+:)?(\w+)[\t ]*(=)"),
 		"entity_tag_key" : re.compile("(\w+)[\t ]*(=)"),
-		"float" : re.compile("-?(\d(\.\d+)?|\.\d+)"),
+		"float" : re.compile("-?(\d+(\.\d+)?|\.\d+)"),
 		"gamemode" : re.compile("survival|creative|adventure|spectator"),
 		"greedy_string" : re.compile(".*$"),
 		"hex4" : re.compile("[0-9a-fA-F]{4}"),
