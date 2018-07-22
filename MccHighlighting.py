@@ -20,26 +20,14 @@ class MccHighlightCommand(sublime_plugin.EventListener): #dd
 
 	def run(self, view):
 		file_name = view.file_name()
-		if file_name == None or not (file_name.endswith(".mcc13") or file_name.endswith(".mcfunction")):
+		if file_name == None or not file_name.endswith(".mcfunction"):
 			return
 
 		full_region = sublime.Region(0, view.size())
 		file_lines = view.lines(full_region)
 		parser = Parser(view)
 
-		if file_name.endswith(".mcfunction"):
-			first_line_string = view.substr(file_lines[0])
-			if not re.match("(?i)[ \t]*#[ \t]*use[ \t]*1\.13[ \t]*parsing[ \t]*$", first_line_string):
-				parser.add_regions()
-				if os.path.exists(sublime.installed_packages_path() + "/Marshal Command Code.sublime-package"):
-					view.settings().set("syntax", "Packages/Marshal Command Code/Minecraft Function.tmLanguage")
-				elif os.path.exists(sublime.installed_packages_path() + "/MinecraftCommandCode.sublime-package"):
-					view.settings().set("syntax", "Packages/MinecraftCommandCode/Minecraft Function.tmLanguage")
-				print("MCC not found")
-				return
-			else:
-				view.settings().set("syntax", "Packages/Text/Plain text.tmLanguage")
-
+		#view.settings().set("syntax", "Packages/Text/Plain text.tmLanguage")
 		
 		for line in file_lines:
 			if not line.empty():
