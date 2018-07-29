@@ -1,3 +1,19 @@
+# Target Selector modifiers
+TARGET_INT_RANGE = {"level"}
+TARGET_INT = {"limit"}
+TARGET_FLOAT_RANGE = {"x", "y", "z", "x_rotation", "y_rotation", "distance", "dx", "dy", "dz"}
+TARGET_USERNAME = {"name", "tag", "team"}
+TARGET_GAMEMODE = {"gamemode"}
+TARGET_SORT = {"sort"}
+TARGET_ENTITY = {"type"}
+TARGET_SCORES = {"scores"}
+TARGET_ADVANCEMENTS = {"advancements"}
+TARGET_NBT = {"nbt"}
+
+TARGET_KEY_LISTS = [TARGET_INT_RANGE,TARGET_INT,TARGET_FLOAT_RANGE,TARGET_USERNAME,TARGET_GAMEMODE,TARGET_SORT,TARGET_ENTITY,TARGET_SCORES,TARGET_ADVANCEMENTS,TARGET_NBT]
+
+
+
 # Regular NBT tags
 NBT_JSON_TAGS = {"Text1","Text2","Text3","Text4"}
 NBT_BYTE_TAGS = {"Ambient","Amplifier","Angry","AttachFace","auto","BatFlags","Bred","CanBreakDoors","CanPickUpLoot","ChestedHorse","CollarColor","Color","conditionMet","Count","crit","CustomDisplayTile","CustomNameVisible","damage","Data","DropItem","EatingHaystack","Enabled","ExactTeleport","ExplosionRadius","extending","Facing","FallFlying","Flicker","Flight","Fuel","Glowing","Health","HurtEntities","Id","ignited","ignoreEntities","inData","inGround","instabuild","Invisible","Invulnerable","invulnerable","IsBaby","IsChickenJockey","isMovable","IsVillager","ItemRotation","Johnny","Leashed","LeftHanded","LightPopulated","map_tracking_position","Marker","mayBuild","mayfly","NoAI","NoBasePlate","NoGravity","note","OnGround","Peek","PersistenceRequired","pickup","player","PlayerCreated","PlayerSpawned","powered","Pumpkin","rewardExp","Rot","Saddle","seenCredits","shake","Sheared","ShowArms","ShowBottom","ShowParticles","Silent","Sitting","SkeletonTrap","SkullType","Sleeping","Slot","Small","source","SpawnForced","SplashPotion","Tame","TerrainPopulated","TrackOutput","Trail","Type","type","Unbreakable", "UpdateLastExecution","V","wasOnGround","Willing","Y"}
@@ -17,6 +33,8 @@ NBT_INTEGER_LIST_TAGS = {"Colors", "FadeColors"}
 NBT_FLOAT_LIST_TAGS = {"Body","Head","LeftArm","LeftLeg","Pos","power","RightArm","RightLeg","Rotation"}
 NBT_DOUBLE_LIST_TAGS = {"direction","Motion","Power"}
 NBT_COMPOUNT_LIST_TAGS = {"ActiveEffects","ArmorItems","AttributeModifiers","Attributes","CustomPotionEffects","HandItems","Inventory","Items","Passengers","StoredEnchantments","textures"}
+
+NBT_KEY_LISTS = [NBT_STRING_LIST_TAGS,NBT_DOUBLE_LIST_TAGS,NBT_INTEGER_LIST_TAGS,NBT_DOUBLE_TAGS,NBT_COMPOUNT_LIST_TAGS,NBT_FLOAT_LIST_TAGS,NBT_FLOAT_TAGS,NBT_LONG_TAGS,NBT_SHORT_TAGS,NBT_STRING_TAGS,NBT_COMPOUND_TAGS,NBT_BYTE_TAGS,NBT_INTEGER_TAGS,NBT_JSON_TAGS,NBT_JSON_LIST_TAGS,NBT_CUSTOM_COMPOUND_TAGS]
 
 # Json keys
 JSON_STRING_KEYS = {"text","author","command","insertion","keybind","title","translate"}
