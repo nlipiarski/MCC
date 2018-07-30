@@ -12,11 +12,11 @@ class ColorSchemeEditor:
 
 	COLOR_SCHEME_COLORS ={ 
 		"mcccomment"	   : ["comment"],
-		"mcccommand"	   : ["keyword.control"],
-		"mccentity"		: ["entity.name.function", "entity"],
-		"mccliteral"	   : ["support.type", "support", "support.constant", "support.function.builtin", ],
+		"mcccommand"	   : ["keyword.control", "source"],
+		"mccentity"		: ["entity.name.function", "entity", "source"],
+		"mccliteral"	   : ["support.type", "support", "support.constant", "support.function.builtin", "support.class", "source"],
 		"mccstring"		: ["string"],
-		"mccconstant"	  : ["constant.numeric", "constant"]
+		"mccconstant"	  : ["constant.numeric", "constant", "source"]
 	}
 
 	@staticmethod
