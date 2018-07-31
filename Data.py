@@ -28,7 +28,7 @@ NBT_CUSTOM_COMPOUND_TAGS = {"tag"}
 
 # List tags
 NBT_JSON_LIST_TAGS = {"pages"}
-NBT_STRING_LIST_TAGS = {"Lore", "Tags"}
+NBT_STRING_LIST_TAGS = {"Lore", "Tags","CanDestroy"}
 NBT_INTEGER_LIST_TAGS = {"Colors", "FadeColors"}
 NBT_FLOAT_LIST_TAGS = {"Body","Head","LeftArm","LeftLeg","Pos","power","RightArm","RightLeg","Rotation"}
 NBT_DOUBLE_LIST_TAGS = {"direction","Motion","Power"}
