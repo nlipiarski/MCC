@@ -272,6 +272,9 @@ class Parser:
 	#	combound list of boolean tags whose key is an advancement.  Can have keys with colons in them
 	#	advancements={foo=true,bar=false,custom:something={criterion=true}} (taken from minecraft wiki)
 	def entity_parser(self, properties={}):
+		if "min" in properties:
+			properties.pop("min")
+		print(properties)
 		if self.current >= len(self.string):
 			return self.current
 		if self.string[self.current] == "*" and "amount" in properties and properties["amount"] == "multiple":
@@ -310,7 +313,7 @@ class Parser:
 					self.mccstring.pop()
 					return start_of_key
 
-				properties["min"] = 0
+				#properties["min"] = 0
 				matched = False
 				for i in range(len(TARGET_KEY_LISTS)):
 					if key in TARGET_KEY_LISTS[i]:
@@ -325,7 +328,7 @@ class Parser:
 
 						old_current = self.current
 						if isRange:
-							self.current = self.range_parser(parser)
+							self.current = self.range_parser(parser, {})
 						else:
 							self.current = parser(properties)
 
@@ -708,6 +711,7 @@ class Parser:
 		if integer_match:
 			value = int(integer_match.group())
 			if "min" in properties and value < properties["min"] or "max" in properties and value > properties["max"]:
+				print("min: " + str(properties["min"]) + " Val: " + str(value))
 				self.append_region(self.invalid, integer_match.start(), integer_match.end())
 			else:
 				self.append_region(self.mccconstant, integer_match.start(), integer_match.end())
