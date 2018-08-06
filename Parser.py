@@ -78,6 +78,17 @@ class Parser:
 		def advancement_parser(properties):
 			return self.nested_entity_tag_parser(self.boolean_parser, do_nested=True)
 
+		def name_or_string_parser(properties):
+			start = self.current
+			self.current = self.username_parser(properties)
+			if start != self.current:
+				return self.current
+			old_string_type = properties["type"]
+			properties["type"] = "strict"
+			self.current = self.string_parser(properties)
+			properties["type"] = old_string_type
+			return self.current
+
 		# Data for target selector parsing
 		# order for tuple:
 		# (isNegatable, isRange, parser)
@@ -85,7 +96,7 @@ class Parser:
 			(False, True, self.integer_parser),
 			(False, False, self.integer_parser),
 			(False, True, self.float_parser),
-			(True, False, self.username_parser),
+			(True, False, name_or_string_parser),
 			(True, False, self.gamemode_parser),
 			(True, False, self.sort_parser),
 			(True, False, self.entity_location_parser),
