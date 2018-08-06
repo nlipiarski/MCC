@@ -272,8 +272,6 @@ class Parser:
 	#	combound list of boolean tags whose key is an advancement.  Can have keys with colons in them
 	#	advancements={foo=true,bar=false,custom:something={criterion=true}} (taken from minecraft wiki)
 	def entity_parser(self, properties={}):
-		if "min" in properties:
-			properties.pop("min")
 
 		if self.current >= len(self.string):
 			return self.current
@@ -313,7 +311,7 @@ class Parser:
 					self.mccstring.pop()
 					return start_of_key
 
-				#properties["min"] = 0
+				properties["min"] = 0
 				matched = False
 				for i in range(len(TARGET_KEY_LISTS)):
 					if key in TARGET_KEY_LISTS[i]:
@@ -329,6 +327,7 @@ class Parser:
 						old_current = self.current
 						if isRange:
 							self.current = self.range_parser(parser, {})
+
 						else:
 							self.current = parser(properties)
 
@@ -387,6 +386,12 @@ class Parser:
 	def nested_entity_tag_parser(self, parser, do_nested=False, properties={}): # scores= and advancements=
 		if self.string[self.current] != "{":
 			return self.current
+		elif "min" in properties:
+			old_min = properties["min"]
+			properties.pop("min")
+		else:
+			old_min = None
+
 		bracket_start = self.current
 		self.current += 1
 		continue_parsing = True
@@ -394,16 +399,22 @@ class Parser:
 		while continue_parsing:
 			reached_end = self.skip_whitespace(self.current)
 			if reached_end:
+				if old_min != None:
+					properties["min"] = old_min
 				return self.current
 
 			start_of_key = self.current
 			key_match = self.regex["entity_tag_advancement_key"].match(self.string, self.current)
 			if not key_match:
+				if old_min != None:
+					properties["min"] = old_min
 				return self.current
 
 			elif not do_nested and key_match.group(1): # If theres a nested tag where there shouldn't be
 				self.append_region(self.invalid, self.current, key_match.end())
 				self.current = key_match.end()
+				if old_min != None:
+					properties["min"] = old_min
 				return self.current
 
 			self.append_region(self.mccstring, key_match.start(2), key_match.end(2))
@@ -412,12 +423,16 @@ class Parser:
 
 			reached_end = self.skip_whitespace(start_of_key)
 			if reached_end:
+				if old_min != None:
+					properties["min"] = old_min
 				return self.current
 
 			if key_match.group(1) != None:
 				self.append_region(self.mccliteral, key_match.start(1), key_match.end(1))
 				self.current = self.nested_entity_tag_parser(parser, do_nested=False, properties=properties)
 				if self.string[self.current - 1] != "}": #This tests to see if the parse was successful
+					if old_min != None:
+						properties["min"] = old_min
 					return self.current
 			else:
 				old_current = self.current
@@ -425,21 +440,29 @@ class Parser:
 				if old_current == self.current:
 					self.mccstring.pop()
 					self.mcccommand.pop()
+					if old_min != None:
+						properties["min"] = old_min
 					return self.current
 
 			reached_end = self.skip_whitespace(start_of_key)
 			if reached_end:
+				if old_min != None:
+					properties["min"] = old_min
 				return self.current
 
 			if self.string[self.current] == ",":
 				self.current += 1
 			elif self.string[self.current] != "}":
 				self.append_region(self.invalid, self.current, self.current + 1)
+				if old_min != None:
+					properties["min"] = old_min
 				return self.current + 1
 			else:
 				continue_parsing = False
 
 		self.current += 1
+		if old_min != None:
+			properties["min"] = old_min
 		return self.current
 
 	# Word means "up to the next space", phrase is "an unquoted word or quoted string", and greedy is "everything from this point to the end of input".
@@ -711,7 +734,6 @@ class Parser:
 		if integer_match:
 			value = int(integer_match.group())
 			if "min" in properties and value < properties["min"] or "max" in properties and value > properties["max"]:
-				print("min: " + str(properties["min"]) + " Val: " + str(value))
 				self.append_region(self.invalid, integer_match.start(), integer_match.end())
 			else:
 				self.append_region(self.mccconstant, integer_match.start(), integer_match.end())
