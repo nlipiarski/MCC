@@ -23,7 +23,7 @@ class Parser:
 		"integer" : re.compile("-?\d+"),
 		"item_block_id" : re.compile("(#?[a-z_]+:)?([a-z_]+)"),
 		"item_slot" : re.compile("armor\.(?:chest|feet|head|legs)|container\.(5[0-3]|[1-4]?\d)|(enderchest|inventory)\.(2[0-6]|1?\d)|horse\.(\d|1[0-4]|armor|chest|saddle)|hotbar\.[0-8]|village\.[0-7]|weapon(?:\.mainhand|\.offhand)?"),
-		"namespace" : re.compile("(#?[a-z_\-1-9\.]+:)([a-z_\-1-9\.]+(?:\/[a-z_\-1-9\.]+)*)(\/?)"),
+		"namespace" : re.compile("(#?[a-z_\-0-9\.]+:)([a-z_\-0-9\.]+(?:\/[a-z_\-0-9\.]+)*)(\/?)"),
 		"nbt_key" : re.compile("(\w+)[\t ]*:"),
 		"operation" : re.compile("[+\-\*\%\/]?=|>?<|>"),
 		"position-2" : re.compile("(~?-?\d*\.?\d+|~)[\t ]+(~?-?\d*\.?\d+|~)"),
