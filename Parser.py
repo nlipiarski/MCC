@@ -496,6 +496,7 @@ class Parser:
 			continue_parsing = True
 			while continue_parsing:
 				if self.current >= len(self.string):
+					self.append_region(self.mccstring, start, self.current - 1)
 					self.append_region(self.invalid, self.current - 1, self.current)
 					return self.current
 
@@ -519,6 +520,7 @@ class Parser:
 						
 						hex_match = self.regex["hex4"].match(self.string, self.current + len(escape) + 1)
 						if not hex_match:
+							self.append_region(self.mccstring, start, self.current - 1)
 							self.append_region(self.invalid, self.current, self.current + len(escape) + 1)
 							return self.current + len(escape) + 1
 
@@ -527,10 +529,12 @@ class Parser:
 						start = self.current
 
 					else:
+						self.append_region(self.mccstring, start, self.current - 1)
 						self.append_region(self.invalid, self.current, self.current + 1)
 						return self.current + 1
 
 				elif self.string[self.current] in "\"\\":
+					self.append_region(self.mccstring, start, self.current - 1)
 					self.append_region(self.invalid, self.current, self.current + 1)
 					return self.current + 1
 				else:
@@ -918,7 +922,8 @@ class Parser:
 		elif self.string[self.current]  == "{":
 			return self.json_object_parser(properties)
 
-		return self.current
+		properties["type"] = "strict"
+		return self.string_parser(properties)
 
 	def json_object_parser(self, properties={}):# The '{}' one
 		if self.string[self.current] != "{":
