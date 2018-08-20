@@ -22,7 +22,7 @@ class Parser:
 		"hover_event_action" : re.compile("show_(?:text|item|entity|achievement)"),
 		"integer" : re.compile("-?\d+"),
 		"item_block_id" : re.compile("(#?[a-z_]+:)?([a-z_]+)"),
-		"item_slot" : re.compile("slot\.(?:container\.\d+|weapon\.(?:main|off)hand|\.(?:enderchest|inventory)\.(?:2[0-6]|1?[0-9])|hotbar.[0-8]|horse\.(?:saddle|chest|armor|1[0-4]|[0-9])|villager\.[0-7])"),
+		"item_slot" : re.compile("armor\.(?:chest|feet|head|legs)|container\.(5[0-3]|[1-4]?\d)|(enderchest|inventory)\.(2[0-6]|1?\d)|horse\.(\d|1[0-4]|armor|chest|saddle)|hotbar\.[0-8]|village\.[0-7]|weapon(?:\.mainhand|\.offhand)?"),
 		"namespace" : re.compile("(#?[a-z_\-1-9\.]+:)([a-z_\-1-9\.]+(?:\/[a-z_\-1-9\.]+)*)(\/?)"),
 		"nbt_key" : re.compile("(\w+)[\t ]*:"),
 		"operation" : re.compile("[+\-\*\%\/]?=|>?<|>"),
@@ -72,8 +72,7 @@ class Parser:
 		]
 
 		def score_parser(properties):
-			properties["decimals"] = False
-			return self.nested_entity_tag_parser(self.brigadier_range_parser, do_nested=False, properties=properties)
+			return self.nested_entity_tag_parser(self.int_range_parser, do_nested=False, properties=properties)
 
 		def advancement_parser(properties):
 			return self.nested_entity_tag_parser(self.boolean_parser, do_nested=True)
@@ -356,11 +355,8 @@ class Parser:
 
 		return self.current
 
-	def brigadier_range_parser(self, properties={}):
-		if properties["decimals"]:
-			return self.range_parser(self.float_parser, properties)
-		else:
-			return self.range_parser(self.integer_parser, properties)
+	def int_range_parser(self, properties={}):
+		return self.range_parser(self.integer_parser, properties)
 
 	def range_parser(self, parse_function, properties={}):
 		matched = False
@@ -1405,40 +1401,40 @@ class Parser:
 		return quote + self.generate_quote(escape_depth - 1)
 
 	parsers = { # Master list of what function the parser name in commands.json corresponds to
-		"minecraft:resource_location": resource_location_parser,
-		"minecraft:function"         : function_parser,
-		"minecraft:entity"           : entity_parser,
-		"brigadier:string"           : string_parser, #type  = word and type= greedy
-		"minecraft:game_profile"     : username_parser,
-		"minecraft:message"          : message_parser,
-		"minecraft:block_pos"        : vec3d_parser,
-		"minecraft:nbt"              : nbt_parser,
-		"minecraft:item_stack"       : item_parser,
-		"minecraft:item_predicate"   : item_parser,
-		"brigadier:integer"          : integer_parser, #Properties has min and max
-		"minecraft:block_state"      : block_parser,
-		"minecraft:block_predicate"  : block_parser,
-		"minecraft:nbt_path"         : nbt_path_parser,
-		"brigadier:float"            : float_parser,
-		"brigadier:double"           : float_parser,
-		"brigadier:bool"             : boolean_parser,
-		"minecraft:swizzle"          : axes_parser, # any cobination of x, y, and z e.g. x, xy, xz. AKA swizzle
-		"minecraft:score_holder"     : score_holder_parser, #Has options to include wildcard or not
-		"minecraft:objective"        : username_parser,
-		"minecraft:vec3"             : vec3d_parser,
-		"minecraft:vec2"             : vec2d_parser,
-		"minecraft:particle"         : particle_parser,
-		"minecraft:item_slot"        : item_slot_parser, #Check the wiki on this one I guess
-		"minecraft:scoreboard_slot"  : scoreboard_slot_parser,
-		"minecraft:team"             : username_parser,
-		"minecraft:color"            : color_parser,
-		"minecraft:rotation"         : vec2d_parser, # [yaw, pitch], includes relative changes
-		"minecraft:component"        : json_parser,
-		"minecraft:entity_anchor"    : entity_anchor_parser,
-		"minecraft:operation"        : scoreboard_operation_parser, # +=, = , <>, etc
-		"minecraft:range"            : brigadier_range_parser,
-		"minecraft:mob_effect"       : mob_effect_parser,
-		"minecraft:sound"            : sound_parser,
+		"minecraft:resource_location" : resource_location_parser,
+		"minecraft:function"          : function_parser,
+		"minecraft:entity"            : entity_parser,
+		"brigadier:string"            : string_parser, #type  = word and type= greedy
+		"minecraft:game_profile"      : username_parser,
+		"minecraft:message"           : message_parser,
+		"minecraft:block_pos"         : vec3d_parser,
+		"minecraft:nbt"               : nbt_parser,
+		"minecraft:item_stack"        : item_parser,
+		"minecraft:item_predicate"    : item_parser,
+		"brigadier:integer"           : integer_parser, #Properties has min and max
+		"minecraft:block_state"       : block_parser,
+		"minecraft:block_predicate"   : block_parser,
+		"minecraft:nbt_path"          : nbt_path_parser,
+		"brigadier:float"             : float_parser,
+		"brigadier:double"            : float_parser,
+		"brigadier:bool"              : boolean_parser,
+		"minecraft:swizzle"           : axes_parser, # any cobination of x, y, and z e.g. x, xy, xz. AKA swizzle
+		"minecraft:score_holder"      : score_holder_parser, #Has options to include wildcard or not
+		"minecraft:objective"         : username_parser,
+		"minecraft:vec3"              : vec3d_parser,
+		"minecraft:vec2"              : vec2d_parser,
+		"minecraft:particle"          : particle_parser,
+		"minecraft:item_slot"         : item_slot_parser, #Check the wiki on this one I guess
+		"minecraft:scoreboard_slot"   : scoreboard_slot_parser,
+		"minecraft:team"              : username_parser,
+		"minecraft:color"             : color_parser,
+		"minecraft:rotation"          : vec2d_parser, # [yaw, pitch], includes relative changes
+		"minecraft:component"         : json_parser,
+		"minecraft:entity_anchor"     : entity_anchor_parser,
+		"minecraft:operation"         : scoreboard_operation_parser, # +=, = , <>, etc
+		"minecraft:int_range"         : int_range_parser,
+		"minecraft:mob_effect"        : mob_effect_parser,
+		"minecraft:sound"             : sound_parser,
 		"minecraft:objective_criteria":objective_criteria_parser,
-		"minecraft:entity_location": entity_location_parser
+		"minecraft:entity_summon"     : entity_location_parser
 	}
