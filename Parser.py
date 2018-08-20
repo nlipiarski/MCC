@@ -602,11 +602,8 @@ class Parser:
 				properties["type"] = old_type
 
 			if not matched:
-				old_current = self.current
-				self.current = self.nbt_value_parser(self.nbt_byte_parser, None, "", properties)
-				if old_current == self.current:
-					self.append_region(self.invalid, self.current, self.current + 1)
-					return self.current + 1
+				self.append_region(self.invalid, self.current, self.current + 1)
+				return self.current + 1
 
 			reached_end = self.skip_whitespace(start_of_key)
 			if reached_end:
