@@ -250,28 +250,15 @@ class Parser:
 				return True
 		return False
 
-	# Entity tags
-	#
-	# gamemode
-	#	survival, creative, spectator, adventure
-	# level
-	#	integer (range)
-	# x, y, z, x_rotation, y_rotation, distance
-	#	float(range)
-	# tag
-	#	unquoted, one word string
-	# name
-	# 	either unquoted, one word string or a quoted string
-	# sort
-	#	nearest, furthest, random, arbitrary
-	# scores
-	# 	compound list of arbitrary tags with integer range values.
-	#	eg scores={foo=1,bar=1..5} (taken from minecraft wiki)
-	# advancements
-	#	combound list of boolean tags whose key is an advancement.  Can have keys with colons in them
-	#	advancements={foo=true,bar=false,custom:something={criterion=true}} (taken from minecraft wiki)
 	def entity_parser(self, properties={}):
+		start = self.current
+		self.current = self.target_selector_parser(properties)
+		if start != self.current:
+			return self.current
 
+		return self.username_parser(properties)
+
+	def target_selector_parser(self, properties={}):
 		if self.current >= len(self.string):
 			return self.current
 		if self.string[self.current] == "*" and "amount" in properties and properties["amount"] == "multiple":
