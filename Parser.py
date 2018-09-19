@@ -32,8 +32,9 @@ class Parser:
 		"scoreboard_slot" : re.compile("belowName|list|sidebar(?:.team.(?:black|dark_blue|dark_green|dark_aqua|dark_red|dark_purple|gold|gray|dark_gray|blue|green|aqua|red|light_purple|yellow|white))?"),
 		"sort" : re.compile("nearest|furthest|random|arbitrary"),
 		"username" : re.compile("[\w\(\)\.\<\>_\-]+"),
+		"objective" : re.compile("[\w\(\)\.\<\>_\-]{1,16}"),
 		"vec4" : re.compile("((?:\d*\.)?\d+)[\t ]+((?:\d*\.)?\d+)[\t ]+((?:\d*\.)?\d+)[\t ]+((?:\d*\.)?\d+)"),
-		"word_string" : re.compile("\w+"),
+		"word_string" : re.compile("[\w\(\)\.\<\>_\-]+"),
 		"white_space" : re.compile("^\s+$")
 	}
 
@@ -1256,6 +1257,9 @@ class Parser:
 	def username_parser(self, properties={}):
 		return self.regex_parser(self.regex["username"], [self.mccstring])
 
+	def objective_parser(self, properties={}):
+		return self.regex_parser(self.regex["objective"], [self.mccstring])
+
 	def vec3d_parser(self, properties={}):
 		return self.regex_parser(self.regex["position-3"], [self.mccconstant, self.mccconstant, self.mccconstant])
 
@@ -1409,7 +1413,7 @@ class Parser:
 		"brigadier:bool"              : boolean_parser,
 		"minecraft:swizzle"           : axes_parser, # any cobination of x, y, and z e.g. x, xy, xz. AKA swizzle
 		"minecraft:score_holder"      : score_holder_parser, #Has options to include wildcard or not
-		"minecraft:objective"         : username_parser,
+		"minecraft:objective"         : objective_parser,
 		"minecraft:vec3"              : vec3d_parser,
 		"minecraft:vec2"              : vec2d_parser,
 		"minecraft:particle"          : particle_parser,
