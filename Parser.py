@@ -544,8 +544,9 @@ class Parser:
 		braces_start = self.current
 		self.current += 1
 		nbt_value_parsers = self.nbt_value_parsers
+		continue_parsing = True
 
-		while self.string[self.current] != "}":
+		while continue_parsing:
 			reached_end = self.skip_whitespace(braces_start)
 			if reached_end:
 				return self.current
@@ -553,6 +554,7 @@ class Parser:
 			start_of_key = self.current
 
 			key_match = self.regex["nbt_key"].match(self.string, self.current)
+			
 			if not key_match:
 				if self.current < len(self.string):
 					self.append_region(self.invalid, self.current, self.current + 1)
@@ -603,6 +605,9 @@ class Parser:
 			elif self.string[self.current] != "}":
 				self.append_region(self.invalid, self.current, self.current + 1)
 				return self.current + 1
+
+			else:
+				continue_parsing = False
 		
 		self.current += 1
 		return self.current
@@ -615,8 +620,9 @@ class Parser:
 
 		braces_start = self.current
 		self.current += 1
+		parsing_complete = False
 
-		while self.string[self.current] != "}":
+		while not parsing_complete:
 			reached_end = self.skip_whitespace(braces_start)
 			if reached_end:
 				return self.current
@@ -627,7 +633,8 @@ class Parser:
 			if not key_match:
 				if self.current < len(self.string):
 					self.append_region(self.invalid, self.current, self.current + 1)
-				return self.current + 1
+					return self.current + 1
+				return self.current
 
 			self.append_region(self.mccstring, key_match.start(1), key_match.end(1))
 			self.current = key_match.end()
@@ -653,6 +660,8 @@ class Parser:
 			elif self.string[self.current] != "}":
 				self.append_region(self.invalid, self.current, self.current + 1)
 				return self.current + 1
+			else:
+				parsing_complete = True
 		
 		self.current += 1
 		return self.current
@@ -695,11 +704,11 @@ class Parser:
 		start = self.current
 		self.current = parser(properties)
 		if start != self.current:
-			if (len(suffix) > 0 and
-					self.current + len(suffix) <= len(self.string) and 
-					self.string[self.current:self.current + len(suffix)] == suffix):
+			if suffix_scope != None and self.string.startswith(suffix, self.current):
 				self.append_region(suffix_scope, self.current, self.current + len(suffix))
-			return self.current + len(suffix)
+				return self.current + len(suffix)
+			elif suffix_scope == None:
+				return self.current
 
 		return start
 
