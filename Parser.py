@@ -25,6 +25,7 @@ class Parser:
 		"item_slot" : re.compile("armor\.(?:chest|feet|head|legs)|container\.(5[0-3]|[1-4]?\d)|(enderchest|inventory)\.(2[0-6]|1?\d)|horse\.(\d|1[0-4]|armor|chest|saddle)|hotbar\.[0-8]|village\.[0-7]|weapon(?:\.mainhand|\.offhand)?"),
 		"namespace" : re.compile("(#?[a-z_\-0-9\.]+:)([a-z_\-0-9\.]+(?:\/[a-z_\-0-9\.]+)*)(\/?)"),
 		"nbt_key" : re.compile("(\w+)[\t ]*:"),
+		"objective_criteria": re.compile("minecraft\.(\w+):minecraft.(\w+)|[\w\.:]+"),
 		"operation" : re.compile("[+\-\*\%\/]?=|>?<|>"),
 		"position-2" : re.compile("(~?-?\d*\.?\d+|~)[\t ]+(~?-?\d*\.?\d+|~)"),
 		"position-3" : re.compile("([~\^]?-?\d*\.?\d+|[~\^])[\t ]+([~\^]?-?\d*\.?\d+|[~\^])[\t ]+([~\^]?-?\d*\.?\d+|[~\^])"),
@@ -737,36 +738,33 @@ class Parser:
 	def block_parser(self, properties={}):
 		start = self.current
 		lenient = False
-		if self.current < len(self.string) and self.string[self.current] ==  "#":
+		if self.string.startswith("#", start):
 			lenient=True
 			self.current += 1
 
 		block_match = self.regex["item_block_id"].match(self.string, self.current)
 		if block_match:
-			if block_match.group(1) != None:
-				self.append_region(self.mccliteral, start, block_match.end(1))
-			elif self.string[start] == "#":
-				self.append_region(self.invalid, start, start+1)
+			block_name = block_match.group(2)
 
+			if (block_name in BLOCKS and "properties" in BLOCKS[block_name] and 
+					(block_match.group(1) in [None, "minecraft:"] or lenient)):
+				properties = BLOCKS[block_name]["properties"]
+			elif lenient:
+				properties = {}
+			else:
+				return start
+
+			self.append_region(self.mccliteral, block_match.start(1), block_match.end(1))
 			self.append_region(self.mccstring, block_match.start(2), block_match.end(2))
+
 			self.current = block_match.end()
 
-			if block_match.start(1) == block_match.end(1):
-				block_name = "minecraft:" + block_match.group(2)
-			else:
-				block_name = block_match.group(0)
-
-			if block_name in BLOCKS and "properties" in BLOCKS[block_name]:
-				properties = BLOCKS[block_name]["properties"]
-			else:
-				properties = {}
-
-			if self.current >= len(self.string) or self.string[self.current] != "[":
+			if self.string.startswith("{", self.current):
 				return self.nbt_parser(properties)
 			start_of_bracket = self.current
 			self.current += 1
 			
-			while self.string[self.current] != "]":
+			while not self.string.startswith("]",self.current):
 				reached_end = self.skip_whitespace(self.current)
 				if reached_end:
 					return self.current
@@ -1233,23 +1231,24 @@ class Parser:
 		return self.current
 
 	def objective_criteria_parser(self, properties={}):
-		criteria_match = self.regex["resource_location"].match(self.string, self.current)
+		criteria_match = self.regex["objective_criteria"].match(self.string, self.current)
 		if criteria_match:
-			criteria = criteria_match.group()
-			namespace = criteria_match.group(1)
-			if criteria_match.group(2).startswith("minecraft."):
-				location = criteria_match.group(2)[10:]
-			else:
-				location = criteria_match.group(2)
+			criteria = criteria_match.group().lower()
 
-			if (criteria in OBJECTIVE_CRITERIA or 
-			   (namespace in CRITERIA_BLOCKS and location in BLOCKS) or
-			   (namespace in CRITERIA_ITEMS and location in ITEMS) or
-			   (namespace in CRITERIA_ENTITIES and location in ENTITIES)):
-				if namespace != None:
-					self.append_region(self.mccliteral, criteria_match.start(1), criteria_match.end(1))
+			if criteria in OBJECTIVE_CRITERIA:
+				self.append_region(self.mccstring, criteria_match.start(), criteria_match.end())
+				self.current = criteria_match.end()
 
-				self.append_region(self.mccstring, criteria_match.start(2), criteria_match.end(2))
+			elif criteria_match.group(1) != None:
+				namespace = criteria_match.group(1).lower()
+				location = criteria_match.group(2).lower()
+				if ((namespace in CRITERIA_BLOCKS and location in BLOCKS) or
+			   			(namespace in CRITERIA_ITEMS and location in ITEMS) or
+			   			(namespace in CRITERIA_ENTITIES and location in ENTITIES) or 
+			   			(namespace in CRITERIA_CUSTOM and location in CUSTOM)):
+					self.append_region(self.mccliteral, criteria_match.start(), criteria_match.end(1) + 1)
+					self.append_region(self.mccstring, criteria_match.end(1)+1, criteria_match.end())
+			
 				self.current = criteria_match.end()
 
 		return self.current
