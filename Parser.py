@@ -736,11 +736,11 @@ class Parser:
 		return self.current
 
 	def block_parser(self, properties={}):
+		print(self.string[self.current:])
 		start = self.current
 		lenient = False
 		if self.string.startswith("#", start):
 			lenient=True
-			self.current += 1
 
 		block_match = self.regex["item_block_id"].match(self.string, self.current)
 		if block_match:
@@ -754,17 +754,25 @@ class Parser:
 			else:
 				return start
 
-			self.append_region(self.mccliteral, block_match.start(1), block_match.end(1))
+			if lenient:
+				namespaceScope = self.mccentity
+			else:
+				namespaceScope = self.mccliteral
+			self.append_region(namespaceScope, block_match.start(), block_match.end(1))
 			self.append_region(self.mccstring, block_match.start(2), block_match.end(2))
 
 			self.current = block_match.end()
 
 			if self.string.startswith("{", self.current):
 				return self.nbt_parser(properties)
+			elif not self.string.startswith("["):
+				return self.current
+
 			start_of_bracket = self.current
 			self.current += 1
+			continue_parsing = True
 			
-			while not self.string.startswith("]",self.current):
+			while continue_parsing:
 				reached_end = self.skip_whitespace(self.current)
 				if reached_end:
 					return self.current
@@ -804,9 +812,13 @@ class Parser:
 
 				if self.string[self.current] == ",":
 					self.current += 1
+
 				elif self.string[self.current] != "]":
 					self.append_region(self.invalid, self.current, self.current + 1)
 					return self.current + 1
+
+				else:
+					continue_parsing = False
 
 			self.current += 1
 			return self.nbt_parser(properties)
