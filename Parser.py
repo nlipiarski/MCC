@@ -550,7 +550,7 @@ class Parser:
 		while continue_parsing:
 			reached_end = self.skip_whitespace(braces_start)
 			if reached_end:
-				return self.current
+				return braces_start
 
 			start_of_key = self.current
 
@@ -570,7 +570,7 @@ class Parser:
 
 			reached_end = self.skip_whitespace(start_of_key)
 			if reached_end:
-				return self.current
+				return braces_start
 
 			old_type = None
 			if "type" in properties:
@@ -605,7 +605,7 @@ class Parser:
 
 			reached_end = self.skip_whitespace(start_of_key)
 			if reached_end:
-				return self.current
+				return braces_start
 
 			if self.string[self.current] == ",":
 				self.current += 1
