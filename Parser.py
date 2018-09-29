@@ -559,7 +559,10 @@ class Parser:
 			if not key_match:
 				if self.current < len(self.string):
 					self.append_region(self.invalid, self.current, self.current + 1)
-				return self.current + 1
+					return self.current + 1
+				
+				self.append_region(self.invalid, self.current, self.current - 1)
+				return self.current
 
 			key = key_match.group(1)
 			self.append_region(self.mccstring, key_match.start(1), key_match.end(1))
@@ -593,8 +596,12 @@ class Parser:
 				properties["type"] = old_type
 
 			if not matched:
-				self.append_region(self.invalid, self.current, self.current + 1)
-				return self.current + 1
+				if self.current < len(self.string):
+					self.append_region(self.invalid, self.current, self.current + 1)
+					return self.current + 1
+				
+				self.append_region(self.invalid, self.current, self.current - 1)
+				return self.current
 
 			reached_end = self.skip_whitespace(start_of_key)
 			if reached_end:
@@ -604,8 +611,12 @@ class Parser:
 				self.current += 1
 
 			elif self.string[self.current] != "}":
-				self.append_region(self.invalid, self.current, self.current + 1)
-				return self.current + 1
+				if self.current < len(self.string):
+					self.append_region(self.invalid, self.current, self.current + 1)
+					return self.current + 1
+
+				self.append_region(self.invalid, self.current, self.current - 1)
+				return self.current
 
 			else:
 				continue_parsing = False
@@ -736,7 +747,6 @@ class Parser:
 		return self.current
 
 	def block_parser(self, properties={}):
-		print(self.string[self.current:])
 		start = self.current
 		lenient = False
 		if self.string.startswith("#", start):
@@ -940,29 +950,35 @@ class Parser:
 		while not finished_parsing:
 			reached_end = self.skip_whitespace(self.current)
 			if reached_end:
-				return self.current
+				return start_of_object
 
 			start_of_key = self.current
 			self.current = self.string_parser(properties={"type":"strict","escape_depth":properties["escape_depth"]})
 			if start_of_key == self.current:
-				self.append_region(self.invalid, self.current, self.current + 1)
-				return self.current + 1
+				if self.current < len(self.string):
+					self.append_region(self.invalid, self.current, self.current + 1)
+				else:
+					self.append_region(self.invalid, self.current, self.current - 1)
+				return start_of_object
 
 			key = self.string[start_of_key + len(quote) : self.current - len(quote)]
 
 			reached_end = self.skip_whitespace(start_of_key)
 			if reached_end:
-				return self.current
+				return start_of_object
 
 			if not self.string[self.current] in ",:}":
-				self.append_region(self.invalid, self.current, self.current + 1)
-				return self.current + 1
+				if self.current < len(self.string):
+					self.append_region(self.invalid, self.current, self.current + 1)
+				else:
+					self.append_region(self.invalid, self.current, self.current - 1)
+				return start_of_object
 
 			elif self.string[self.current] == ":":
 				self.current += 1
 				reached_end = self.skip_whitespace(start_of_key)
 				if reached_end:
-					return self.current
+					return start_of_object
 
 				matched = False
 				if key in JSON_STRING_KEYS:
@@ -979,7 +995,7 @@ class Parser:
 
 				if not matched and key in JSON_BOOLEAN_KEYS:
 					start_of_value = self.current
-					self.current = self.boolean_parser(properties)
+					self.current = self.quoted_parser(self.boolean_parser, properties)
 					if start_of_value != self.current:
 						matched = True
 
@@ -1020,14 +1036,17 @@ class Parser:
 
 			reached_end = self.skip_whitespace(start_of_key)
 			if reached_end:
-				return self.current
+				return start_of_object
 
 			if self.string[self.current] == ",":
 				self.current += 1
 
 			elif self.string[self.current] != "}":
-				self.append_region(self.invalid, self.current, self.current + 1)
-				return self.current + 1
+				if self.current < len(self.string):
+					self.append_region(self.invalid, self.current, self.current + 1)
+				else:
+					self.append_region(self.invalid, self.current, self.current - 1)
+				return start_of_object
 
 			else:
 				finished_parsing = True
