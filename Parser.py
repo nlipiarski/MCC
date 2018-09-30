@@ -967,72 +967,64 @@ class Parser:
 			if reached_end:
 				return start_of_object
 
-			if not self.string[self.current] in ",:}":
-				if self.current < len(self.string):
-					self.append_region(self.invalid, self.current, self.current + 1)
-				else:
-					self.append_region(self.invalid, self.current, self.current - 1)
+			self.current += 1
+			reached_end = self.skip_whitespace(start_of_key)
+			if reached_end:
 				return start_of_object
 
-			elif self.string[self.current] == ":":
-				self.current += 1
-				reached_end = self.skip_whitespace(start_of_key)
-				if reached_end:
-					return start_of_object
-
-				matched = False
-				if key in JSON_STRING_KEYS:
-					start_of_value = self.current
-					self.current = self.string_parser(properties={"type":"strict","escape_depth":properties["escape_depth"]})
-					if start_of_value != self.current:
-						matched = True
-
-				if not matched and key in JSON_ENTITY_KEYS:
-					start_of_value = self.current
-					self.current = self.quoted_parser(self.entity_parser, properties)
-					if start_of_value != self.current:
-						matched = True
-
-				if not matched and key in JSON_BOOLEAN_KEYS:
-					start_of_value = self.current
-					self.current = self.quoted_parser(self.boolean_parser, properties)
-					if start_of_value != self.current:
-						matched = True
-
-				if not matched and key in JSON_NESTED_KEYS:
-					self.current = self.json_parser(properties)
-					if not self.string[self.current - 1] in "}]":
-						return self.current
+			matched = False
+			if key in JSON_STRING_KEYS:
+				start_of_value = self.current
+				self.current = self.string_parser(properties={"type":"strict","escape_depth":properties["escape_depth"]})
+				if start_of_value != self.current:
 					matched = True
 
-				if not matched and key == "color":
-					start_of_value = self.current
-					self.current = self.quoted_parser(self.color_parser, properties)
-					if start_of_value != self.current:
-						matched = True
-
-				if not matched and key == "clickEvent":
-					self.current = self.json_event_parser(regex["click_event_action"], properties)
-					if not self.string[self.current - 1] in "}":
-						return self.current
+			if not matched and key in JSON_ENTITY_KEYS:
+				start_of_value = self.current
+				self.current = self.quoted_parser(self.entity_parser, properties)
+				if start_of_value != self.current:
 					matched = True
 
-				if not matched and key == "hoverEvent":
-					self.current = self.json_event_parser(regex["hover_event_action"], properties)
-					if not self.string[self.current - 1] in "}":
-						return self.current
+			if not matched and key in JSON_BOOLEAN_KEYS:
+				start_of_value = self.current
+				self.current = self.quoted_parser(self.boolean_parser, properties)
+				if start_of_value != self.current:
 					matched = True
 
-				if not matched and key == "score":
-					self.current = self.json_score_parser(properties)
-					if not self.string[self.current - 1] in "}":
-						return self.current
-					matched = True
-
-				if not matched:
-					self.mccstring.pop()
-					self.append_region(self.invalid, start_of_key, self.current)
+			if not matched and key in JSON_NESTED_KEYS:
+				self.current = self.json_parser(properties)
+				if not self.string[self.current - 1] in "}]":
 					return self.current
+				matched = True
+
+			if not matched and key == "color":
+				start_of_value = self.current
+				self.current = self.quoted_parser(self.color_parser, properties)
+				if start_of_value != self.current:
+					matched = True
+
+			if not matched and key == "clickEvent":
+				self.current = self.json_event_parser(regex["click_event_action"], properties)
+				if not self.string[self.current - 1] in "}":
+					return self.current
+				matched = True
+
+			if not matched and key == "hoverEvent":
+				self.current = self.json_event_parser(regex["hover_event_action"], properties)
+				if not self.string[self.current - 1] in "}":
+					return self.current
+				matched = True
+
+			if not matched and key == "score":
+				self.current = self.json_score_parser(properties)
+				if not self.string[self.current - 1] in "}":
+					return self.current
+				matched = True
+
+			if not matched:
+				self.mccstring.pop()
+				self.append_region(self.invalid, start_of_key, self.current)
+				return self.current
 
 			reached_end = self.skip_whitespace(start_of_key)
 			if reached_end:
