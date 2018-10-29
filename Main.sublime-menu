@@ -1,0 +1,16 @@
+[
+	{
+		"id": "preferences",
+		"children": [
+			{"caption": "-", "id": "mcc"},
+			{
+				"caption": "MCC",
+				"children": [
+					{
+						"command": "toggle_custom_nbt"
+					}
+				]
+			}
+		]
+	}
+]

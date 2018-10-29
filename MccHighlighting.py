@@ -7,7 +7,7 @@ from .CommandTree import COMMAND_TREE
 from .Parser import Parser
 from .ColorSchemeEditor import ColorSchemeEditor
 
-class MccHighlightCommand(sublime_plugin.EventListener): #dd
+class MccHighlightCommand(sublime_plugin.EventListener):
 
 	def on_load(self, view):
 		self.run(view)
@@ -25,9 +25,8 @@ class MccHighlightCommand(sublime_plugin.EventListener): #dd
 
 		full_region = sublime.Region(0, view.size())
 		file_lines = view.lines(full_region)
-		parser = Parser(view)
-
-		#view.settings().set("syntax", "Packages/Text/Plain text.tmLanguage")
+		allow_custom_tags = sublime.load_settings("Preferences.sublime-settings").get("mcc_custom_tags", False)
+		parser = Parser(view, allow_custom_tags)
 		
 		for line in file_lines:
 			if not line.empty():

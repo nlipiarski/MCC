@@ -39,7 +39,7 @@ class Parser:
 		"white_space" : re.compile("^\s+$")
 	}
 
-	def __init__(self, view):
+	def __init__(self, view, allow_custom_tags):
 
 		self.current = 0
 		self.view = view
@@ -50,6 +50,7 @@ class Parser:
 		self.mccentity = []
 		self.mccliteral = []
 		self.invalid = []
+		self.custom_tags = allow_custom_tags
 
 		#The order of this list corresponds to the ordering of nbt_tag_lists.
 		# The tuples are ordered like this
@@ -64,13 +65,13 @@ class Parser:
 			(False, self.float_parser, self.mccconstant, "f"),
 			(False, self.integer_parser, self.mccconstant, "L"),
 			(False, self.integer_parser, self.mccconstant, "s"),
-			(False, self.string_parser, None, ""),
 			(False, self.nbt_parser, None, ""),
 			(False, self.nbt_byte_parser, None, ""),
 			(False, self.integer_parser, None, ""),
 			(False, self.json_in_nbt_parser, None, ""),
 			(True, self.json_in_nbt_parser, None, ""),
-			(False, self.nbt_tags_parser, None, "")
+			(False, self.nbt_tags_parser, None, ""),
+			(False, self.string_parser, None, "")
 		]
 
 		def score_parser(properties):
@@ -589,6 +590,19 @@ class Parser:
 						self.current = self.nbt_value_parser(value_parser, suffix_scope, suffix, properties)
 
 					if old_current != self.current:
+						matched = True
+						break
+
+			if self.custom_tags:
+				for parser_data in nbt_value_parsers:
+					is_list, value_parser, suffix_scope, suffix = parser_data
+					start = self.current
+					if is_list:
+						self.current = self.nbt_list_parser(value_parser, suffix_scope, suffix, properties)
+					else:
+						self.current = self.nbt_value_parser(value_parser, suffix_scope, suffix, properties)
+
+					if start != self.current:
 						matched = True
 						break
 
