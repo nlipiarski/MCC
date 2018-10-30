@@ -13,7 +13,7 @@ class Parser:
 		"command" : re.compile('[\t ]*(/?)([a-z]+)'),
 		"comment" :  re.compile('^[\t ]*#.*$'),
 		"entity_anchor" : re.compile("feet|eyes"),
-		"entity_tag_advancement_key" : re.compile("([a-z_\-1-9]+:)?(\w+)[\t ]*(=)"),
+		"entity_tag_advancement_key" : re.compile("([a-z_\-1-9]+:)?([\w\.\-]+)[\t ]*(=)"),
 		"entity_tag_key" : re.compile("(\w+)[\t ]*(=)"),
 		"float" : re.compile("-?(\d+(\.\d+)?|\.\d+)"),
 		"gamemode" : re.compile("survival|creative|adventure|spectator"),
@@ -593,7 +593,7 @@ class Parser:
 						matched = True
 						break
 
-			if self.custom_tags:
+			if self.custom_tags or ("tags" in properties and properties["tags"]):
 				for parser_data in nbt_value_parsers:
 					is_list, value_parser, suffix_scope, suffix = parser_data
 					start = self.current
@@ -639,61 +639,13 @@ class Parser:
 		return self.current
 
 	def nbt_tags_parser(self, properties={}):
-		if self.current >= len(self.string) or self.string[self.current] != "{":
-			return self.current
-		elif not "escape_depth" in properties:
-			properties["escape_depth"] = 0
-
-		braces_start = self.current
-		self.current += 1
-		parsing_complete = False
-
-		while not parsing_complete:
-			reached_end = self.skip_whitespace(braces_start)
-			if reached_end:
-				return self.current
-
-			start_of_key = self.current
-
-			key_match = self.regex["nbt_key"].match(self.string, self.current)
-			if not key_match:
-				if self.current < len(self.string):
-					self.append_region(self.invalid, self.current, self.current + 1)
-					return self.current + 1
-				return self.current
-
-			self.append_region(self.mccstring, key_match.start(1), key_match.end(1))
-			self.current = key_match.end()
-
-			reached_end = self.skip_whitespace(start_of_key)
-			if reached_end:
-				return self.current
-
-			start = self.current
-			self.current = self.nbt_value_parser(self.nbt_byte_parser, None, "", properties)
-
-			if start == self.current:
-				self.append_region(self.invalid, self.current, self.current + 1)
-				return self.current + 1
-
-			reached_end = self.skip_whitespace(start_of_key)
-			if reached_end:
-				return self.current
-
-			if self.string[self.current] == ",":
-				self.current += 1
-
-			elif self.string[self.current] != "}":
-				self.append_region(self.invalid, self.current, self.current + 1)
-				return self.current + 1
-			else:
-				parsing_complete = True
-		
-		self.current += 1
+		properties["tags"] = True
+		self.current = self.nbt_parser(properties)
+		properties["tags"] = False
 		return self.current
 
 	def nbt_list_parser(self, item_parser, suffix_scope, item_suffix, properties={}):
-		if self.string[self.current] != "[":
+		if not self.string.startswith("[", self.current):
 			return self.current
 		start_of_list = self.current
 		self.current += 1

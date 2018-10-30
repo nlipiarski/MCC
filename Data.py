@@ -32,9 +32,9 @@ NBT_STRING_LIST_TAGS = {"Lore", "Tags","CanDestroy"}
 NBT_INTEGER_LIST_TAGS = {"Colors", "FadeColors"}
 NBT_FLOAT_LIST_TAGS = {"Body","Head","LeftArm","LeftLeg","Pos","power","RightArm","RightLeg","Rotation"}
 NBT_DOUBLE_LIST_TAGS = {"direction","Motion","Power"}
-NBT_COMPOUNT_LIST_TAGS = {"ActiveEffects","ArmorItems","AttributeModifiers","Attributes","CustomPotionEffects","HandItems","Inventory","Items","Passengers","StoredEnchantments","textures"}
+NBT_COMPOUND_LIST_TAGS = {"ActiveEffects","ArmorItems","AttributeModifiers","Attributes","CustomPotionEffects","HandItems","Inventory","Items","Passengers","StoredEnchantments","textures"}
 
-NBT_KEY_LISTS = [NBT_STRING_LIST_TAGS,NBT_DOUBLE_LIST_TAGS,NBT_INTEGER_LIST_TAGS,NBT_DOUBLE_TAGS,NBT_COMPOUNT_LIST_TAGS,NBT_FLOAT_LIST_TAGS,NBT_FLOAT_TAGS,NBT_LONG_TAGS,NBT_SHORT_TAGS,NBT_COMPOUND_TAGS,NBT_BYTE_TAGS,NBT_INTEGER_TAGS,NBT_JSON_TAGS,NBT_JSON_LIST_TAGS,NBT_CUSTOM_COMPOUND_TAGS,NBT_STRING_TAGS]
+NBT_KEY_LISTS = [NBT_STRING_LIST_TAGS,NBT_DOUBLE_LIST_TAGS,NBT_INTEGER_LIST_TAGS,NBT_DOUBLE_TAGS,NBT_COMPOUND_LIST_TAGS,NBT_FLOAT_LIST_TAGS,NBT_FLOAT_TAGS,NBT_LONG_TAGS,NBT_SHORT_TAGS,NBT_COMPOUND_TAGS,NBT_BYTE_TAGS,NBT_INTEGER_TAGS,NBT_JSON_TAGS,NBT_JSON_LIST_TAGS,NBT_CUSTOM_COMPOUND_TAGS,NBT_STRING_TAGS]
 
 # Json keys
 JSON_STRING_KEYS = {"text","author","command","insertion","keybind","title","translate"}
