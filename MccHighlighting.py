@@ -1,8 +1,5 @@
 import sublime
 import sublime_plugin
-import os
-import os.path
-import re
 from .CommandTree import COMMAND_TREE
 from .Parser import Parser
 from .ColorSchemeEditor import ColorSchemeEditor
@@ -35,5 +32,14 @@ class MccHighlightCommand(sublime_plugin.EventListener):
 		parser.add_regions()
 
 def plugin_loaded():
-	sublime.load_settings("Preferences.sublime-settings").add_on_change('color_scheme',ColorSchemeEditor.edit_color_scheme)
+	settings = sublime.load_settings("Preferences.sublime-settings")
+	settings.add_on_change('color_scheme',ColorSchemeEditor.edit_color_scheme)
 	ColorSchemeEditor.edit_color_scheme()
+
+	allowed_autocomplete = settings.get("auto_complete_selector", "")
+	if not "text.plain" in allowed_autocomplete:
+		if len(allowed_autocomplete) > 0:
+			allowed_autocomplete += ", "
+		allowed_autocomplete += "text.plain"
+		print(allowed_autocomplete)
+		settings.set("auto_complete_selector", allowed_autocomplete)
