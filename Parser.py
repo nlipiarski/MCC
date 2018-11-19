@@ -651,7 +651,7 @@ class Parser:
 		self.current += 1
 
 		continue_parsing = True
-		while continue_parsing:
+		while self.string[self.current] != "]":
 
 			reached_end = self.skip_whitespace(start_of_list)
 			if reached_end:
@@ -671,8 +671,6 @@ class Parser:
 				self.current += 1
 			elif self.string[self.current] != "]":
 				return start_of_list
-			else:
-				continue_parsing = False
 
 		self.current += 1
 		return self.current
