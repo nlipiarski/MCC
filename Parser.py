@@ -21,7 +21,7 @@ class Parser:
 		"hex4" : re.compile("[0-9a-fA-F]{4}"),
 		"hover_event_action" : re.compile("show_(?:text|item|entity|achievement)"),
 		"integer" : re.compile("-?\d+"),
-		"item_block_id" : re.compile("(#?[a-z_]+:)?([a-z_]+)"),
+		"item_block_id" : re.compile("#?([a-z_]+:)?([a-z_]+)"),
 		"item_slot" : re.compile("armor\.(?:chest|feet|head|legs)|container\.(5[0-3]|[1-4]?\d)|(enderchest|inventory)\.(2[0-6]|1?\d)|horse\.(\d|1[0-4]|armor|chest|saddle)|hotbar\.[0-8]|village\.[0-7]|weapon(?:\.mainhand|\.offhand)?"),
 		"namespace" : re.compile("(#?[a-z_\-0-9\.]+:)([a-z_\-0-9\.]+(?:\/[a-z_\-0-9\.]+)*)(\/?)"),
 		"nbt_key" : re.compile("(\w+)[\t ]*:"),
@@ -128,8 +128,13 @@ class Parser:
 			if redirect_command == "root":
 				new_command_tree = COMMAND_TREE
 			else:
-				new_command_tree = COMMAND_TREE["children"][redirect_command]
+				new_command_tree = COMMAND_TREE
+				for redirect in command_tree["redirect"]:
+					new_command_tree = new_command_tree["children"][redirect]
 			#print("Redirecting to: " + redirect_command + ", " + str(self.current))
+			if "executable" in command_tree:
+				new_command_tree["executable"] = command_tree["executable"]
+
 			return self.highlight(new_command_tree, line_region, self.current)
 		elif not "children" in command_tree or self.current >= line_region.size():
 			
@@ -732,8 +737,12 @@ class Parser:
 				namespaceScope = self.mccentity
 			else:
 				namespaceScope = self.mccliteral
-			self.append_region(namespaceScope, block_match.start(), block_match.end(1))
-			self.append_region(self.mccstring, block_match.start(2), block_match.end(2))
+
+			if block_match.group(1):
+				self.append_region(namespaceScope, block_match.start(), block_match.end(1))
+				self.append_region(self.mccstring, block_match.start(2), block_match.end(2))
+			else:
+				self.append_region(self.mccstring, block_match.start(), block_match.end(2))
 
 			self.current = block_match.end()
 
@@ -1297,10 +1306,15 @@ class Parser:
 
 	def location_from_list_parser(self, regex, possibilities):
 		match = regex.match(self.string, self.current)
-		if match and match.group(1) != None and match.group(1)[0] == "#" or (
-		   match and match.group(2) in possibilities and match.group(1) in [None, "minecraft:"]):
-			self.append_region(self.mccliteral, match.start(1), match.end(1))
-			self.append_region(self.mccstring, match.start(2), match.end(2))
+		if match and (self.string[self.current] == "#" or ( match.group(2) in possibilities and match.group(1) in [None, "minecraft:"])):
+
+			if (self.string[self.current] == "#" and not match.group(1)):
+				self.append_region(self.mccstring, match.start(), match.end(2))
+			else:
+				if (match.group(1)):
+					self.append_region(self.mccliteral, match.start(), match.end(1))
+				self.append_region(self.mccstring, match.start(2), match.end(2))
+
 			self.current = match.end()
 
 		return self.current
