@@ -1,4 +1,5 @@
-*.mcc
 *.mcfunction
-*.mcc13
+*.jar
+generated/*
+logs/*
 ModifiedColorSchemes/*
