@@ -40,7 +40,7 @@
                           "type": "argument",
                           "parser": "brigadier:string",
                           "properties": {
-                            "type": "word"
+                            "type": "greedy"
                           },
                           "executable": true
                         }
@@ -109,7 +109,7 @@
                           "type": "argument",
                           "parser": "brigadier:string",
                           "properties": {
-                            "type": "word"
+                            "type": "greedy"
                           },
                           "executable": true
                         }
@@ -198,7 +198,7 @@
     "bossbar": {
       "type": "literal",
       "children": {
-        "create": {
+        "add": {
           "type": "literal",
           "children": {
             "id": {
@@ -1197,10 +1197,7 @@
                           "children": {
                             "range": {
                               "type": "argument",
-                              "parser": "minecraft:range",
-                              "properties": {
-                                "decimals": false
-                              },
+                              "parser": "minecraft:int_range",
                               "executable": true,
                               "redirect": [
                                 "execute"
@@ -1219,20 +1216,9 @@
         "in": {
           "type": "literal",
           "children": {
-            "overworld": {
-              "type": "literal",
-              "redirect": [
-                "execute"
-              ]
-            },
-            "the_end": {
-              "type": "literal",
-              "redirect": [
-                "execute"
-              ]
-            },
-            "the_nether": {
-              "type": "literal",
+            "dimension": {
+              "type": "argument",
+              "parser": "minecraft:dimension",
               "redirect": [
                 "execute"
               ]
@@ -1296,10 +1282,7 @@
           }
         },
         "run": {
-          "type": "literal",
-          "redirect": [
-            "root"
-          ]
+          "type": "literal"
         },
         "store": {
           "type": "literal",
@@ -1973,10 +1956,7 @@
                           "children": {
                             "range": {
                               "type": "argument",
-                              "parser": "minecraft:range",
-                              "properties": {
-                                "decimals": false
-                              },
+                              "parser": "minecraft:int_range",
                               "executable": true,
                               "redirect": [
                                 "execute"
@@ -2131,6 +2111,60 @@
                   "executable": true
                 }
               }
+            }
+          }
+        }
+      }
+    },
+    "forceload": {
+      "type": "literal",
+      "children": {
+        "add": {
+          "type": "literal",
+          "children": {
+            "from": {
+              "type": "argument",
+              "parser": "minecraft:column_pos",
+              "children": {
+                "to": {
+                  "type": "argument",
+                  "parser": "minecraft:column_pos",
+                  "executable": true
+                }
+              },
+              "executable": true
+            }
+          }
+        },
+        "query": {
+          "type": "literal",
+          "children": {
+            "pos": {
+              "type": "argument",
+              "parser": "minecraft:column_pos",
+              "executable": true
+            }
+          },
+          "executable": true
+        },
+        "remove": {
+          "type": "literal",
+          "children": {
+            "all": {
+              "type": "literal",
+              "executable": true
+            },
+            "from": {
+              "type": "argument",
+              "parser": "minecraft:column_pos",
+              "children": {
+                "to": {
+                  "type": "argument",
+                  "parser": "minecraft:column_pos",
+                  "executable": true
+                }
+              },
+              "executable": true
             }
           }
         }
@@ -2550,6 +2584,12 @@
     },
     "list": {
       "type": "literal",
+      "children": {
+        "uuids": {
+          "type": "literal",
+          "executable": true
+        }
+      },
       "executable": true
     },
     "locate": {
@@ -2758,7 +2798,7 @@
       "children": {
         "sound": {
           "type": "argument",
-          "parser": "minecraft:sound",
+          "parser": "minecraft:resource_location",
           "children": {
             "ambient": {
               "type": "literal",
@@ -3491,10 +3531,7 @@
                       "children": {
                         "displayName": {
                           "type": "argument",
-                          "parser": "brigadier:string",
-                          "properties": {
-                            "type": "greedy"
-                          },
+                          "parser": "minecraft:component",
                           "executable": true
                         }
                       },
@@ -3507,6 +3544,40 @@
             "list": {
               "type": "literal",
               "executable": true
+            },
+            "modify": {
+              "type": "literal",
+              "children": {
+                "objective": {
+                  "type": "argument",
+                  "parser": "minecraft:objective",
+                  "children": {
+                    "displayname": {
+                      "type": "literal",
+                      "children": {
+                        "displayName": {
+                          "type": "argument",
+                          "parser": "minecraft:component",
+                          "executable": true
+                        }
+                      }
+                    },
+                    "rendertype": {
+                      "type": "literal",
+                      "children": {
+                        "hearts": {
+                          "type": "literal",
+                          "executable": true
+                        },
+                        "integer": {
+                          "type": "literal",
+                          "executable": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             },
             "remove": {
               "type": "literal",
@@ -4006,7 +4077,7 @@
       "children": {
         "entity": {
           "type": "argument",
-          "parser": "minecraft:entity_location",
+          "parser": "minecraft:entity_summon",
           "children": {
             "pos": {
               "type": "argument",
@@ -4085,10 +4156,7 @@
               "children": {
                 "displayName": {
                   "type": "argument",
-                  "parser": "brigadier:string",
-                  "properties": {
-                    "type": "greedy"
-                  },
+                  "parser": "minecraft:component",
                   "executable": true
                 }
               },
@@ -4150,7 +4218,7 @@
           },
           "executable": true
         },
-        "option": {
+        "modify": {
           "type": "literal",
           "children": {
             "team": {
@@ -4209,7 +4277,17 @@
                     }
                   }
                 },
-                "friendlyfire": {
+                "displayName": {
+                  "type": "literal",
+                  "children": {
+                    "displayName": {
+                      "type": "argument",
+                      "parser": "minecraft:component",
+                      "executable": true
+                    }
+                  }
+                },
+                "friendlyFire": {
                   "type": "literal",
                   "children": {
                     "allowed": {
@@ -4240,12 +4318,32 @@
                     }
                   }
                 },
+                "prefix": {
+                  "type": "literal",
+                  "children": {
+                    "prefix": {
+                      "type": "argument",
+                      "parser": "minecraft:component",
+                      "executable": true
+                    }
+                  }
+                },
                 "seeFriendlyInvisibles": {
                   "type": "literal",
                   "children": {
                     "allowed": {
                       "type": "argument",
                       "parser": "brigadier:bool",
+                      "executable": true
+                    }
+                  }
+                },
+                "suffix": {
+                  "type": "literal",
+                  "children": {
+                    "suffix": {
+                      "type": "argument",
+                      "parser": "minecraft:component",
                       "executable": true
                     }
                   }
@@ -4664,10 +4762,10 @@
           "children": {
             "distance": {
               "type": "argument",
-              "parser": "brigadier:integer",
+              "parser": "brigadier:float",
               "properties": {
-                "min": -60000000,
-                "max": 60000000
+                "min": -6.0E7,
+                "max": 6.0E7
               },
               "children": {
                 "time": {
@@ -4733,10 +4831,10 @@
           "children": {
             "distance": {
               "type": "argument",
-              "parser": "brigadier:integer",
+              "parser": "brigadier:float",
               "properties": {
-                "min": -60000000,
-                "max": 60000000
+                "min": -6.0E7,
+                "max": 6.0E7
               },
               "children": {
                 "time": {

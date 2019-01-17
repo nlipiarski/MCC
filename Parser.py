@@ -1304,9 +1304,17 @@ class Parser:
 			return self.nbt_parser(properties)
 		return self.current
 
-	def location_from_list_parser(self, regex, possibilities):
+	def enchantment_parser(self, properties={}):
+		return self.location_from_list_parser(self.regex["resource_location"], ENCHANTMENTS, False)
+
+	def dimension_parser(self, properties={}):
+		dimensions = {"overworld", "the_end", "the_nether"}
+		return self.location_from_list_parser(self.regex["resource_location"], dimensions, False)
+
+	def location_from_list_parser(self, regex, possibilities, allow_custom=True):
 		match = regex.match(self.string, self.current)
-		if match and (self.string[self.current] == "#" or ( match.group(2) in possibilities and match.group(1) in [None, "minecraft:"])):
+		if match and (self.string[self.current] == "#" and allow_custom or 
+			( match.group(2) in possibilities and match.group(1) in [None, "minecraft:"])):
 
 			if (self.string[self.current] == "#" and not match.group(1)):
 				self.append_region(self.mccstring, match.start(), match.end(2))
@@ -1437,6 +1445,9 @@ class Parser:
 		"minecraft:int_range"         : int_range_parser,
 		"minecraft:mob_effect"        : mob_effect_parser,
 		"minecraft:sound"             : sound_parser,
-		"minecraft:objective_criteria":objective_criteria_parser,
-		"minecraft:entity_summon"     : entity_location_parser
+		"minecraft:objective_criteria": objective_criteria_parser,
+		"minecraft:entity_summon"     : entity_location_parser,
+		"minecraft:item_enchantment"  : enchantment_parser,
+		"minecraft:dimension"         : dimension_parser,
+		"minecraft:column_pos"        : vec2d_parser
 	}
