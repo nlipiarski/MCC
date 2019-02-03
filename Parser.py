@@ -104,7 +104,7 @@ class Parser:
 			(True, False, self.entity_location_parser),
 			(False, False, score_parser),
 			(False, False, advancement_parser),
-			(False, False, self.nbt_parser)
+			(True, False, self.nbt_parser)
 		]
 
 
