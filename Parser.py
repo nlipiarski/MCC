@@ -1313,7 +1313,7 @@ class Parser:
 
 	def location_from_list_parser(self, regex, possibilities, allow_custom=True):
 		match = regex.match(self.string, self.current)
-		if match and (self.string[self.current] == "#" and allow_custom or 
+		if match and (allow_custom or 
 			( match.group(2) in possibilities and match.group(1) in [None, "minecraft:"])):
 
 			if (self.string[self.current] == "#" and not match.group(1)):
