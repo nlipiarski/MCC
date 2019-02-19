@@ -456,8 +456,9 @@ class Parser:
 			properties["min"] = old_min
 		return self.current
 
-	# Word means "up to the next space", phrase is "an unquoted word or quoted string", and greedy is "everything from this point to the end of input".
-	# strict means only a regular quote enclosed string will work
+	# Word means "up to the next space", phrase is "an unquoted word or 
+	# quoted string", and greedy is "everything from this point to the end of input".
+	# strict means only a regular quote enclosed string will word
 	def string_parser(self, properties={}):
 		if self.current >= len(self.string):
 			return self.current
@@ -467,17 +468,17 @@ class Parser:
 		else:
 			escape_depth = properties["escape_depth"]
 
-		if properties["type"] == "word":
+		if properties["type"] == "word" and not self.string.startswith("\"", self.current):
 			old_current = self.current
 			self.current = self.regex_parser(self.regex["word_string"], [self.mccstring])
 			if old_current != self.current:
 				return self.current
 
-		if properties["type"] == "greedy":
+		elif properties["type"] == "greedy":
 			old_current = self.current
 			self.current = self.regex_parser(self.regex["greedy_string"], [self.mccstring])
 
-		elif properties["type"] in {"strict", "word"}:
+		elif properties["type"] in {"strict", "phrase"}:
 			quote = self.generate_quote(escape_depth)
 			escape = self.generate_quote(escape_depth + 1)[:-1] # Gets the needed backslashes to escape
 
@@ -543,17 +544,17 @@ class Parser:
 		return len(self.string)
 
 	def nbt_parser(self, properties={}):
-		if self.current >= len(self.string) or self.string[self.current] != "{":
+		if not self.string.startswith("{", self.current):
 			return self.current
+
 		elif not "escape_depth" in properties:
 			properties["escape_depth"] = 0
 
 		braces_start = self.current
 		self.current += 1
 		nbt_value_parsers = self.nbt_value_parsers
-		continue_parsing = True
 
-		while continue_parsing:
+		while not self.string.startswith("}", self.current):
 			reached_end = self.skip_whitespace(braces_start)
 			if reached_end:
 				return braces_start
@@ -581,7 +582,7 @@ class Parser:
 			old_type = None
 			if "type" in properties:
 				old_type = properties["type"]
-			properties["type"] = "word"
+			properties["type"] = "phrase"
 
 			matched = False
 			for i in range(len(NBT_KEY_LISTS)):
@@ -636,9 +637,6 @@ class Parser:
 
 				self.append_region(self.invalid, self.current, self.current - 1)
 				return self.current
-
-			else:
-				continue_parsing = False
 		
 		self.current += 1
 		return self.current
@@ -748,7 +746,7 @@ class Parser:
 
 			if self.string.startswith("{", self.current):
 				return self.nbt_parser(properties)
-			elif not self.string.startswith("["):
+			elif not self.string.startswith("[", self.current):
 				return self.current
 
 			start_of_bracket = self.current
@@ -960,9 +958,14 @@ class Parser:
 
 			if not matched and key in JSON_BOOLEAN_KEYS:
 				start_of_value = self.current
-				self.current = self.quoted_parser(self.boolean_parser, properties)
+				self.current = self.boolean_parser(properties);
 				if start_of_value != self.current:
 					matched = True
+
+				else:
+					self.current = self.quoted_parser(self.boolean_parser, properties)
+					if start_of_value != self.current:
+						matched = True
 
 			if not matched and key in JSON_NESTED_KEYS:
 				self.current = self.json_parser(properties)
@@ -1252,9 +1255,6 @@ class Parser:
 	def entity_location_parser(self, properties={}):
 		return self.location_from_list_parser(self.regex["item_block_id"], ENTITIES)
 
-	def resource_location_parser(self, properties={}):
-		return self.regex_parser(self.regex["resource_location"], [self.mccliteral, self.mccstring])
-
 	def function_parser(self, properties={}):
 		return self.regex_parser(self.regex["namespace"], [self.mccstring, self.mccliteral, self.invalid])
 
@@ -1411,7 +1411,7 @@ class Parser:
 		return quote + self.generate_quote(escape_depth - 1)
 
 	parsers = { # Master list of what function the parser name in commands.json corresponds to
-		"minecraft:resource_location" : resource_location_parser,
+		"minecraft:resource_location" : function_parser,
 		"minecraft:function"          : function_parser,
 		"minecraft:entity"            : entity_parser,
 		"brigadier:string"            : string_parser, #type  = word and type= greedy
