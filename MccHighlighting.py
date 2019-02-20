@@ -25,11 +25,12 @@ class MccHighlightCommand(sublime_plugin.EventListener):
 		allow_custom_tags = sublime.load_settings("Preferences.sublime-settings").get("mcc_custom_tags", False)
 		parser = Parser(view, allow_custom_tags)
 		
+		i = 0
 		for line in file_lines:
 			if not line.empty():
 				parser.highlight(COMMAND_TREE, line, 0)
-
-		parser.add_regions()
+				parser.add_regions(line_num=i)
+				i += 1
 
 def plugin_loaded():
 	settings = sublime.load_settings("Preferences.sublime-settings")

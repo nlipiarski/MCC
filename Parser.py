@@ -108,14 +108,22 @@ class Parser:
 		]
 
 
-	def add_regions(self):
-		self.view.add_regions("mcccomment", self.mcccomment, "mcccomment", flags=self.add_regions_flags)
-		self.view.add_regions("mcccommand", self.mcccommand, "mcccommand", flags=self.add_regions_flags)
-		self.view.add_regions("mccconstant", self.mccconstant, "mccconstant", flags=self.add_regions_flags)
-		self.view.add_regions("mccstring", self.mccstring, "mccstring", flags=self.add_regions_flags)
-		self.view.add_regions("mccentity", self.mccentity, "mccentity", flags=self.add_regions_flags)
-		self.view.add_regions("mccliteral", self.mccliteral, "mccliteral", flags=self.add_regions_flags)
-		self.view.add_regions("invalid", self.invalid, "invalid.illegal", flags=self.add_regions_flags)
+	def add_regions(self, line_num=0):
+		self.view.add_regions("mcccomment" + str(line_num), self.mcccomment, "mcccomment", flags=self.add_regions_flags)
+		self.view.add_regions("mcccommand" + str(line_num), self.mcccommand, "mcccommand", flags=self.add_regions_flags)
+		self.view.add_regions("mccconstant" + str(line_num), self.mccconstant, "mccconstant", flags=self.add_regions_flags)
+		self.view.add_regions("mccstring" + str(line_num), self.mccstring, "mccstring", flags=self.add_regions_flags)
+		self.view.add_regions("mccentity" + str(line_num), self.mccentity, "mccentity", flags=self.add_regions_flags)
+		self.view.add_regions("mccliteral" + str(line_num), self.mccliteral, "mccliteral", flags=self.add_regions_flags)
+		self.view.add_regions("invalid" + str(line_num), self.invalid, "invalid.illegal", flags=self.add_regions_flags)
+
+		self.mcccomment = []
+		self.mcccommand = []
+		self.mccconstant = []
+		self.mccstring = []
+		self.mccentity = []
+		self.mccliteral = []
+		self.invalid = []
 
 	def append_region(self, region_list, start, end):
 		region_list.append(sublime.Region(self.region_begin + start, self.region_begin + end))
@@ -1327,7 +1335,6 @@ class Parser:
 
 		return self.current
 
-	# properties["type"] must equal "word".  This should be done already.
 	def json_in_nbt_parser(self, properties):
 		if not "escape_depth" in properties:
 			escape_depth = 0
@@ -1336,31 +1343,21 @@ class Parser:
 
 		quote = self.generate_quote(escape_depth)
 		if not self.string.startswith(quote, self.current):
-			return self.string_parser(properties)
+			return self.current
 
-		start = self.current
+		if not self.string.startswith("{", self.current + len(quote)):
+			return self.string_parser({"escape_depth": escape_depth, "type":"strict"})
+
 		self.append_region(self.mccstring, self.current, self.current + len(quote))
 		self.current += len(quote)
-
-		old_current = self.current
-		properties["escape_depth"] = escape_depth + 1
-		self.current = self.json_parser(properties)
-		if old_current == self.current:
-			self.mccstring.pop()
-			properties["escape_depth"] = escape_depth
-			self.current = start
-			return self.string_parser(properties)
+		self.current = self.json_parser({"escape_depth": escape_depth + 1})
 
 		if not self.string.startswith(quote, self.current):
-			if self.current < len(self.string):
-				delta = 1
-			else:
-				delta = -1
-			self.append_region(self.invalid, self.current, self.current + delta)
-			return self.current + max(0, delta)
-
-		self.append_region(self.mccstring, self.current, self.current + len(quote))
-		self.current += len(quote)
+			self.append_region(self.invalid, self.current, min(self.current + 1, len(self.string)))
+			self.current += 1
+		else:
+			self.append_region(self.mccstring, self.current, self.current + len(quote))
+			self.current += len(quote)
 		return self.current
 
 	def regex_parser(self, pattern, scopes, properties={}):
