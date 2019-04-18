@@ -21,7 +21,7 @@ class CompletionsBuilderCommand(sublime_plugin.TextCommand):
 
 		completions_file = open(completions_file_path, "w")
 		completions_data = {
-			"scope": "text.plain",
+			"scope": "source.mcc",
 			"completions": completions
 		}
 		json.dump(completions_data, completions_file, indent="\t")
