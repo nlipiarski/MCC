@@ -20,17 +20,19 @@ class MccHighlightCommand(sublime_plugin.EventListener):
 		if file_name == None or not file_name.endswith(".mcfunction"):
 			return
 
-		full_region = sublime.Region(0, view.size())
-		file_lines = view.lines(full_region)
+		full_region_string = view.substr(sublime.Region(0, view.size()))
+		file_lines = full_region_string.split("\n")
 		allow_custom_tags = sublime.load_settings("Preferences.sublime-settings").get("mcc_custom_tags", False)
 		parser = Parser(view, allow_custom_tags)
-		
+		region_start = 0;
+
 		i = 0
 		for line in file_lines:
-			if not line.empty():
-				parser.highlight(COMMAND_TREE, line, 0)
+			if len(line) > 0:
+				parser.highlight(COMMAND_TREE, line, 0, region_start)
 				parser.add_regions(line_num=i)
 				i += 1
+			region_start += len(line) + 1
 
 def plugin_loaded():
 	settings = sublime.load_settings("Preferences.sublime-settings")

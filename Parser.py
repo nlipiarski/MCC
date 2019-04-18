@@ -25,14 +25,14 @@ class Parser:
 		"item_slot" : re.compile("armor\.(?:chest|feet|head|legs)|container\.(5[0-3]|[1-4]?\d)|(enderchest|inventory)\.(2[0-6]|1?\d)|horse\.(\d|1[0-4]|armor|chest|saddle)|hotbar\.[0-8]|village\.[0-7]|weapon(?:\.mainhand|\.offhand)?"),
 		"namespace" : re.compile("(#?[a-z_\-0-9\.]+:)([a-z_\-0-9\.]+(?:\/[a-z_\-0-9\.]+)*)(\/?)"),
 		"nbt_key" : re.compile("(\w+)[\t ]*:"),
-		"objective_criteria": re.compile("minecraft\.(\w+):minecraft.(\w+)|[\w\.:]+"),
+		"objective_criteria": re.compile("(?:(minecraft\.\w+):)?(?:minecraft\.)?([\w\.]+)"),
 		"operation" : re.compile("[+\-\*\%\/]?=|>?<|>"),
 		"position-2" : re.compile("(~?-?\d*\.?\d+|~)[\t ]+(~?-?\d*\.?\d+|~)"),
 		"position-3" : re.compile("([~\^]?-?\d*\.?\d+|[~\^])[\t ]+([~\^]?-?\d*\.?\d+|[~\^])[\t ]+([~\^]?-?\d*\.?\d+|[~\^])"),
-		"resource_location" : re.compile("([\w\.]+:)?([\w\.]+)"),
+		"resource_location" : re.compile("([\w\.]+:)?([\w\.]+(?:/[\w\.]+)*)"),
 		"scoreboard_slot" : re.compile("belowName|list|sidebar(?:.team.(?:black|dark_blue|dark_green|dark_aqua|dark_red|dark_purple|gold|gray|dark_gray|blue|green|aqua|red|light_purple|yellow|white))?"),
 		"sort" : re.compile("nearest|furthest|random|arbitrary"),
-		"username" : re.compile("[\w\(\)\.\<\>_\-]+"),
+		"username" : re.compile("[\w\(\)\.\<\>_\-%\*]+"),
 		"objective" : re.compile("[\w\(\)\.\<\>_\-]{1,16}"),
 		"vec4" : re.compile("((?:\d*\.)?\d+)[\t ]+((?:\d*\.)?\d+)[\t ]+((?:\d*\.)?\d+)[\t ]+((?:\d*\.)?\d+)"),
 		"word_string" : re.compile("[\w\(\)\.\<\>_\-]+"),
@@ -51,28 +51,6 @@ class Parser:
 		self.mccliteral = []
 		self.invalid = []
 		self.custom_tags = allow_custom_tags
-
-		#The order of this list corresponds to the ordering of nbt_tag_lists.
-		# The tuples are ordered like this
-		# (isList, parser,  item suffix scope, item suffix)
-		self.nbt_value_parsers = [ 
-			(True, self.string_parser, None, ""),
-			(True, self.float_parser, self.mccconstant, "d"),
-			(True, self.integer_parser, None, ""),
-			(False, self.float_parser, self.mccconstant, "d"),
-			(True, self.nbt_parser, None, ""),
-			(True, self.float_parser, self.mccconstant, "f"),
-			(False, self.float_parser, self.mccconstant, "f"),
-			(False, self.integer_parser, self.mccconstant, "L"),
-			(False, self.integer_parser, self.mccconstant, "s"),
-			(False, self.nbt_parser, None, ""),
-			(False, self.nbt_byte_parser, None, ""),
-			(False, self.integer_parser, None, ""),
-			(False, self.json_in_nbt_parser, None, ""),
-			(True, self.json_in_nbt_parser, None, ""),
-			(False, self.nbt_tags_parser, None, ""),
-			(False, self.string_parser, None, "")
-		]
 
 		def score_parser(properties):
 			return self.nested_entity_tag_parser(self.int_range_parser, do_nested=False, properties=properties)
@@ -128,7 +106,10 @@ class Parser:
 	def append_region(self, region_list, start, end):
 		region_list.append(sublime.Region(self.region_begin + start, self.region_begin + end))
 
-	def highlight(self, command_tree, line_region, current):
+	def highlight(self, command_tree, line_string, current, region_start=None):
+		if (region_start != None):
+			self.region_begin = region_start
+		self.string = line_string
 		self.current = current
 
 		if ("redirect" in command_tree):
@@ -143,30 +124,26 @@ class Parser:
 			if "executable" in command_tree:
 				new_command_tree["executable"] = command_tree["executable"]
 
-			return self.highlight(new_command_tree, line_region, self.current)
-		elif not "children" in command_tree or self.current >= line_region.size():
+			return self.highlight(new_command_tree, line_string, self.current)
+		elif not "children" in command_tree or self.current >= len(line_string):
 			
 			if not "executable" in command_tree or not command_tree["executable"]:
-				self.append_region(self.invalid, 0, line_region.size())
-				self.current = self.region.size()
+				self.append_region(self.invalid, 0, len(line_string))
+				self.current = len(line_string)
 				return False
 			else:
 				while (self.current < len(self.string) and self.string[self.current] in " \t"):
 					self.current += 1
 
-				if self.current < line_region.size():
-					self.append_region(self.invalid, self.current, line_region.size())
-					self.current = line_region.size()
+				if self.current < len(line_string):
+					self.append_region(self.invalid, self.current, len(line_string))
+					self.current = len(line_string)
 					return False
 
 				return True
 
-		self.string = self.view.substr(line_region)
 		if self.regex["white_space"].match(self.string):
 			return True
-
-		self.region = line_region
-		self.region_begin = self.region.begin()
 
 		comment_match = self.regex["comment"].match(self.string, self.current)
 		if comment_match:
@@ -177,7 +154,7 @@ class Parser:
 		elif command_tree["type"] == "root":
 			command_match = self.regex["command"].match(self.string, self.current)
 			if not command_match:
-				self.append_region(self.invalid, 0, line_region.size())
+				self.append_region(self.invalid, 0, len(line_string))
 				return False
 
 			command = command_match.group(2)
@@ -186,7 +163,7 @@ class Parser:
 				self.append_region(self.invalid, command_match.start(1), command_match.end(1))
 
 				self.current = command_match.end(2)
-				if self.highlight(command_tree["children"][command], line_region, command_match.end()):
+				if self.highlight(command_tree["children"][command], line_string, command_match.end()):
 					self.append_region(self.mcccommand, command_match.start(2), command_match.end(2))
 					return True
 				else:
@@ -194,7 +171,7 @@ class Parser:
 					return False
 
 			else:
-				self.append_region(self.invalid, 0, line_region.size())
+				self.append_region(self.invalid, 0, len(line_string))
 				return False
 		else:
 			was_space = False
@@ -216,7 +193,7 @@ class Parser:
 				if properties["type"] == "literal" and self.string.startswith(key, self.current):
 					self.append_region(self.mccliteral, self.current, self.current + len(key))
 					self.current += len(key)
-					success = self.highlight(properties, line_region, self.current)
+					success = self.highlight(properties, line_string, self.current)
 					if success:
 						return True
 					else:
@@ -234,7 +211,7 @@ class Parser:
 						self.current = parse_function(self)
 
 					if old_current != self.current:
-						success = self.highlight(properties, line_region, self.current)
+						success = self.highlight(properties, line_string, self.current)
 						if success:
 							return True
 						else:
@@ -244,9 +221,9 @@ class Parser:
 			while (self.current < len(self.string) and self.string[self.current] in " \t"):
 				self.current += 1
 
-			if self.current < line_region.size():
-				self.append_region(self.invalid, self.current, line_region.size())
-				self.current = line_region.size()
+			if self.current < len(line_string):
+				self.append_region(self.invalid, self.current, len(line_string))
+				self.current = len(line_string)
 
 			if not "executable" in properties or not properties["executable"]:
 				return False
@@ -476,7 +453,7 @@ class Parser:
 		else:
 			escape_depth = properties["escape_depth"]
 
-		if properties["type"] == "word" and not self.string.startswith("\"", self.current):
+		if properties["type"] == "phrase" and not self.string.startswith("\"", self.current) or properties["type"] == "word":
 			old_current = self.current
 			self.current = self.regex_parser(self.regex["word_string"], [self.mccstring])
 			if old_current != self.current:
@@ -548,24 +525,32 @@ class Parser:
 
 	# Todo: add entity highlighting
 	def message_parser(self, properties={}):
-		self.append_region(self.mccstring, self.current, self.region.size())
+		self.append_region(self.mccstring, self.current, len(self.string))
 		return len(self.string)
 
 	def nbt_parser(self, properties={}):
 		if not self.string.startswith("{", self.current):
 			return self.current
 
-		elif not "escape_depth" in properties:
-			properties["escape_depth"] = 0
+		escape_depth = 0
+		if "escape_depth" in properties:
+			escape_depth = properties["escape_depth"]
 
 		braces_start = self.current
 		self.current += 1
-		nbt_value_parsers = self.nbt_value_parsers
 
-		while not self.string.startswith("}", self.current):
+		allow_custom_tags = self.custom_tags or ("tags" in properties and properties["tags"])
+
+		continue_parsing = True
+		first_run = True
+		while continue_parsing:
 			reached_end = self.skip_whitespace(braces_start)
 			if reached_end:
 				return braces_start
+
+			if first_run and self.string.startswith("}", self.current):
+				break
+			first_run = False
 
 			start_of_key = self.current
 
@@ -587,43 +572,138 @@ class Parser:
 			if reached_end:
 				return braces_start
 
-			old_type = None
-			if "type" in properties:
-				old_type = properties["type"]
-			properties["type"] = "phrase"
+			if not allow_custom_tags and not key in NBT_TAGS:
+				print("Bad key: " + key)
+				if self.current < len(self.string):
+					self.append_region(self.invalid, self.current, self.current + 1)
+					return self.current + 1
+				
+				self.append_region(self.invalid, self.current, self.current - 1)
+				return self.current
+
+			elif allow_custom_tags:
+				possible_types = NBT_TAGS["CUSTOM_TAG"]
+			else:
+				possible_types = NBT_TAGS[key]
 
 			matched = False
-			for i in range(len(NBT_KEY_LISTS)):
-				keys = NBT_KEY_LISTS[i]
-				if key in keys:
-					is_list, value_parser, suffix_scope, suffix = nbt_value_parsers[i]
-					old_current = self.current
-					if is_list:
-						self.current = self.nbt_list_parser(value_parser, suffix_scope, suffix, properties)
-					else:
-						self.current = self.nbt_value_parser(value_parser, suffix_scope, suffix, properties)
-
-					if old_current != self.current:
-						matched = True
-						break
-
-			if self.custom_tags or ("tags" in properties and properties["tags"]):
-				for parser_data in nbt_value_parsers:
-					is_list, value_parser, suffix_scope, suffix = parser_data
+			for key_type in possible_types:
+				if key_type == "byte":
 					start = self.current
-					if is_list:
-						self.current = self.nbt_list_parser(value_parser, suffix_scope, suffix, properties)
-					else:
-						self.current = self.nbt_value_parser(value_parser, suffix_scope, suffix, properties)
-
+					self.current = self.nbt_byte_parser(properties)
 					if start != self.current:
 						matched = True
 						break
 
-			if old_type != None:
-				properties["type"] = old_type
+				elif key_type == "short":
+					start = self.current
+					self.current = self.nbt_value_parser(self.integer_parser, self.mccconstant, "s")
+					if start != self.current:
+						matched = True
+						break
+
+				elif key_type == "int":
+					start = self.current
+					self.current = self.integer_parser(properties)
+					if start != self.current:
+						matched = True
+						break
+
+				elif key_type == "long":
+					start = self.current
+					self.current = self.nbt_value_parser(self.integer_parser, self.mccconstant, "L")
+					if start != self.current:
+						matched = True
+						break
+
+				elif key_type == "float":
+					start = self.current
+					self.current = self.nbt_value_parser(self.float_parser, self.mccconstant, "f")
+					if start != self.current:
+						matched = True
+						break
+
+				elif key_type == "double":
+					start = self.current
+					self.current = self.nbt_value_parser(self.float_parser, self.mccconstant, "d")
+					if start != self.current:
+						matched = True
+						break
+
+				elif key_type == "string":
+					start = self.current
+					self.current = self.string_parser({"type":"phrase", "escape_depth":escape_depth})
+					if start != self.current:
+						matched = True
+						break
+
+				elif key_type == "string_list":
+					start = self.current
+					self.current = self.nbt_list_parser(self.string_parser, None, "", {"type":"phrase", "escape_depth":escape_depth})
+					if start != self.current:
+						matched = True
+						break
+
+				elif key_type == "compound":
+					start = self.current
+					self.current = self.nbt_parser({"escape_depth": escape_depth, "tags": allow_custom_tags})
+					if start != self.current:
+						matched = True
+						break
+
+				elif key_type == "compound_list":
+					start = self.current
+					self.current = self.nbt_list_parser(self.nbt_parser, None, "", {"escape_depth": escape_depth, "tags": allow_custom_tags})
+					if start != self.current:
+						matched = True
+						break
+
+				elif key_type == "custom_compound":
+					start = self.current
+					self.current = self.nbt_tags_parser({"escape_depth": escape_depth})
+					if start != self.current:
+						matched = True
+						break
+
+				elif key_type == "int_list":
+					start = self.current
+					self.current = self.nbt_list_parser(self.integer_parser, None, "", {"list_prefix": "I;"})
+					if start != self.current:
+						matched = True
+						break
+
+				elif key_type == "double_list":
+					start = self.current
+					self.current = self.nbt_list_parser(self.float_parser, self.mccconstant, "d")
+					if start != self.current:
+						matched = True
+						break
+
+				elif key_type == "float_list":
+					start = self.current
+					self.current = self.nbt_list_parser(self.float_parser, self.mccconstant, "f")
+					if start != self.current:
+						matched = True
+						break
+
+				elif key_type == "json":
+					start = self.current
+					self.current = self.json_in_nbt_parser({"escape_depth":escape_depth})
+					if start != self.current:
+						matched = True
+						break
+
+				elif key_type == "json_list":
+					start = self.current
+					self.current = self.nbt_list_parser(self.json_in_nbt_parser, None, "", {"escape_depth": escape_depth})
+					if start != self.current:
+						matched = True
+						break
+				else:
+					print("unkown type: " + str(key_type))
 
 			if not matched:
+				print("No match for key '" + key + "' within types " + str(possible_types))
 				if self.current < len(self.string):
 					self.append_region(self.invalid, self.current, self.current + 1)
 					return self.current + 1
@@ -645,6 +725,8 @@ class Parser:
 
 				self.append_region(self.invalid, self.current, self.current - 1)
 				return self.current
+			else:
+				continue_parsing = False
 		
 		self.current += 1
 		return self.current
@@ -656,13 +738,16 @@ class Parser:
 		return self.current
 
 	def nbt_list_parser(self, item_parser, suffix_scope, item_suffix, properties={}):
-		if not self.string.startswith("[", self.current):
+		start_delimiter = "["
+		if "list_prefix" in properties:
+			start_delimiter += properties["list_prefix"]
+
+		if not self.string.startswith(start_delimiter, self.current):
 			return self.current
 		start_of_list = self.current
-		self.current += 1
+		self.current += len(start_delimiter)
 
-		continue_parsing = True
-		while self.string[self.current] != "]":
+		while not self.string.startswith("]", self.current):
 
 			reached_end = self.skip_whitespace(start_of_list)
 			if reached_end:
@@ -994,7 +1079,7 @@ class Parser:
 				matched = True
 
 			if not matched and key == "hoverEvent":
-				self.current = self.json_event_parser(regex["hover_event_action"], properties)
+				self.current = self.json_event_parser(self.regex["hover_event_action"], properties)
 				if not self.string[self.current - 1] in "}":
 					return self.current
 				matched = True
@@ -1104,8 +1189,12 @@ class Parser:
 	def json_event_parser(self, action_regex, properties={}):
 		if self.string[self.current] != "{": #Can't be [] since it's an object
 			return self.current
-		current += 1
-		quote = self.generate_quote(properties["escape_depth"])
+		self.current += 1
+		escape_depth = 0;
+		if "escape_depth" in properties:
+			escape_depth = properties["escape_depth"]
+
+		quote = self.generate_quote(escape_depth)
 
 		start_of_object = self.current
 		while self.string[self.current] != "}":
@@ -1114,7 +1203,7 @@ class Parser:
 				return self.current
 
 			start_of_key = self.current
-			self.current = self.string_parser(properties={"type":"strict","escape_depth":properties["escape_depth"]})
+			self.current = self.string_parser(properties={"type":"strict","escape_depth":escape_depth})
 			if start_of_key == self.current:
 				self.append_region(self.invalid, self.current, self.current + 1)
 				return self.current+1
@@ -1146,8 +1235,8 @@ class Parser:
 
 			if key == "value":
 				start_of_value = self.current
-				self.current = self.string_parser(properties={"type":"strict","escape_depth":properties["escape_depth"]})
-				if start_of_value == self.current:
+				self.current = self.string_parser(properties={"type":"strict","escape_depth":escape_depth})
+				if start_of_value != self.current:
 					success = True
 
 			if not success:
@@ -1240,22 +1329,26 @@ class Parser:
 	def objective_criteria_parser(self, properties={}):
 		criteria_match = self.regex["objective_criteria"].match(self.string, self.current)
 		if criteria_match:
-			criteria = criteria_match.group().lower()
+			namespace = criteria_match.group(1)
+			location = criteria_match.group(2)
+			print("Namespace: " + str(namespace) + " Location: " + location)
 
-			if criteria in OBJECTIVE_CRITERIA:
-				self.append_region(self.mccstring, criteria_match.start(), criteria_match.end())
-				self.current = criteria_match.end()
-
-			elif criteria_match.group(1) != None:
-				namespace = criteria_match.group(1).lower()
-				location = criteria_match.group(2).lower()
+			if namespace != None:
+				namespace = namespace.lower()
 				if ((namespace in CRITERIA_BLOCKS and location in BLOCKS) or
-			   			(namespace in CRITERIA_ITEMS and location in ITEMS) or
-			   			(namespace in CRITERIA_ENTITIES and location in ENTITIES) or 
-			   			(namespace in CRITERIA_CUSTOM and location in CUSTOM)):
-					self.append_region(self.mccliteral, criteria_match.start(), criteria_match.end(1) + 1)
-					self.append_region(self.mccstring, criteria_match.end(1)+1, criteria_match.end())
-			
+				   		(namespace in CRITERIA_ITEMS and location in ITEMS) or
+				   		(namespace in CRITERIA_ENTITIES and location in ENTITIES) or 
+				   		(namespace in CRITERIA_CUSTOM and location in CUSTOM)):
+					self.append_region(self.mccliteral, criteria_match.start(1), criteria_match.end(1) + 1)
+					self.append_region(self.mccstring, criteria_match.start(2), criteria_match.end(2))
+					self.current = criteria_match.end()
+
+			elif (location in BLOCKS or 
+					location in ITEMS or 
+					location in ENTITIES or 
+					location in CUSTOM or
+					location in OBJECTIVE_CRITERIA):
+				self.append_region(self.mccstring, criteria_match.start(2), criteria_match.end(2))
 				self.current = criteria_match.end()
 
 		return self.current
@@ -1298,6 +1391,9 @@ class Parser:
 
 	def sound_parser(self, properties={}):
 		return self.location_from_list_parser(self.regex["resource_location"], SOUNDS)
+
+	def resource_location(self, properties={}):
+		return self.regex_parser(self.regex["resource_location"], [self.mccstring, self.mccliteral])
 
 	def gamemode_parser(self, properties={}):
 		return self.regex_parser(self.regex["gamemode"], [self.mccstring])
@@ -1364,12 +1460,11 @@ class Parser:
 		pattern_match = pattern.match(self.string, self.current)
 		if pattern_match:
 			if len(scopes) == 1:
-				scopes[0].append(sublime.Region(self.region_begin + pattern_match.start(), self.region_begin + pattern_match.end()))
+				self.append_region(scopes[0], pattern_match.start(), pattern_match.end())
 				
 			else:
 				for i in range(len(scopes)):
-					scopes[i].append(sublime.Region(self.region_begin + pattern_match.start(i + 1), 
-													self.region_begin + pattern_match.end(i + 1)))
+					self.append_region(scopes[i], pattern_match.start(i + 1), pattern_match.end(i + 1))
 			self.current = pattern_match.end()
 		return self.current
 
@@ -1408,7 +1503,7 @@ class Parser:
 		return quote + self.generate_quote(escape_depth - 1)
 
 	parsers = { # Master list of what function the parser name in commands.json corresponds to
-		"minecraft:resource_location" : function_parser,
+		"minecraft:resource_location" : resource_location,
 		"minecraft:function"          : function_parser,
 		"minecraft:entity"            : entity_parser,
 		"brigadier:string"            : string_parser, #type  = word and type= greedy
