@@ -2,7 +2,7 @@ import sublime
 import sublime_plugin
 import cProfile, pstats, io
 from .CommandTree import COMMAND_TREE
-from .Parser import Parser
+from .Parser import *
 from .ColorSchemeEditor import ColorSchemeEditor
 
 class MccProfileCommand(sublime_plugin.TextCommand):
@@ -17,17 +17,17 @@ class MccProfileCommand(sublime_plugin.TextCommand):
 		full_region_string = view.substr(sublime.Region(0, view.size()))
 		file_lines = full_region_string.split("\n")
 		allow_custom_tags = sublime.load_settings("Preferences.sublime-settings").get("mcc_custom_tags", False)
-		parser = Parser(view, allow_custom_tags)
+		PARSER.reset(view, allow_custom_tags)
 		
 		region_start = 0;
 		i = 0
 		for line in file_lines:
 			if len(line) > 0:
-				parser.highlight(COMMAND_TREE, line, 0, region_start)
-				parser.add_regions(line_num=i)
+				PARSER.highlight(COMMAND_TREE, line, 0, region_start)
 				i += 1
 			region_start += len(line) + 1
 
+		PARSER.add_regions(line_num=i)
 		profiler.disable()
 		s = io.StringIO()
 		profile_stats = pstats.Stats(profiler, stream=s)

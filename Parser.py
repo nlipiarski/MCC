@@ -2,24 +2,21 @@ import sublime, re
 from .Blocks import BLOCKS
 from .Items import ITEMS
 from .Data import *
+from .Registries import *
+from .NbtData import NBT_TAGS
 from .CommandTree import COMMAND_TREE
 
 class Parser:
 	add_regions_flags = sublime.DRAW_NO_OUTLINE
 	regex = {
-		"axes" : re.compile("[xyz]+"),
-		"click_event_action": re.compile("(?:run|suggest)_command|open_url|change_page"),
-		"color" : re.compile("none|black|dark_blue|dark_green|dark_aqua|dark_red|dark_purple|gold|gray|dark_gray|blue|green|aqua|red|light_purple|yellow|white"),
 		"command" : re.compile('[\t ]*(/?)([a-z]+)'),
 		"comment" :  re.compile('^[\t ]*#.*$'),
-		"entity_anchor" : re.compile("feet|eyes"),
 		"entity_tag_advancement_key" : re.compile("([a-z_\-1-9]+:)?([\w\.\-]+)[\t ]*(=)"),
 		"entity_tag_key" : re.compile("(\w+)[\t ]*(=)"),
 		"float" : re.compile("-?(\d+(\.\d+)?|\.\d+)"),
 		"gamemode" : re.compile("survival|creative|adventure|spectator"),
 		"greedy_string" : re.compile(".*$"),
 		"hex4" : re.compile("[0-9a-fA-F]{4}"),
-		"hover_event_action" : re.compile("show_(?:text|item|entity|achievement)"),
 		"integer" : re.compile("-?\d+"),
 		"item_block_id" : re.compile("#?([a-z_]+:)?([a-z_]+)"),
 		"item_slot" : re.compile("armor\.(?:chest|feet|head|legs)|container\.(5[0-3]|[1-4]?\d)|(enderchest|inventory)\.(2[0-6]|1?\d)|horse\.(\d|1[0-4]|armor|chest|saddle)|hotbar\.[0-8]|village\.[0-7]|weapon(?:\.mainhand|\.offhand)?"),
@@ -39,7 +36,31 @@ class Parser:
 		"white_space" : re.compile("^\s+$")
 	}
 
-	def __init__(self, view, allow_custom_tags):
+	def __init__(self):
+		
+		def score_parser(properties):
+			return self.nested_entity_tag_parser(self.int_range_parser, do_nested=False, properties=properties)
+
+		def advancement_parser(properties):
+			return self.nested_entity_tag_parser(self.boolean_parser, do_nested=True)
+
+		# Data for target selector parsing
+		# order for tuple:
+		# (isNegatable, isRange, parser)
+		self.target_selector_value_parsers = [
+			(False, True, self.integer_parser),
+			(False, False, self.integer_parser),
+			(False, True, self.float_parser),
+			(True, False, self.string_parser),
+			(True, False, self.gamemode_parser),
+			(True, False, self.sort_parser),
+			(True, False, self.entity_location_parser),
+			(False, False, score_parser),
+			(False, False, advancement_parser),
+			(True, False, self.nbt_parser)
+		]
+
+	def reset(self, view, allow_custom_tags):
 
 		self.current = 0
 		self.view = view
@@ -51,40 +72,6 @@ class Parser:
 		self.mccliteral = []
 		self.invalid = []
 		self.custom_tags = allow_custom_tags
-
-		def score_parser(properties):
-			return self.nested_entity_tag_parser(self.int_range_parser, do_nested=False, properties=properties)
-
-		def advancement_parser(properties):
-			return self.nested_entity_tag_parser(self.boolean_parser, do_nested=True)
-
-		def name_or_string_parser(properties):
-			start = self.current
-			self.current = self.username_parser(properties)
-			if start != self.current:
-				return self.current
-			old_string_type = properties["type"]
-			properties["type"] = "strict"
-			self.current = self.string_parser(properties)
-			properties["type"] = old_string_type
-			return self.current
-
-		# Data for target selector parsing
-		# order for tuple:
-		# (isNegatable, isRange, parser)
-		self.target_selector_value_parsers = [
-			(False, True, self.integer_parser),
-			(False, False, self.integer_parser),
-			(False, True, self.float_parser),
-			(True, False, name_or_string_parser),
-			(True, False, self.gamemode_parser),
-			(True, False, self.sort_parser),
-			(True, False, self.entity_location_parser),
-			(False, False, score_parser),
-			(False, False, advancement_parser),
-			(True, False, self.nbt_parser)
-		]
-
 
 	def add_regions(self, line_num=0):
 		self.view.add_regions("mcccomment" + str(line_num), self.mcccomment, "mcccomment", flags=self.add_regions_flags)
@@ -290,7 +277,9 @@ class Parser:
 					self.mccstring.pop()
 					return start_of_key
 
-				properties["min"] = 0
+				new_properties = {}
+				new_properties["min"] = 0
+				new_properties["type"] = "phrase"
 				matched = False
 				for i in range(len(TARGET_KEY_LISTS)):
 					if key in TARGET_KEY_LISTS[i]:
@@ -308,7 +297,7 @@ class Parser:
 							self.current = self.range_parser(parser, {})
 
 						else:
-							self.current = parser(properties)
+							self.current = parser(new_properties)
 
 						if old_current != self.current:
 							matched = True
@@ -586,9 +575,9 @@ class Parser:
 			else:
 				possible_types = NBT_TAGS[key]
 
-			matched = False
+			matched = False#self.nbt_values_parser(possible_types, allow_custom_tags, {"escape_depth":escape_depth})
 			for key_type in possible_types:
-				if key_type == "byte":
+				if key_type == "byte": 
 					start = self.current
 					self.current = self.nbt_byte_parser(properties)
 					if start != self.current:
@@ -602,7 +591,7 @@ class Parser:
 						matched = True
 						break
 
-				elif key_type == "int":
+				elif key_type == "int": 
 					start = self.current
 					self.current = self.integer_parser(properties)
 					if start != self.current:
@@ -731,6 +720,130 @@ class Parser:
 		self.current += 1
 		return self.current
 
+
+
+	def nbt_values_parser(self, possible_types, allow_custom_tags, properties={}):
+		escape_depth = 0
+		if "escape_depth" in properties:
+			escape_depth = properties["escape_depth"]
+
+		matched = False;
+		for key_type in possible_types:
+			if key_type == "byte": 
+				start = self.current
+				self.current = self.nbt_byte_parser(properties)
+				if start != self.current:
+					matched = True
+					break
+
+			elif key_type == "short":
+				start = self.current
+				self.current = self.nbt_value_parser(self.integer_parser, self.mccconstant, "s")
+				if start != self.current:
+					matched = True
+					break
+
+			elif key_type == "int": 
+				start = self.current
+				self.current = self.integer_parser(properties)
+				if start != self.current:
+					matched = True
+					break
+
+			elif key_type == "long":
+				start = self.current
+				self.current = self.nbt_value_parser(self.integer_parser, self.mccconstant, "L")
+				if start != self.current:
+					matched = True
+					break
+
+			elif key_type == "float":
+				start = self.current
+				self.current = self.nbt_value_parser(self.float_parser, self.mccconstant, "f")
+				if start != self.current:
+					matched = True
+					break
+
+			elif key_type == "double":
+				start = self.current
+				self.current = self.nbt_value_parser(self.float_parser, self.mccconstant, "d")
+				if start != self.current:
+					matched = True
+					break
+
+			elif key_type == "string":
+				start = self.current
+				self.current = self.string_parser({"type":"phrase", "escape_depth":escape_depth})
+				if start != self.current:
+					matched = True
+					break
+
+			elif key_type == "string_list":
+				start = self.current
+				self.current = self.nbt_list_parser(self.string_parser, None, "", {"type":"phrase", "escape_depth":escape_depth})
+				if start != self.current:
+					matched = True
+					break
+
+			elif key_type == "compound":
+				start = self.current
+				self.current = self.nbt_parser({"escape_depth": escape_depth, "tags": allow_custom_tags})
+				if start != self.current:
+					matched = True
+					break
+
+			elif key_type == "compound_list":
+				start = self.current
+				self.current = self.nbt_list_parser(self.nbt_parser, None, "", {"escape_depth": escape_depth, "tags": allow_custom_tags})
+				if start != self.current:
+					matched = True
+					break
+
+			elif key_type == "custom_compound":
+				start = self.current
+				self.current = self.nbt_tags_parser({"escape_depth": escape_depth})
+				if start != self.current:
+					matched = True
+					break
+
+			elif key_type == "int_list":
+				start = self.current
+				self.current = self.nbt_list_parser(self.integer_parser, None, "", {"list_prefix": "I;"})
+				if start != self.current:
+					matched = True
+					break
+
+			elif key_type == "double_list":
+				start = self.current
+				self.current = self.nbt_list_parser(self.float_parser, self.mccconstant, "d")
+				if start != self.current:
+					matched = True
+					break
+
+			elif key_type == "float_list":
+				start = self.current
+				self.current = self.nbt_list_parser(self.float_parser, self.mccconstant, "f")
+				if start != self.current:
+					matched = True
+					break
+
+			elif key_type == "json":
+				start = self.current
+				self.current = self.json_in_nbt_parser({"escape_depth":escape_depth})
+				if start != self.current:
+					matched = True
+					break
+
+			elif key_type == "json_list":
+				start = self.current
+				self.current = self.nbt_list_parser(self.json_in_nbt_parser, None, "", {"escape_depth": escape_depth})
+				if start != self.current:
+					matched = True
+					break
+			else:
+				print("unkown type: " + str(key_type))
+		return matched
+
 	def nbt_tags_parser(self, properties={}):
 		properties["tags"] = True
 		self.current = self.nbt_parser(properties)
@@ -771,6 +884,14 @@ class Parser:
 		self.current += 1
 		return self.current
 
+	def nbt_tag_parser(self, properties={}):
+		start = self.current
+		possible_types = ["byte", "short", "int", "long", "float", "double", "string", "string_list", "compound", "compound_list", "custom_compound", "int_list", "double_list", "float_list", "json", "json_list"]
+		matched = self.nbt_values_parser(possible_types, self.custom_tags)
+		if not matched:
+			return start
+
+		return self.current
 
 	def nbt_value_parser(self, parser, suffix_scope, suffix, properties={}):
 		start = self.current
@@ -949,12 +1070,7 @@ class Parser:
 		return self.current
 
 	def axes_parser(self, properties={}):
-		axes = set("xyz")
-		axes_match = self.regex["axes"].match(self.string, self.current)
-		if axes_match and len(set(axes_match.group())) == len(axes_match.group()) and axes.issuperset(axes_match.group()):
-			self.append_region(self.mccconstant, self.current, axes_match.end())
-			return axes_match.end()
-		return self.current
+		return self.item_from_set_parser(AXES, self.mccliteral)
 
 	def score_holder_parser(self, properties={}):
 		start = self.current
@@ -1073,13 +1189,13 @@ class Parser:
 					matched = True
 
 			if not matched and key == "clickEvent":
-				self.current = self.json_event_parser(regex["click_event_action"], properties)
+				self.current = self.json_event_parser(CLICK_EVENT_ACTIONS, properties)
 				if not self.string[self.current - 1] in "}":
 					return self.current
 				matched = True
 
 			if not matched and key == "hoverEvent":
-				self.current = self.json_event_parser(self.regex["hover_event_action"], properties)
+				self.current = self.json_event_parser(HOVER_EVENT_ACTIONS, properties)
 				if not self.string[self.current - 1] in "}":
 					return self.current
 				matched = True
@@ -1186,7 +1302,7 @@ class Parser:
 		self.current += 1
 		return self.current
 
-	def json_event_parser(self, action_regex, properties={}):
+	def json_event_parser(self, action_set, properties={}):
 		if self.string[self.current] != "{": #Can't be [] since it's an object
 			return self.current
 		self.current += 1
@@ -1226,7 +1342,7 @@ class Parser:
 			success = False
 			if key == "action":
 				def action_parser(properties={}):
-					return self.regex_parser(action_regex, [self.mccstring])
+					return self.item_from_set_parser(action_set, self.mccstring)
 
 				start_of_value = self.current
 				self.current = self.quoted_parser(action_parser)
@@ -1331,14 +1447,13 @@ class Parser:
 		if criteria_match:
 			namespace = criteria_match.group(1)
 			location = criteria_match.group(2)
-			print("Namespace: " + str(namespace) + " Location: " + location)
 
 			if namespace != None:
 				namespace = namespace.lower()
 				if ((namespace in CRITERIA_BLOCKS and location in BLOCKS) or
 				   		(namespace in CRITERIA_ITEMS and location in ITEMS) or
 				   		(namespace in CRITERIA_ENTITIES and location in ENTITIES) or 
-				   		(namespace in CRITERIA_CUSTOM and location in CUSTOM)):
+				   		(namespace in CRITERIA_CUSTOM and location in CUSTOM_STATS)):
 					self.append_region(self.mccliteral, criteria_match.start(1), criteria_match.end(1) + 1)
 					self.append_region(self.mccstring, criteria_match.start(2), criteria_match.end(2))
 					self.current = criteria_match.end()
@@ -1346,10 +1461,22 @@ class Parser:
 			elif (location in BLOCKS or 
 					location in ITEMS or 
 					location in ENTITIES or 
-					location in CUSTOM or
+					location in CUSTOM_STATS or
 					location in OBJECTIVE_CRITERIA):
 				self.append_region(self.mccstring, criteria_match.start(2), criteria_match.end(2))
 				self.current = criteria_match.end()
+
+		return self.current
+
+	def time_parser(self, properties={}):
+		start = self.current
+		self.current = self.integer_parser()
+		if start == self.current:
+			return start
+
+		if self.current < len(self.string) and self.string[self.current] in "dst":
+			self.append_region(self.mccconstant, self.current, self.current + 1)
+			return self.current + 1
 
 		return self.current
 
@@ -1378,10 +1505,10 @@ class Parser:
 		return self.regex_parser(self.regex["scoreboard_slot"], [self.mccstring])
 
 	def color_parser(self, properties={}):
-		return self.regex_parser(self.regex["color"], [self.mccconstant])
+		return self.item_from_set_parser(COLORS, self.mccconstant)
 
 	def entity_anchor_parser(self, properties={}):
-		return self.regex_parser(self.regex["entity_anchor"], [self.mccstring])
+		return self.item_from_set_parser(ENTITY_ANCHORS, self.mccstring)
 
 	def scoreboard_operation_parser(self, properties={}):
 		return self.regex_parser(self.regex["operation"], [self.mcccommand])
@@ -1468,6 +1595,20 @@ class Parser:
 			self.current = pattern_match.end()
 		return self.current
 
+	def item_from_set_parser(self, token_set, scope):
+		token_end = self.current
+		while (token_end < len(self.string) and 
+			   self.string[token_end] not in " \t\\\""):
+			token_end += 1
+
+		token = self.string[self.current:token_end]
+		print("Token: " + token)
+		if token in token_set:
+			self.append_region(scope, self.current, token_end)
+			return token_end
+
+		return self.current
+
 	def quoted_parser(self, parser, properties={}):
 		if not "escape_depth" in properties:
 			escape_depth = 0
@@ -1510,7 +1651,7 @@ class Parser:
 		"minecraft:game_profile"      : username_parser,
 		"minecraft:message"           : message_parser,
 		"minecraft:block_pos"         : vec3d_parser,
-		"minecraft:nbt"               : nbt_parser,
+		"minecraft:nbt_compound_tag"  : nbt_parser,
 		"minecraft:item_stack"        : item_parser,
 		"minecraft:item_predicate"    : item_parser,
 		"brigadier:integer"           : integer_parser, #Properties has min and max
@@ -1541,5 +1682,9 @@ class Parser:
 		"minecraft:entity_summon"     : entity_location_parser,
 		"minecraft:item_enchantment"  : enchantment_parser,
 		"minecraft:dimension"         : dimension_parser,
-		"minecraft:column_pos"        : vec2d_parser
+		"minecraft:column_pos"        : vec2d_parser,
+		"minecraft:nbt_tag"           : nbt_tag_parser,
+		"minecraft:time"              : time_parser
 	}
+
+PARSER = Parser()
