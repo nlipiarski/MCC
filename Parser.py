@@ -1,6 +1,5 @@
 import sublime, re
 from .Blocks import BLOCKS
-from .Items import ITEMS
 from .Data import *
 from .Registries import *
 from .NbtData import NBT_TAGS
@@ -1602,7 +1601,6 @@ class Parser:
 			token_end += 1
 
 		token = self.string[self.current:token_end]
-		print("Token: " + token)
 		if token in token_set:
 			self.append_region(scope, self.current, token_end)
 			return token_end

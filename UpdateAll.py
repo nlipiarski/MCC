@@ -173,7 +173,8 @@ registry_names = {
 	"ENCHANTMENTS" : "minecraft:enchantment",
 	"CUSTOM_STATS" : "minecraft:custom_stat",
 	"PARTICLES" : "minecraft:particle_type",
-	"SOUNDS" : "minecraft:sound_event"
+	"SOUNDS" : "minecraft:sound_event",
+	"ENTITIES" : "minecraft:entity_type"
 }
 
 registries_py = open("Registries.py", "w")
